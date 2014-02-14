@@ -1,8 +1,8 @@
 #ifndef __GLENGINEDEVICE__
 #define __GLENGINEDEVICE__
 #include "..\EngineLib\GLEngineDevice.h"
-#include <GL/glew.h>
-#include <GL/wglew.h>
+#include <gl\GL.h>
+#include <gl\GLU.h>
 
 class GLENGINE : public GLENGINEDEVICE {
 private:

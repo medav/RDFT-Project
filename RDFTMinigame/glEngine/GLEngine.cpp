@@ -1,13 +1,10 @@
 #include "GLEngine.h"
 
 bool GLENGINE::CreateRenderDevice(HWND hwnd) {
-	
-	this->hwnd = hwnd;
-	// Get the device context for our window
-	hdc = GetDC(hwnd);
-
 	PIXELFORMATDESCRIPTOR pfd;
 	int format;
+
+	this->hwnd = hwnd;
 
 	// get the device context (DC)
 	hdc = GetDC(hwnd);
