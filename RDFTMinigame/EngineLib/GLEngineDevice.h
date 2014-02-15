@@ -40,6 +40,8 @@ public:
 	int getY() const {
 		return PosY;
 	}
+
+	RECT getRect();
 };
 
 
