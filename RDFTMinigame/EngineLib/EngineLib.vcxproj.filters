@@ -21,5 +21,8 @@
     <ClInclude Include="PhysEngineDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RDFTEngine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

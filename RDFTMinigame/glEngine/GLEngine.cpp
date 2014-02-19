@@ -1,14 +1,12 @@
 #include "GLEngine.h"
 
 bool GLENGINE::CreateRenderDevice(HWND hwnd) {
+	this->hwnd = hwnd;
+	this->hdc = GetDC(hwnd);
+
 	PIXELFORMATDESCRIPTOR pfd;
 	int format;
-
-	this->hwnd = hwnd;
-
-	// get the device context (DC)
-	hdc = GetDC(hwnd);
-
+	
 	// set the pixel format for the DC
 	ZeroMemory(&pfd, sizeof(pfd));
 	pfd.nSize = sizeof(pfd);
@@ -23,7 +21,18 @@ bool GLENGINE::CreateRenderDevice(HWND hwnd) {
 
 	// create and enable the render context (RC)
 	hrc = wglCreateContext(hdc);
-	wglMakeCurrent(hdc, hrc);
+	return wglMakeCurrent(hdc, hrc);
+}
 
-	return true; // We have successfully created a context, return true
+bool GLENGINE::ReleaseRenderDevice() {
+	bool result = true;
+
+	if (!wglMakeCurrent(NULL, NULL))
+		result = false;
+
+	if (!wglDeleteContext(hrc))
+		result = false;
+
+	ReleaseDC(hwnd, hdc);
+	return result;
 }
