@@ -24,6 +24,15 @@ public:
 	virtual ~GLENGINEDEVICE() = 0;
 };
 
+class GLENGINECONTEXT {
+private:
+	HMODULE h_dll;
+	GLENGINEDEVICE * device;
+
+public:
+	GLENGINEDEVICE * CreateDevice();
+};
+
 class ENTITY {
 private:
 	int PosX, PosY;

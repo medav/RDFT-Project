@@ -6,4 +6,21 @@ class PHYSENGINEDEVICE {
 
 };
 
+class PHYSENGINECONTEXT {
+
+};
+
+class Rectangle {
+private:
+	RECT r;
+
+public:
+	// TODO: Finish me!
+
+};
+
+class Ball : public Rectangle {
+
+};
+
 #endif
