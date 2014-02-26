@@ -1,5 +1,5 @@
-#ifndef __GLENGINE__
-#define __GLENGINE__
+#ifndef __GLENGINEDEVICE__
+#define __GLENGINEDEVICE__
 #include <Windows.h>
 
 class GLENGINEDEVICE {

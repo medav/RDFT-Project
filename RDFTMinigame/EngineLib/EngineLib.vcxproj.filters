@@ -27,6 +27,9 @@
     <ClInclude Include="EngineCommon.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LMEngineDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="RDFTEngine.cpp">

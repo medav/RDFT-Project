@@ -1,5 +1,5 @@
-#ifndef __GLENGINEDEVICE__
-#define __GLENGINEDEVICE__
+#ifndef __GLENGINE__
+#define __GLENGINE__
 #include "..\EngineLib\GLEngineDevice.h"
 #include "..\EngineLib\PhysEngineDevice.h"
 #include "..\EngineLib\EngineCommon.h"
