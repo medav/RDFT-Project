@@ -13,13 +13,17 @@ private:
 	HMODULE hPhysDLL;
 	HMODULE hLmDLL;
 
+	bool CreateGlDevice();
+	bool CreatePhysDevice();
+	bool CreateLmDevice();
+
 public:
 	RDFTENGINE();
 	~RDFTENGINE(void);
 
-	HRESULT CreateGlDevice();
-	HRESULT CreatePhysDevice();
-	HRESULT CreateLmDevice();
+	bool GetOK();
+	bool LoadDLLs();
+	bool CreateDevices();
 
 	GLENGINE GetGlDevice(void) { 
 		return glDevice; 
