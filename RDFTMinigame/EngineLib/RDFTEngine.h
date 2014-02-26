@@ -14,7 +14,7 @@ private:
 	HMODULE hLmDLL;
 
 public:
-	RDFTENGINE(HINSTANCE hInst);
+	RDFTENGINE();
 	~RDFTENGINE(void);
 
 	HRESULT CreateGlDevice();
