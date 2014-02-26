@@ -2,6 +2,7 @@
 #define __GLENGINEDEVICE__
 #include "..\EngineLib\GLEngineDevice.h"
 #include "..\EngineLib\PhysEngineDevice.h"
+#include "..\EngineLib\EngineCommon.h"
 #include <gl\GL.h>
 #include <gl\GLU.h>
 

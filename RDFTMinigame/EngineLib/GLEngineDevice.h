@@ -2,10 +2,6 @@
 #define __GLENGINE__
 #include <Windows.h>
 
-typedef struct {
-	float r, g, b, a;
-} ARGBCOLOR;
-
 class GLENGINEDEVICE {
 public:
 	GLENGINEDEVICE();

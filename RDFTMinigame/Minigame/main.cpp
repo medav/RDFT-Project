@@ -39,8 +39,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 	// Run the message loop.
 
 	MSG msg = {};
-	while (GetMessage(&msg, NULL, 0, 0))
-	{
+	while (GetMessage(&msg, NULL, 0, 0)) {
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
@@ -49,8 +48,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 }
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-	switch (uMsg)
-	{
+	switch (uMsg) {
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;

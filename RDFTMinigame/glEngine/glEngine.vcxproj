@@ -68,7 +68,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GLEngine.cpp" />
-    <ClCompile Include="glew.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

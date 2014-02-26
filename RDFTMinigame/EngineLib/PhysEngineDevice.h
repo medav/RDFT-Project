@@ -1,6 +1,7 @@
 #ifndef __PHYSENGINE__
 #define __PHYSENGINE__
 #include <Windows.h>
+#include "EngineCommon.h"
 
 class PHYSENGINEDEVICE {
 
@@ -12,31 +13,31 @@ class PHYSENGINECONTEXT {
 
 class ENTITY {
 private:
-	int PosX, PosY;
+	RECT rect;
+	GLCOLOR colors[4];
 
 public:
+	enum VERTEX {TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT};
+
 	ENTITY() {
-		PosX = 0;
-		PosY = 0;
+		rect.left = 0;
+		rect.right = 0;
+		rect.top = 0;
+		rect.bottom = 0;
 	}
 
-	ENTITY(int x, int y) {
-		PosX = x;
-		PosY = y;
+	ENTITY(int x, int y, int w, int h) {
+		rect.left = x;
+		rect.right = x + w;
+		rect.top = y;
+		rect.bottom = y + h;
 	}
-
-	int getX() const {
-		return PosX;
-	}
-
-	int getY() const {
-		return PosY;
-	}
-
-	// TODO: Need a way to get vertex info to the GL Engine
 
 	virtual void Collide(ENTITY * other) = 0;
 
+	GLCOLOR getColor(VERTEX v);
+
+	// Required for rendering
 	RECT getRect();
 };
 

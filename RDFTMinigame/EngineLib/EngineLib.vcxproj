@@ -64,6 +64,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="EngineCommon.h" />
     <ClInclude Include="GLEngineDevice.h" />
     <ClInclude Include="PhysEngineDevice.h" />
     <ClInclude Include="RDFTEngine.h" />

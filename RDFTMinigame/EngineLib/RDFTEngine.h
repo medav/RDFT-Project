@@ -7,7 +7,7 @@ typedef GLENGINEDEVICE* GLENGINE;
 
 class RDFTENGINE {
 private:
-	GLENGINE * glDevice;
+	GLENGINE glDevice;
 	HINSTANCE hInst;
 	HMODULE hGlDLL;
 	HMODULE hPhysDLL;
@@ -21,7 +21,7 @@ public:
 	HRESULT CreatePhysDevice();
 	HRESULT CreateLmDevice();
 
-	GLENGINE * GetGlDevice(void) { 
+	GLENGINE GetGlDevice(void) { 
 		return glDevice; 
 	}
 

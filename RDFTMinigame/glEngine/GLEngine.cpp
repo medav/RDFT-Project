@@ -6,7 +6,7 @@ bool GLENGINE::CreateRenderDevice(HWND hwnd) {
 
 	PIXELFORMATDESCRIPTOR pfd;
 	int format;
-	
+
 	// set the pixel format for the DC
 	ZeroMemory(&pfd, sizeof(pfd));
 	pfd.nSize = sizeof(pfd);
@@ -21,7 +21,28 @@ bool GLENGINE::CreateRenderDevice(HWND hwnd) {
 
 	// create and enable the render context (RC)
 	hrc = wglCreateContext(hdc);
-	return wglMakeCurrent(hdc, hrc);
+	wglMakeCurrent(hdc, hrc);
+}
+
+bool GLENGINE::BeginScene() {
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void GLENGINE::Render(ENTITY * ent) {
+	glBegin(GL_QUADS);
+	
+	glColor3f(1.0, 1.0, 1.0);
+	glVertex2f(ent->getRect().left, ent->getRect().top);
+	glVertex2f(ent->getRect().right, ent->getRect().top);
+	glVertex2f(ent->getRect().right, ent->getRect().bottom);
+	glVertex2f(ent->getRect().left, ent->getRect().bottom);
+
+	glEnd();
+}
+
+bool GLENGINE::EndScene() {
+	SwapBuffers(hdc);
 }
 
 bool GLENGINE::ReleaseRenderDevice() {
@@ -34,6 +55,7 @@ bool GLENGINE::ReleaseRenderDevice() {
 		result = false;
 
 	ReleaseDC(hwnd, hdc);
+
 	return result;
 }
 
