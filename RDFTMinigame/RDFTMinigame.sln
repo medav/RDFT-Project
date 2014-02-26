@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EngineLib", "EngineLib\Engi
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Minigame", "Minigame\Minigame.vcxproj", "{A1326F18-8C07-4539-8EC8-11B38F928525}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lmEngine", "lmEngine\lmEngine.vcxproj", "{07EA9BD2-5F9D-4028-9148-3C4452C90229}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -53,6 +55,14 @@ Global
 		{A1326F18-8C07-4539-8EC8-11B38F928525}.Release|Win32.ActiveCfg = Release|Win32
 		{A1326F18-8C07-4539-8EC8-11B38F928525}.Release|Win32.Build.0 = Release|Win32
 		{A1326F18-8C07-4539-8EC8-11B38F928525}.Release|x64.ActiveCfg = Release|Win32
+		{07EA9BD2-5F9D-4028-9148-3C4452C90229}.Debug|ARM.ActiveCfg = Debug|Win32
+		{07EA9BD2-5F9D-4028-9148-3C4452C90229}.Debug|Win32.ActiveCfg = Debug|Win32
+		{07EA9BD2-5F9D-4028-9148-3C4452C90229}.Debug|Win32.Build.0 = Debug|Win32
+		{07EA9BD2-5F9D-4028-9148-3C4452C90229}.Debug|x64.ActiveCfg = Debug|Win32
+		{07EA9BD2-5F9D-4028-9148-3C4452C90229}.Release|ARM.ActiveCfg = Release|Win32
+		{07EA9BD2-5F9D-4028-9148-3C4452C90229}.Release|Win32.ActiveCfg = Release|Win32
+		{07EA9BD2-5F9D-4028-9148-3C4452C90229}.Release|Win32.Build.0 = Release|Win32
+		{07EA9BD2-5F9D-4028-9148-3C4452C90229}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
