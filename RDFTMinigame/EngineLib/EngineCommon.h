@@ -7,6 +7,6 @@ typedef struct {
 
 typedef struct {
 	double x, y;
-} GLVERTEX;
+} GLVERTEX2;
 
 #endif

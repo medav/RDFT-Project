@@ -4,11 +4,13 @@
 #include "EngineCommon.h"
 
 class PHYSENGINEDEVICE {
+public:
+	PHYSENGINEDEVICE();
 
-};
+	// TODO: Interface functions declared here:
+	// virtual (type) NAME(args) = 0;
 
-class PHYSENGINECONTEXT {
-
+	virtual ~PHYSENGINEDEVICE() = 0;
 };
 
 class ENTITY {
