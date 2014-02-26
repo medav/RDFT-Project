@@ -8,8 +8,9 @@ private:
 	// Private variables go here
 
 public:
-	// Declaration of interface implementation methods go here
-
+	virtual bool LMInitiate();
+	virtual bool LMRefresh();
+	virtual GLVECTOR2 LMGetVector(GLVECTOR2 start, GLVECTOR2 end);
 };
 
 LMENGINEDEVICE * __declspec(dllexport) CreateLmDevice();
