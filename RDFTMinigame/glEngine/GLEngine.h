@@ -15,14 +15,14 @@ private:
 	HDC hdc;
 	HWND hwnd;
 
-	ARGBCOLOR clearColor;
+	GLCOLOR clearColor;
 
 public:
 	GLENGINE();
 	virtual bool CreateRenderDevice(HWND hwnd);
 	virtual void SetWindowSize(int width, int height);
 
-	virtual void SetClearColor(ARGBCOLOR bgcolor);
+	virtual void SetClearColor(GLCOLOR bgcolor);
 
 	virtual bool BeginScene();
 	virtual void Render(ENTITY * ent);
