@@ -68,6 +68,9 @@
     <ClInclude Include="PhysEngineDevice.h" />
     <ClInclude Include="RDFTEngine.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="RDFTEngine.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -24,39 +24,4 @@ public:
 	virtual ~GLENGINEDEVICE() = 0;
 };
 
-class GLENGINECONTEXT {
-private:
-	HMODULE h_dll;
-	GLENGINEDEVICE * device;
-
-public:
-	GLENGINEDEVICE * CreateDevice();
-};
-
-class ENTITY {
-private:
-	int PosX, PosY;
-
-public:
-	ENTITY() {
-		PosX = 0;
-		PosY = 0;
-	}
-
-	ENTITY(int x, int y) {
-		PosX = x;
-		PosY = y;
-	}
-
-	int getX() const {
-		return PosX;
-	}
-
-	int getY() const {
-		return PosY;
-	}
-
-	RECT getRect();
-};
-
 #endif

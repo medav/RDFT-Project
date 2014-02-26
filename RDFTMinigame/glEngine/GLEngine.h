@@ -1,6 +1,7 @@
 #ifndef __GLENGINEDEVICE__
 #define __GLENGINEDEVICE__
 #include "..\EngineLib\GLEngineDevice.h"
+#include "..\EngineLib\PhysEngineDevice.h"
 #include <gl\GL.h>
 #include <gl\GLU.h>
 
@@ -29,5 +30,7 @@ public:
 	virtual bool ReleaseRenderDevice();
 	~GLENGINE();
 };
+
+GLENGINEDEVICE * __declspec(dllexport) CreateGlDevice();
 
 #endif

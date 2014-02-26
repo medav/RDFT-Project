@@ -36,3 +36,8 @@ bool GLENGINE::ReleaseRenderDevice() {
 	ReleaseDC(hwnd, hdc);
 	return result;
 }
+
+GLENGINEDEVICE * __declspec(dllexport) CreateGlDevice() {
+	GLENGINEDEVICE * device = new GLENGINE();
+	return device;
+}
