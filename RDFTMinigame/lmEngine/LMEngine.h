@@ -1,6 +1,6 @@
 #ifndef __LMENGINE__
 #define __LMENGINE__
-
+#include <Windows.h>
 #include "..\EngineLib\LMEngineDevice.h"
 
 class LMENGINE : public LMENGINEDEVICE {
@@ -13,6 +13,5 @@ public:
 	virtual GLVECTOR2 LMGetVector(GLVECTOR2 start, GLVECTOR2 end);
 };
 
-LMENGINEDEVICE * __declspec(dllexport) CreateLmDevice();
 
 #endif

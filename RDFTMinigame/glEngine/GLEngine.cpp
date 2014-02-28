@@ -1,13 +1,14 @@
 #include "GLEngine.h"
 
-GLENGINE::GLENGINE() {
-
+GLENGINE::GLENGINE(HWND hwnd) {
+	this->CreateRenderDevice(hwnd);
 }
 
 bool GLENGINE::CreateRenderDevice(HWND hwnd) {
 	this->hwnd = hwnd;
 	this->hdc = GetDC(hwnd);
 
+	
 	PIXELFORMATDESCRIPTOR pfd;
 	int format;
 
@@ -71,9 +72,10 @@ GLENGINE::~GLENGINE() {
 	this->ReleaseRenderDevice();
 }
 
-GLENGINEDEVICE * CreateGlDevice() {
-	GLENGINEDEVICE * device = new GLENGINE();
-	return device;
+bool CreateGlDevice(LPGLENGINE device, HWND hwnd) {
+	*device = new GLENGINE(hwnd);
+	
+	return true;
 }
 
 bool ReleaseGlDevice(GLENGINEDEVICE * device) {

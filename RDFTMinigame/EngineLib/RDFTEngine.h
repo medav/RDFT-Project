@@ -3,12 +3,19 @@
 #include "GLEngineDevice.h"
 #include "PhysEngineDevice.h"
 
-typedef GLENGINEDEVICE* GLENGINE;
+
+typedef PHYSENGINEDEVICE* PHYSENGINE;
+//typedef LMENGINEDEVICE* LMENGINE;
+
+typedef bool (*CREATEPHYSENGINEDEVICE)(PHYSENGINE engine);
 
 class RDFTENGINE {
 private:
-	GLENGINE glDevice;
+	PGLENGINE glEngine;
+
 	HINSTANCE hInst;
+	HWND hwnd;
+
 	HMODULE hGlDLL;
 	HMODULE hPhysDLL;
 	HMODULE hLmDLL;
@@ -19,31 +26,35 @@ private:
 
 public:
 	RDFTENGINE();
-	~RDFTENGINE(void);
+	~RDFTENGINE();
+
+	void SetHWND(HWND hwnd) {
+		this->hwnd = hwnd;
+	}
 
 	bool GetOK();
 	bool LoadDLLs();
 	bool CreateDevices();
 
-	GLENGINE GetGlDevice(void) { 
-		return glDevice; 
+	PGLENGINE GetGlDevice() {
+		return glEngine; 
 	}
 
-	HINSTANCE GetGlModule(void) { 
+	HINSTANCE GetGlModule() { 
 		return hGlDLL; 
 	}
 
-	HINSTANCE GetPhysModule(void) {
+	HINSTANCE GetPhysModule() {
 		return hPhysDLL;
 	}
 
-	HINSTANCE GetLmModule(void) {
+	HINSTANCE GetLmModule() {
 		return hLmDLL;
 	}
 
-	void ReleaseGl(void);
-	void ReleasePhys(void);
-	void ReleaseLm(void);
+	void ReleaseGl();
+	void ReleasePhys();
+	void ReleaseLm();
 
 };
 

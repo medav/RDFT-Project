@@ -1,5 +1,5 @@
 #include <windows.h>
-
+#include "Game.h"
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow) {
@@ -36,12 +36,24 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 
 	ShowWindow(hwnd, nCmdShow);
 
+	Engine()->SetHWND(hwnd);
+
+	if (!Engine()->LoadDLLs())
+	//	return 0;
+
+	if (!Engine()->CreateDevices())
+		return 0;
+
+
 	// Run the message loop.
 
 	MSG msg = {};
 	while (GetMessage(&msg, NULL, 0, 0)) {
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
+
+		Engine()->GetGlDevice()->BeginScene();
+		Engine()->GetGlDevice()->EndScene();
 	}
 
 	return 0;

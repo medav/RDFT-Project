@@ -18,7 +18,7 @@ private:
 	GLCOLOR clearColor;
 
 public:
-	GLENGINE();
+	GLENGINE(HWND hwnd);
 	bool CreateRenderDevice(HWND hwnd);
 	void SetWindowSize(int width, int height);
 
@@ -31,8 +31,5 @@ public:
 	bool ReleaseRenderDevice();
 	~GLENGINE();
 };
-
-GLENGINEDEVICE * CreateGlDevice();
-bool ReleaseGlDevice(GLENGINEDEVICE * device);
 
 #endif

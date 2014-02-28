@@ -7,7 +7,6 @@ class GLENGINEDEVICE {
 public:
 	GLENGINEDEVICE() {}
 
-	virtual bool CreateRenderDevice(HWND hwnd) = 0;
 	//virtual void SetWindowSize(int width, int height) = 0;
 
 	//virtual void SetClearColor(ARGBCOLOR bgcolor) = 0;
@@ -16,9 +15,11 @@ public:
 	virtual void Render(ENTITY * ent) = 0;
 	virtual bool EndScene() = 0;
 
-	virtual bool ReleaseRenderDevice() = 0;
-
 	virtual ~GLENGINEDEVICE() {}
 };
+
+typedef GLENGINEDEVICE* PGLENGINE;
+typedef GLENGINEDEVICE** LPGLENGINE;
+typedef bool(*CREATEGLENGINEDEVICE)(LPGLENGINE engine, HWND hwnd);
 
 #endif
