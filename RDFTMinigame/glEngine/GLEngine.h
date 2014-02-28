@@ -19,19 +19,20 @@ private:
 
 public:
 	GLENGINE();
-	virtual bool CreateRenderDevice(HWND hwnd);
-	virtual void SetWindowSize(int width, int height);
+	bool CreateRenderDevice(HWND hwnd);
+	void SetWindowSize(int width, int height);
 
-	virtual void SetClearColor(GLCOLOR bgcolor);
+	void SetClearColor(GLCOLOR bgcolor);
 
-	virtual bool BeginScene();
-	virtual void Render(ENTITY * ent);
-	virtual bool EndScene();
+	bool BeginScene();
+	void Render(ENTITY * ent);
+	bool EndScene();
 
-	virtual bool ReleaseRenderDevice();
+	bool ReleaseRenderDevice();
 	~GLENGINE();
 };
 
-GLENGINEDEVICE * __declspec(dllexport) CreateGlDevice();
+GLENGINEDEVICE * CreateGlDevice();
+bool ReleaseGlDevice(GLENGINEDEVICE * device);
 
 #endif

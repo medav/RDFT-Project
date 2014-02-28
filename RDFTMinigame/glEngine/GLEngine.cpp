@@ -1,5 +1,9 @@
 #include "GLEngine.h"
 
+GLENGINE::GLENGINE() {
+
+}
+
 bool GLENGINE::CreateRenderDevice(HWND hwnd) {
 	this->hwnd = hwnd;
 	this->hdc = GetDC(hwnd);
@@ -22,11 +26,14 @@ bool GLENGINE::CreateRenderDevice(HWND hwnd) {
 	// create and enable the render context (RC)
 	hrc = wglCreateContext(hdc);
 	wglMakeCurrent(hdc, hrc);
+
+	return true;
 }
 
 bool GLENGINE::BeginScene() {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
+	return true;
 }
 
 void GLENGINE::Render(ENTITY * ent) {
@@ -43,6 +50,7 @@ void GLENGINE::Render(ENTITY * ent) {
 
 bool GLENGINE::EndScene() {
 	SwapBuffers(hdc);
+	return true;
 }
 
 bool GLENGINE::ReleaseRenderDevice() {
@@ -59,7 +67,40 @@ bool GLENGINE::ReleaseRenderDevice() {
 	return result;
 }
 
-GLENGINEDEVICE * __declspec(dllexport) CreateGlDevice() {
+GLENGINE::~GLENGINE() {
+	this->ReleaseRenderDevice();
+}
+
+GLENGINEDEVICE * CreateGlDevice() {
 	GLENGINEDEVICE * device = new GLENGINE();
 	return device;
+}
+
+bool ReleaseGlDevice(GLENGINEDEVICE * device) {
+	if (!device)
+		return true;
+
+	GLENGINE * engine = (GLENGINE *) device;
+	delete engine;
+
+	return true;
+}
+
+bool APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call,	LPVOID lpReserved) {
+	switch (ul_reason_for_call)
+	{
+	case DLL_PROCESS_ATTACH:
+		// A process is loading the DLL.
+		break;
+	case DLL_THREAD_ATTACH:
+		// A process is creating a new thread.
+		break;
+	case DLL_THREAD_DETACH:
+		// A thread exits normally.
+		break;
+	case DLL_PROCESS_DETACH:
+		// A process unloads the DLL.
+		break;
+	}
+	return true;
 }
