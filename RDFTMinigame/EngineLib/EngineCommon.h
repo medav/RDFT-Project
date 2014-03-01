@@ -1,5 +1,6 @@
 #ifndef __ENGINECOMMON__
 #define __ENGINECOMMON__
+#include <Windows.h>
 
 typedef struct {
 	double r, b, g, a;
@@ -31,9 +32,9 @@ public:
 		rect.bottom = y + h;
 	}
 
-	virtual void Collide(ENTITY * other) = 0;
+	//virtual void Collide(ENTITY * other) = 0;
 
-	GLCOLOR getColor(VERTEX v);
+	//GLCOLOR getColor(VERTEX v);
 
 	// Required for rendering
 	RECT getRect() {

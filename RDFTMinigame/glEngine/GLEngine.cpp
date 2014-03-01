@@ -2,6 +2,7 @@
 
 GLENGINE::GLENGINE(HWND hwnd) {
 	this->CreateRenderDevice(hwnd);
+	r = 0;
 }
 
 bool GLENGINE::CreateRenderDevice(HWND hwnd) {
@@ -38,15 +39,32 @@ bool GLENGINE::BeginScene() {
 }
 
 void GLENGINE::Render(ENTITY * ent) {
-	glBegin(GL_QUADS);
+	glPushMatrix();
+	glBegin(GL_TRIANGLES);
 	
-	glColor3f(1.0, 1.0, 1.0);
-	glVertex2f(ent->getRect().left, ent->getRect().top);
-	glVertex2f(ent->getRect().right, ent->getRect().top);
-	glVertex2f(ent->getRect().right, ent->getRect().bottom);
-	glVertex2f(ent->getRect().left, ent->getRect().bottom);
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glVertex2f(0.0f, 1.0f);
+
+	glColor3f(0.0f, 1.0f, 0.0f);
+	glVertex2f(0.87f, -0.5f);
+
+	glColor3f(0.0f, 0.0f, 1.0f);
+	glVertex2f(-0.87f, -0.5f);
+
+	//glColor3f(1.0f, 0.0f, 0.0f);
+	//glVertex2f((float) ent->getRect().left, (float) ent->getRect().top);
+
+	//glColor3f(0.0f, 1.0f, 0.0f);
+	//glVertex2f((float) ent->getRect().right, (float) ent->getRect().top);
+
+	//glColor3f(0.0f, 0.0f, 1.0f);
+	//glVertex2f((float) ent->getRect().right, (float) ent->getRect().bottom);
+
+	//glColor3f(1.0f, 1.0f, 1.0f);
+	//glVertex2f((float) ent->getRect().left, (float) ent->getRect().bottom);
 
 	glEnd();
+	glPopMatrix();
 }
 
 bool GLENGINE::EndScene() {

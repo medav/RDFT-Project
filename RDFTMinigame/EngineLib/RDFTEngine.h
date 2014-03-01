@@ -20,9 +20,7 @@ private:
 	HMODULE hPhysDLL;
 	HMODULE hLmDLL;
 
-	bool CreateGlDevice();
-	bool CreatePhysDevice();
-	bool CreateLmDevice();
+	
 
 public:
 	RDFTENGINE();
@@ -35,6 +33,10 @@ public:
 	bool GetOK();
 	bool LoadDLLs();
 	bool CreateDevices();
+
+	bool CreateGlDevice();
+	bool CreatePhysDevice();
+	bool CreateLmDevice();
 
 	PGLENGINE GetGlDevice() {
 		return glEngine; 

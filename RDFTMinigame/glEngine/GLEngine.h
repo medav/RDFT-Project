@@ -10,6 +10,7 @@ class GLENGINE : public GLENGINEDEVICE {
 private:
 	int windowWidth;
 	int windowHeight;
+	float r;
 
 	HGLRC hrc;
 	HDC hdc;

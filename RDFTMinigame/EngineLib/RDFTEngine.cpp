@@ -12,7 +12,7 @@ RDFTENGINE::RDFTENGINE() {
 }
 
 RDFTENGINE::~RDFTENGINE() {
-
+	
 }
 
 bool RDFTENGINE::LoadDLLs() {

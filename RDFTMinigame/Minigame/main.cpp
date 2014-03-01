@@ -23,7 +23,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 		WS_OVERLAPPEDWINDOW,            // Window style
 
 		// Size and position
-		CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
+		
+		CW_USEDEFAULT, CW_USEDEFAULT, 500, 500,
 
 		NULL,       // Parent window    
 		NULL,       // Menu
@@ -44,15 +45,28 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 	if (!Engine()->CreateDevices())
 		return 0;
 
+	ENTITY e(1, 1, 2, 2);
 
 	// Run the message loop.
 
 	MSG msg = {};
-	while (GetMessage(&msg, NULL, 0, 0)) {
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
+	bool done = false; 
+	while (!done)
+	{
+		PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE);
+		if (msg.message == WM_QUIT) //check for a quit message
+		{
+			done = true; //if found, quit app
+		}
+		else
+		{
+			/*	Translate and dispatch to event queue*/
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
 
 		Engine()->GetGlDevice()->BeginScene();
+		Engine()->GetGlDevice()->Render(&e);
 		Engine()->GetGlDevice()->EndScene();
 	}
 
