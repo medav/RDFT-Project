@@ -32,7 +32,8 @@ public:
 		rect.bottom = y + h;
 	}
 
-	//virtual void Collide(ENTITY * other) = 0;
+	virtual void Think();
+	virtual void Collide(ENTITY * other) = 0;
 
 	//GLCOLOR getColor(VERTEX v);
 

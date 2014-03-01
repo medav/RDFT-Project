@@ -21,7 +21,7 @@ private:
 public:
 	GLENGINE(HWND hwnd);
 	bool CreateRenderDevice(HWND hwnd);
-	void SetWindowSize(int width, int height);
+	void SetWindowSize();
 
 	void SetClearColor(GLCOLOR bgcolor);
 

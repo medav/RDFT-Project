@@ -45,7 +45,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 	if (!Engine()->CreateDevices())
 		return 0;
 
-	ENTITY e(1, 1, 2, 2);
+	Engine()->GetGlDevice()->SetWindowSize();
+
+	ENTITY e(50, 50, 20, 20);
+
 
 	// Run the message loop.
 
@@ -67,6 +70,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 
 		Engine()->GetGlDevice()->BeginScene();
 		Engine()->GetGlDevice()->Render(&e);
+		Engine()->GetGlDevice()->Render(&f);
 		Engine()->GetGlDevice()->EndScene();
 	}
 
@@ -79,12 +83,18 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 		PostQuitMessage(0);
 		return 0;
 
+	case WM_SIZE:
+		if (Engine()->GetGlDevice())
+			Engine()->GetGlDevice()->SetWindowSize();
+		return 0;
+
 	case WM_PAINT:
 		PAINTSTRUCT ps;
 		HDC hdc = BeginPaint(hwnd, &ps);
 		FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
 		EndPaint(hwnd, &ps);
 		return 0;
+	
 	}
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }

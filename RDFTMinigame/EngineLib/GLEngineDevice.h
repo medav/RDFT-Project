@@ -7,7 +7,7 @@ class GLENGINEDEVICE {
 public:
 	GLENGINEDEVICE() {}
 
-	//virtual void SetWindowSize(int width, int height) = 0;
+	virtual void SetWindowSize() = 0;
 
 	//virtual void SetClearColor(ARGBCOLOR bgcolor) = 0;
 
