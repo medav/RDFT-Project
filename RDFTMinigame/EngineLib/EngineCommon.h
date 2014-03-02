@@ -13,6 +13,7 @@ typedef struct {
 class ENTITY {
 private:
 	RECT rect;
+	int w, h;
 	GLCOLOR colors[4];
 
 public:
@@ -26,19 +27,37 @@ public:
 	}
 
 	ENTITY(int x, int y, int w, int h) {
-		rect.left = x;
-		rect.right = x + w;
-		rect.top = y;
-		rect.bottom = y + h;
+		SetX(x);
+		SetY(y);
+		SetW(w);
+		SetH(h);
 	}
 
-	virtual void Think();
-	virtual void Collide(ENTITY * other) = 0;
+	void SetX(int x) {
+		rect.left = x;
+	}
+
+	void SetY(int y) {
+		rect.top = y;
+	}
+
+	void SetW(int w) {
+		this->w = w;
+	}
+
+	void SetH(int h) {
+		this->h = h;
+	}
+	//virtual void Think();
+	//virtual void Collide(ENTITY * other);
 
 	//GLCOLOR getColor(VERTEX v);
 
 	// Required for rendering
-	RECT getRect() {
+	const RECT& getRect() {
+		rect.right = rect.left + w;
+		rect.bottom = rect.top + h;
+
 		return rect;
 	}
 };
