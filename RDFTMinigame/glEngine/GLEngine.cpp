@@ -1,9 +1,28 @@
 #include "GLEngine.h"
 
+GLENGINE::GLENGINE(HWND hwnd) {
+	this->CreateRenderDevice(hwnd);
+	r = 0;
+}
+
+void GLENGINE::SetWindowSize() {
+	RECT r;
+
+	GetWindowRect(hwnd, &r);
+	int width = r.right - 1;
+	int height = r.bottom - 1;
+
+	glViewport(0, 0, width, height);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0.0f, width, 0.0f, height, 0.0f, 1.0f);
+}
+
 bool GLENGINE::CreateRenderDevice(HWND hwnd) {
 	this->hwnd = hwnd;
 	this->hdc = GetDC(hwnd);
 
+	
 	PIXELFORMATDESCRIPTOR pfd;
 	int format;
 
@@ -22,27 +41,33 @@ bool GLENGINE::CreateRenderDevice(HWND hwnd) {
 	// create and enable the render context (RC)
 	hrc = wglCreateContext(hdc);
 	wglMakeCurrent(hdc, hrc);
+
+	return true;
 }
 
 bool GLENGINE::BeginScene() {
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
+	return true;
 }
 
 void GLENGINE::Render(ENTITY * ent) {
+	glPushMatrix();
 	glBegin(GL_QUADS);
-	
-	glColor3f(1.0, 1.0, 1.0);
-	glVertex2f(ent->getRect().left, ent->getRect().top);
-	glVertex2f(ent->getRect().right, ent->getRect().top);
-	glVertex2f(ent->getRect().right, ent->getRect().bottom);
-	glVertex2f(ent->getRect().left, ent->getRect().bottom);
+
+	glColor3f(0.95f, 0.95f, 0.95f);
+	glVertex2f((float) ent->getRect().left, (float) ent->getRect().top);
+	glVertex2f((float) ent->getRect().right, (float) ent->getRect().top);
+	glVertex2f((float) ent->getRect().right, (float) ent->getRect().bottom);
+	glVertex2f((float) ent->getRect().left, (float) ent->getRect().bottom);
 
 	glEnd();
+	glPopMatrix();
 }
 
 bool GLENGINE::EndScene() {
 	SwapBuffers(hdc);
+	return true;
 }
 
 bool GLENGINE::ReleaseRenderDevice() {
@@ -59,7 +84,41 @@ bool GLENGINE::ReleaseRenderDevice() {
 	return result;
 }
 
-GLENGINEDEVICE * __declspec(dllexport) CreateGlDevice() {
-	GLENGINEDEVICE * device = new GLENGINE();
-	return device;
+GLENGINE::~GLENGINE() {
+	this->ReleaseRenderDevice();
+}
+
+bool CreateGlDevice(LPGLENGINE device, HWND hwnd) {
+	*device = new GLENGINE(hwnd);
+	
+	return true;
+}
+
+bool ReleaseGlDevice(GLENGINEDEVICE * device) {
+	if (!device)
+		return true;
+
+	GLENGINE * engine = (GLENGINE *) device;
+	delete engine;
+
+	return true;
+}
+
+bool APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call,	LPVOID lpReserved) {
+	switch (ul_reason_for_call)
+	{
+	case DLL_PROCESS_ATTACH:
+		// A process is loading the DLL.
+		break;
+	case DLL_THREAD_ATTACH:
+		// A process is creating a new thread.
+		break;
+	case DLL_THREAD_DETACH:
+		// A thread exits normally.
+		break;
+	case DLL_PROCESS_DETACH:
+		// A process unloads the DLL.
+		break;
+	}
+	return true;
 }

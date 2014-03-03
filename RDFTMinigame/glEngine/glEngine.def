@@ -1,0 +1,5 @@
+;The following functions are exported from this DLL
+LIBRARY   "glEngine.dll"
+EXPORTS
+   CreateGlDevice
+   ReleaseGlDevice
