@@ -19,7 +19,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 	HWND hwnd = CreateWindowEx(
 		0,                              // Optional window styles.
 		CLASS_NAME,                     // Window class
-		"RDFT Engine Demo",    // Window text
+		"RDFT Engine Demo",				// Window text
 		WS_OVERLAPPEDWINDOW,            // Window style
 
 		// Size and position
@@ -49,7 +49,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 
 	ENTITY e(50, 50, 20, 20);
 
-	ENTITY f(100, 50, 40, 20);
+	ENTITY f(50, 50, 15, 15);
+
+	ENTITY g(50, 50, 10, 10);
 
 	int t = 0;
 
@@ -75,9 +77,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 		e.SetY(200 + 100 * sinf((float)t / 200));
 		e.SetX(200 + 100 * cosf((float)t / 200));
 
+		f.SetY(200 + 100 * sinf((float)(t - 90) / 200));
+		f.SetX(200 + 100 * cosf((float)(t - 90) / 200));
+
+		g.SetY(200 + 100 * sinf((float)(t - 180) / 200));
+		g.SetX(200 + 100 * cosf((float)(t - 180) / 200));
+
+
 		Engine()->GetGlDevice()->BeginScene();
 		Engine()->GetGlDevice()->Render(&e);
-		//Engine()->GetGlDevice()->Render(&f);
+		Engine()->GetGlDevice()->Render(&f);
+		Engine()->GetGlDevice()->Render(&g);
 		Engine()->GetGlDevice()->EndScene();
 
 		t++;
