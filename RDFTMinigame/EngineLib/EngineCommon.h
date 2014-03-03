@@ -62,15 +62,4 @@ public:
 	}
 };
 
-class Rectangle : public ENTITY {
-public:
-	// TODO: Finish me!
-
-};
-
-class Ball : public Rectangle {
-public:
-	// TODO: Finish me!
-};
-
 #endif
