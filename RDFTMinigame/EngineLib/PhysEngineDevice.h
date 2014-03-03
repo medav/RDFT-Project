@@ -43,13 +43,23 @@ public:
 	RECT getRect();
 };
 
-class Rectangle : public ENTITY {
+class Wall : public ENTITY {
 public:
 	// TODO: Finish me!
 
 };
 
-class Ball : public Rectangle {
+class AlmostCircle : public ENTITY{
+public:
+	//TODO
+};
+
+class Hole : public AlmostCircle {
+public:
+	//TODO
+};
+
+class Ball : public ENTITY {
 public:
 	// TODO: Finish me!
 };
