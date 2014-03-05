@@ -18,3 +18,19 @@ bool APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserve
 	}
 	return true;
 }
+
+bool CreateLmDevice(LPLMENGINE device, HWND hwnd) {
+	*device = new LMENGINE();
+
+	return true;
+}
+
+bool ReleaseLmDevice(LMENGINEDEVICE * device) {
+	if (!device)
+		return true;
+
+	LMENGINE * engine = (LMENGINE *)device;
+	delete engine;
+
+	return true;
+}

@@ -53,7 +53,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 
 	ENTITY g(50, 50, 10, 10);
 
-	int t = 0;
+	float t = 0;
 
 
 	// Run the message loop.
@@ -74,14 +74,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 			DispatchMessage(&msg);
 		}
 
-		e.SetY(200 + 100 * sinf((float)t / 200));
-		e.SetX(200 + 100 * cosf((float)t / 200));
+		e.SetY(200 + 100 * sinf(t / 200.0f));
+		e.SetX(200 + 100 * cosf(t / 200.0f));
 
-		f.SetY(200 + 100 * sinf((float)(t - 90) / 200));
-		f.SetX(200 + 100 * cosf((float)(t - 90) / 200));
+		f.SetY(200 + 60 * sinf(t / 220.0f));
+		f.SetX(200 + 60 * cosf(t / 220.0f));
 
-		g.SetY(200 + 100 * sinf((float)(t - 180) / 200));
-		g.SetX(200 + 100 * cosf((float)(t - 180) / 200));
+		g.SetY(200 + 20 * sinf(t / 240.0f));
+		g.SetX(200 + 20 * cosf(t / 240.0f));
 
 
 		Engine()->GetGlDevice()->BeginScene();

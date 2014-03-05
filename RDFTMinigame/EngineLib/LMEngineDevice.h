@@ -14,4 +14,8 @@ public:
 	virtual ~LMENGINEDEVICE() = 0;
 };
 
+typedef LMENGINEDEVICE* PLMENGINE;
+typedef LMENGINEDEVICE** LPLMENGINE;
+typedef bool(*CREATELMENGINEDEVICE)(LPLMENGINE engine, HWND hwnd);
+
 #endif
