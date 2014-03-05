@@ -7,7 +7,7 @@
 
 class LMENGINE : public LMENGINEDEVICE {
 private:
-	// Private variables go here
+	HWND hwnd;
 
 public:
 	LMENGINE(HWND hwnd);
