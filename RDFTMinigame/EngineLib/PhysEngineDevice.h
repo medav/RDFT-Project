@@ -1,16 +1,15 @@
-#ifndef __PHYSENGINE__
-#define __PHYSENGINE__
+#ifndef __PHYSENGINEDEVICE__
+#define __PHYSENGINEDEVICE__
 #include <Windows.h>
 #include "EngineCommon.h"
 
 class PHYSENGINEDEVICE {
 public:
-	PHYSENGINEDEVICE();
+	PHYSENGINEDEVICE() {}
 
-	// TODO: Interface functions declared here:
-	// virtual (type) NAME(args) = 0;
+	virtual void init() = 0;
 
-	virtual ~PHYSENGINEDEVICE() = 0;
+	virtual ~PHYSENGINEDEVICE() {}
 };
 
 
