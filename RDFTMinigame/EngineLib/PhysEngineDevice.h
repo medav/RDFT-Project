@@ -8,7 +8,7 @@ public:
 	PHYSENGINEDEVICE();
 
 	// TODO: Interface functions declared here:
-	// virtual (type) NAME(args) = 0;
+	// Form: virtual (type) NAME(args) = 0;
 
 	virtual ~PHYSENGINEDEVICE() = 0;
 };
@@ -16,8 +16,8 @@ public:
 
 class Wall : public ENTITY {
 public:
-	// TODO: Finish me!
-
+	// This is basically just for clarification's sake of having a name; walls are
+	// identical to ENTITY for all intensive purposes
 };
 
 class AlmostCircle : public ENTITY{
@@ -30,7 +30,7 @@ public:
 	//TODO
 };
 
-class Ball : public ENTITY {
+class Ball : public AlmostCircle {
 public:
 	// TODO: Finish me!
 };
