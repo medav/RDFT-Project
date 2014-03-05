@@ -33,21 +33,22 @@ public:
 		SetH(h);
 	}
 
-	void SetX(int x) {
+	virtual void SetX(int x) {
 		rect.left = x;
 	}
 
-	void SetY(int y) {
+	virtual void SetY(int y) {
 		rect.top = y;
 	}
 
-	void SetW(int w) {
+	virtual void SetW(int w) {
 		this->w = w;
 	}
 
-	void SetH(int h) {
+	virtual void SetH(int h) {
 		this->h = h;
 	}
+
 	//virtual void Think();
 	//virtual void Collide(ENTITY * other);
 
