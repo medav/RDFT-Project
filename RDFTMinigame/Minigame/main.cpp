@@ -40,7 +40,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 	Engine()->SetHWND(hwnd);
 
 	if (!Engine()->LoadDLLs())
-	//	return 0;
+		return 0;
 
 	if (!Engine()->CreateDevices())
 		return 0;
