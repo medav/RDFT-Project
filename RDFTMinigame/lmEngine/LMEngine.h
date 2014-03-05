@@ -1,6 +1,7 @@
 #ifndef __LMENGINE__
 #define __LMENGINE__
 #include <Windows.h>
+#include <Leap.h>
 #include "..\EngineLib\LMEngineDevice.h"
 #include "..\EngineLib\EngineCommon.h"
 
