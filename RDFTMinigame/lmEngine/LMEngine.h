@@ -2,22 +2,22 @@
 #define __LMENGINE__
 #include <Windows.h>
 #include "..\EngineLib\LMEngineDevice.h"
-#include "Leap.h"
-#include "LeapMath.h"
+#include "..\EngineLib\EngineCommon.h"
+
 
 class LMENGINE : public LMENGINEDEVICE {
 private:
-	// Private variables go here
+	HWND hwnd;
 
 public:
+	LMENGINE(HWND hwnd);
+
 	virtual bool LMInitiate();
 	virtual bool LMRefresh();
 	virtual GLVECTOR2 LMGetVector(GLVECTOR2 start, GLVECTOR2 end);
+
+	~LMENGINE();
 };
 
-static Leap::Controller& getController()
-{
-	static Leap::Controller s_controller;
-	return  s_controller;
-}
+
 #endif
