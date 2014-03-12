@@ -10,7 +10,20 @@ void PHYSENGINE::init() {
 }
 
 void PHYSENGINE::Think() {
-	// TODO:
+	ENTITY * temp;
+
+	// Call Think() for all ENTITYs
+	for (int i = 0; i < ents.size(); i++){
+		ents[i]->Think();
+		if (ents[i]->TYPE == MOVING){
+			temp = ents[i];
+		}
+	}
+
+	// Search for collisions
+	for (int i = 0; i < ents.size(); i++){
+
+	}
 }
 
 PHYSENGINE::~PHYSENGINE() {
