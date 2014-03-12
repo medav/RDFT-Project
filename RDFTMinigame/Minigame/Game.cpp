@@ -1,25 +1,56 @@
 #include "Game.h"
 
-//enum STATE { /* Fill this in */ };
-
 RDFTENGINE * Engine() {
 	static RDFTENGINE rdft;
 	return &rdft;
 }
-/*
-void GameThink() {
-	STATE st;
 
-	switch (st) {
-	case STATE::MENU:
-		DO_MENU_THINK();
+Minigame::Minigame() {
+	MinigameState = GAME;
+	MenuState = MAIN;
+	GameState = WAITING;
+}
+
+void Minigame::Think() {
+	switch (MinigameState) {
+	case MENU:
+		MenuThink();
 		break;
-	case STATE::GAME_PLAYING:
-		DO_GAME_WAITING_THINK();
+	case GAME:
+		GameThink();
 		break;
 	default:
-
 	}
 }
-void GameDraw();
-*/
+
+void Minigame::MenuThink() {
+	switch (MenuState) {
+	case MAIN:
+		MenuMainThink();
+		break;
+	case SETTINGS:
+		MenuSettingsThink();
+		break;
+	default:
+	}
+}
+
+void Minigame::MenuMainThink() {
+	// TODO:
+}
+
+void Minigame::MenuSettingsThink() {
+	// TODO:
+}
+
+void Minigame::GameThink() {
+	// TODO:
+}
+
+void Minigame::GameWaitingThink() {
+	// TODO:
+}
+
+void Minigame::GameRunningThink() {
+	// TODO:
+}

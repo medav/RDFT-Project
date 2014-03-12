@@ -56,6 +56,23 @@ bool RDFTENGINE::CreateGlDevice() {
 	return _CreateGLEngineDevice(&this->glEngine, this->hwnd);
 }
 
+bool RDFTENGINE::CreatePhysDevice() {
+	if (!hPhysDLL) {
+		MessageBox(NULL, "physEngine.dll not loaded, could not create device", "Engine error", MB_ICONERROR | MB_OK);
+		return false;
+	}
+
+	CREATEGLENGINEDEVICE _CreateGLEngineDevice = 0;
+	_CreateGLEngineDevice = (CREATEGLENGINEDEVICE)GetProcAddress(hGlDLL, "CreatePhysDevice");
+
+	if (!_CreateGLEngineDevice) {
+		MessageBox(NULL, "Could not call CreatePhysDevice()", "Engine error", MB_ICONERROR | MB_OK);
+		return false;
+	}
+
+	return _CreatePhysEngineDevice(&this->glEngine, this->hwnd);
+}
+
 bool RDFTENGINE::CreateDevices() {
 	bool result = true;
 	

@@ -3,11 +3,8 @@
 #include "GLEngineDevice.h"
 #include "PhysEngineDevice.h"
 
-
-typedef PHYSENGINEDEVICE* PHYSENGINE;
-//typedef LMENGINEDEVICE* LMENGINE;
-
-typedef bool (*CREATEPHYSENGINEDEVICE)(PHYSENGINE engine);
+typedef bool(*CREATEGLENGINEDEVICE)(LPGLENGINE engine, HWND hwnd);
+typedef bool (*CREATEPHYSENGINEDEVICE)(LPPHYSENGINE engine, HWND hwnd);
 
 class RDFTENGINE {
 private:
