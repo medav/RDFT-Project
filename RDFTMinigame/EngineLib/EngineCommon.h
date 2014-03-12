@@ -11,6 +11,9 @@ typedef struct {
 } GLVECTOR2, GLVERTEX2;
 
 class ENTITY {
+public:
+	enum TYPE { STATIC, MOVING };
+
 private:
 	float x, y;
 
@@ -36,7 +39,7 @@ public:
 
 	virtual void Think();
 	virtual void Collide(ENTITY * other);
-
+	virtual TYPE Type() = 0;
 };
 
 #endif

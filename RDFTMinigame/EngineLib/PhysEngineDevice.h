@@ -44,4 +44,7 @@ public:
 	void ApplyVelocity(float x, float y);
 };
 
+typedef PHYSENGINEDEVICE* PPHYSENGINE;
+typedef PHYSENGINEDEVICE** LPPHYSENGINE;
+
 #endif

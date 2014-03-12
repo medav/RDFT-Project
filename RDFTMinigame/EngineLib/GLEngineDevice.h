@@ -20,6 +20,6 @@ public:
 
 typedef GLENGINEDEVICE* PGLENGINE;
 typedef GLENGINEDEVICE** LPGLENGINE;
-typedef bool(*CREATEGLENGINEDEVICE)(LPGLENGINE engine, HWND hwnd);
+
 
 #endif
