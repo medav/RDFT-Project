@@ -22,12 +22,7 @@ public:
 
 };
 
-class AlmostCircle : public ENTITY{
-public:
-	//TODO
-};
-
-class Hole : public AlmostCircle {
+class Hole : public ENTITY {
 public:
 	//TODO
 };
@@ -35,10 +30,10 @@ public:
 class Ball : public ENTITY {
 private:
 	// Kinetic friction coef.
-	const double mk = .7;
+	const double mk = 0.7;
 
 	// Collision constant
-	const double cc = .1;
+	const double cc = 0.1;
 
 	GLVECTOR2 V;
 	GLVECTOR2 R;
