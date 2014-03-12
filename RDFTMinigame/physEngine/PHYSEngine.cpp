@@ -9,6 +9,10 @@ void PHYSENGINE::init() {
 
 }
 
+void PHYSENGINE::Think() {
+	// TODO:
+}
+
 PHYSENGINE::~PHYSENGINE() {
 
 }
