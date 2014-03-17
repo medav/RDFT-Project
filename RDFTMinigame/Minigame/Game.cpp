@@ -14,43 +14,47 @@ Minigame::Minigame() {
 void Minigame::Think() {
 	switch (MinigameState) {
 	case MENU:
-		MenuThink();
+		MinigameMenu::Instance()->Think();
 		break;
 	case GAME:
-		GameThink();
+		MinigameGame::Instance()->Think();
 		break;
 	default:
 	}
 }
 
-void Minigame::MenuThink() {
+/************************************************************/
+
+void MinigameMenu::Think() {
 	switch (MenuState) {
-	case MAIN:
-		MenuMainThink();
+	case Minigame::MAIN:
+		MainThink();
 		break;
-	case SETTINGS:
-		MenuSettingsThink();
+	case Minigame::SETTINGS:
+		SettingsThink();
 		break;
 	default:
 	}
 }
 
-void Minigame::MenuMainThink() {
+void MinigameMenu::MainThink() {
 	// TODO:
 }
 
-void Minigame::MenuSettingsThink() {
+void MinigameMenu::SettingsThink() {
 	// TODO:
 }
 
-void Minigame::GameThink() {
+/************************************************************/
+
+void MinigameGame::Think() {
 	// TODO:
 }
 
-void Minigame::GameWaitingThink() {
+void MinigameGame::WaitingThink() {
 	// TODO:
 }
 
-void Minigame::GameRunningThink() {
+void MinigameGame::RunningThink() {
 	// TODO:
 }
