@@ -4,19 +4,6 @@
 #include "EngineCommon.h"
 #include "GLEngineDevice.h"
 
-class PHYSENGINEDEVICE {
-public:
-	PHYSENGINEDEVICE() {}
-
-	virtual void init() = 0;
-
-	virtual void Think() = 0;
-
-	virtual void AddEntity(ENTITY * ent) = 0;
-
-	virtual ~PHYSENGINEDEVICE() {}
-};
-
 class ENTITY {
 public:
 	enum TYPE { STATIC, MOVING };
@@ -71,7 +58,7 @@ public:
 class Wall : public World {
 
 public:
-	Wall(GLVECTOR2 Pos, float w, float h) : World(Pos) {}
+	Wall(GLVECTOR2 Pos, float w, float h) : World(Pos, w, h) {}
 
 	virtual void Draw();
 };
@@ -111,6 +98,18 @@ public:
 	virtual ENTITY::TYPE Type() {
 		return ENTITY::MOVING;
 	}
+};
+
+class PHYSENGINEDEVICE {
+public:
+	PHYSENGINEDEVICE() {}
+
+	virtual void init() = 0;
+	virtual void Think() = 0;
+	virtual void AddEntity(ENTITY * ent) = 0;
+	virtual void Clear() = 0;
+
+	virtual ~PHYSENGINEDEVICE() {}
 };
 
 typedef PHYSENGINEDEVICE* PPHYSENGINE;

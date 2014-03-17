@@ -40,7 +40,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 
 	Engine()->GetGlDevice()->SetWindowSize();
 
-	ENTITY * ball = new Ball(VectorOf(20, 20));
+	//ENTITY * ball = new Ball(VectorOf(20, 20));
 
 	float t = 0;
 
@@ -64,9 +64,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 		}
 
 		Engine()->GetGlDevice()->BeginScene();
-		Engine()->GetGlDevice()->Render(&e);
-		Engine()->GetGlDevice()->Render(&f);
-		Engine()->GetGlDevice()->Render(&g);
 		Engine()->GetGlDevice()->EndScene();
 
 		t++;

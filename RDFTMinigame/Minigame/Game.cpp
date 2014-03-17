@@ -20,6 +20,7 @@ void Minigame::Think() {
 		MinigameGame::Instance()->Think();
 		break;
 	default:
+		break;
 	}
 }
 
@@ -34,6 +35,7 @@ void MinigameMenu::Think() {
 		SettingsThink();
 		break;
 	default:
+		break;
 	}
 }
 

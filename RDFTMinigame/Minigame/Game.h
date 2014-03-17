@@ -6,6 +6,34 @@
 
 RDFTENGINE * Engine();
 
+class Minigame {
+public:
+	enum STATE { MENU, GAME };
+	enum MENUSTATE { MAIN, SETTINGS };
+	enum GAMESTATE { WAITING, RUNNING };
+
+private:
+	Minigame();
+
+	STATE MinigameState;
+	MENUSTATE MenuState;
+	GAMESTATE GameState;
+
+public:
+
+	static Minigame * Instance() {
+		return NULL;
+	}
+
+	void Think();
+
+	void SetState(STATE state) {
+		MinigameState = state;
+	}
+
+	~Minigame();
+};
+
 class MinigameMenu {
 private:
 	MinigameMenu();
@@ -17,7 +45,9 @@ public:
 	void MainThink();
 	void SettingsThink();
 
-	static MinigameMenu * Instance();
+	static MinigameMenu * Instance() {
+		return NULL;
+	}
 };
 
 class MinigameGame {
@@ -26,33 +56,19 @@ private:
 
 	Minigame::GAMESTATE state;
 
+	int Level;
+	int NumMoves;
+
+	void NewMap();
+
 public:
 	void Think();
 	void WaitingThink();
 	void RunningThink();
 
-	static MinigameGame * Instance();
-};
-
-class Minigame {
-public:
-	enum STATE { MENU, GAME };
-	enum MENUSTATE { MAIN, SETTINGS };
-	enum GAMESTATE { WAITING, RUNNING };
-
-private:
-	STATE MinigameState;
-	MENUSTATE MenuState;
-	GAMESTATE GameState;
-
-	Minigame();
-
-public:
-
-	static Minigame * Instance();
-	void Think();
-
-	~Minigame();
+	static MinigameGame * Instance() {
+		return NULL;
+	}
 };
 
 #endif

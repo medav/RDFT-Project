@@ -6,6 +6,7 @@
 
 typedef bool(*CREATEGLENGINEDEVICE)(LPGLENGINE engine, HWND hwnd);
 typedef bool (*CREATEPHYSENGINEDEVICE)(LPPHYSENGINE engine, HWND hwnd);
+typedef bool(*CREATELMENGINEDEVICE)(LPLMENGINE engine, HWND hwnd);
 
 class RDFTENGINE {
 private:
