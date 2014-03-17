@@ -11,11 +11,45 @@ public:
 
 	virtual void Think() = 0;
 
+	virtual void AddEntity(ENTITY * ent) = 0;
+
 	virtual ~PHYSENGINEDEVICE() {}
+};
+
+class ENTITY {
+public:
+	enum TYPE { STATIC, MOVING };
+
+protected:
+	GLVECTOR2 pos;
+
+public:
+
+	ENTITY() {
+		pos.x = 0;
+		pos.y = 0;
+	}
+
+	ENTITY(GLVECTOR2 pos) {
+		this->pos = pos;
+	}
+
+	virtual void SetX(int x) {
+		this->pos.x = x;
+	}
+
+	virtual void SetY(int y) {
+		this->pos.y = y;
+	}
+
+	virtual void Think();
+	virtual void Collide(ENTITY * other);
+	virtual TYPE Type() = 0;
 };
 
 
 class Wall : public ENTITY {
+
 public:
 	virtual void Think() {}
 
@@ -39,7 +73,10 @@ private:
 	GLVECTOR2 R;
 
 public:
+	Ball(GLVECTOR2 pos) : ENTITY(pos) {}
+
 	virtual void Think();
+	virtual void Collide(ENTITY * other);
 
 	void ApplyVelocity(float x, float y);
 };
