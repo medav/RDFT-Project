@@ -61,6 +61,10 @@ public:
 	Wall(GLVECTOR2 Pos, float w, float h) : World(Pos, w, h) {}
 
 	virtual void Draw();
+
+	virtual ENTITY::TYPE Type() {
+		return ENTITY::STATIC;
+	}
 };
 
 class Hole : public ENTITY {
