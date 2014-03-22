@@ -62,8 +62,6 @@ public:
 
 	virtual void Draw();
 
-	virtual ENTITY::TYPE Type() {
-		return ENTITY::STATIC;
 	}
 };
 
