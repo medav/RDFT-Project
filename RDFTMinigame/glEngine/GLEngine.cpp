@@ -56,10 +56,6 @@ void GLENGINE::Render(ENTITY * ent) {
 	glBegin(GL_QUADS);
 
 	glColor3f(0.95f, 0.95f, 0.95f);
-	glVertex2f((float) ent->getRect().left, (float) ent->getRect().top);
-	glVertex2f((float) ent->getRect().right, (float) ent->getRect().top);
-	glVertex2f((float) ent->getRect().right, (float) ent->getRect().bottom);
-	glVertex2f((float) ent->getRect().left, (float) ent->getRect().bottom);
 
 	glEnd();
 	glPopMatrix();

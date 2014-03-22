@@ -10,36 +10,10 @@ typedef struct {
 	double x, y;
 } GLVECTOR2, GLVERTEX2;
 
-class ENTITY {
-public:
-	enum TYPE { STATIC, MOVING };
+typedef struct {
+	double x, y, w, h;
+} BOUNDINGBOX;
 
-private:
-	float x, y;
-
-public:
-
-	ENTITY() {
-		x = 0;
-		y = 0;
-	}
-
-	ENTITY(float x, float y) {
-		SetX(x);
-		SetY(y);
-	}
-
-	virtual void SetX(int x) {
-		this->x = x;
-	}
-
-	virtual void SetY(int y) {
-		this->y = y;
-	}
-
-	virtual void Think();
-	virtual void Collide(ENTITY * other);
-	virtual TYPE Type() = 0;
-};
+GLVECTOR2 VectorOf(float x, float y);
 
 #endif

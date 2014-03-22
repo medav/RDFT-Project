@@ -13,26 +13,62 @@ public:
 	enum GAMESTATE { WAITING, RUNNING };
 
 private:
+	Minigame();
+
 	STATE MinigameState;
 	MENUSTATE MenuState;
 	GAMESTATE GameState;
 
-	Minigame();
-
-	void MenuThink();
-	void MenuMainThink();
-	void MenuSettingsThink();
-
-	void GameThink();
-	void GameWaitingThink();
-	void GameRunningThink();
-
 public:
 
-	static Minigame * Instance();
+	static Minigame * Instance() {
+		return NULL;
+	}
+
 	void Think();
 
+	void SetState(STATE state) {
+		MinigameState = state;
+	}
+
 	~Minigame();
+};
+
+class MinigameMenu {
+private:
+	MinigameMenu();
+
+	Minigame::MENUSTATE MenuState;
+
+public:
+	void Think();
+	void MainThink();
+	void SettingsThink();
+
+	static MinigameMenu * Instance() {
+		return NULL;
+	}
+};
+
+class MinigameGame {
+private:
+	MinigameGame();
+
+	Minigame::GAMESTATE state;
+
+	int Level;
+	int NumMoves;
+
+	void NewMap();
+
+public:
+	void Think();
+	void WaitingThink();
+	void RunningThink();
+
+	static MinigameGame * Instance() {
+		return NULL;
+	}
 };
 
 #endif
