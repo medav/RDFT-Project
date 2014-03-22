@@ -15,7 +15,7 @@ void PHYSENGINE::Think() {
 	// Call Think() for all ENTITYs
 	for (int i = 0; i < ents.size(); i++){
 		ents[i]->Think();
-		if (ents[i]->TYPE == MOVING){
+		if (ents[i]->Type() == ENTITY::MOVING){
 			temp = ents[i];
 		}
 	}
