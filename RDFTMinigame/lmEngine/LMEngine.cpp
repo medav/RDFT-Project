@@ -1,5 +1,7 @@
 #include "LMEngine.h"
 
+using namespace Leap;
+
 LMENGINE::LMENGINE(HWND hwnd) {
 	this->hwnd = hwnd;
 	this->LMInitiate();
@@ -11,7 +13,21 @@ bool LMENGINE::LMInitiate() {
 }
 
 bool LMENGINE::LMRefresh() {
-	// TODO: Finish me!
+	
+	const Frame frame = ctrl.frame();
+	if (!frame.hands().isEmpty()){
+		const Hand hand = frame.hands()[0];
+		const FingerList fingers = hand.fingers();
+		if (!fingers.isEmpty()){
+			Vector avgPos;
+			for (int i = 0; i < fingers.count(); ++i){
+				avgPos += fingers[i].tipPosition();
+			}
+			avgPos /= (float)fingers.count();
+			std::cout << avgPos << std::endl;
+		}
+	}
+
 	return true;
 }
 

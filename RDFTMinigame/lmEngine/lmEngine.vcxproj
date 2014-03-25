@@ -69,11 +69,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="LeapListener.h" />
     <ClInclude Include="LMEngine.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LeapListener.cpp" />
     <ClCompile Include="LMEngine.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
