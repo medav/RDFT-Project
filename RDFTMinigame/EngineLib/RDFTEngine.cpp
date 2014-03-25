@@ -62,15 +62,15 @@ bool RDFTENGINE::CreatePhysDevice() {
 		return false;
 	}
 
-	CREATEGLENGINEDEVICE _CreateGLEngineDevice = 0;
-	_CreateGLEngineDevice = (CREATEGLENGINEDEVICE)GetProcAddress(hGlDLL, "CreatePhysDevice");
+	CREATEPHYSENGINEDEVICE _CreatePhysEngineDevice = 0;
+	_CreatePhysEngineDevice = (CREATEPHYSENGINEDEVICE)GetProcAddress(hGlDLL, "CreatePhysDevice");
 
-	if (!_CreateGLEngineDevice) {
+	if (!_CreatePhysEngineDevice) {
 		MessageBox(NULL, "Could not call CreatePhysDevice()", "Engine error", MB_ICONERROR | MB_OK);
 		return false;
 	}
 
-	return _CreatePhysEngineDevice(&this->glEngine, this->hwnd);
+	return _CreatePhysEngineDevice(&this->physEngine, this->hwnd);
 }
 
 bool RDFTENGINE::CreateDevices() {

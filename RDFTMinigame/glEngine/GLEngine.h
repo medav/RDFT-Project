@@ -26,7 +26,10 @@ public:
 	void SetClearColor(GLCOLOR bgcolor);
 
 	bool BeginScene();
-	void Render(ENTITY * ent);
+
+	virtual void DrawRect(GLVERTEX2 pos, GLVECTOR2 size, GLCOLOR color);
+	virtual void DrawCircle(GLVERTEX2 pos, GLVECTOR2 size, GLCOLOR color);
+
 	bool EndScene();
 
 	bool ReleaseRenderDevice();

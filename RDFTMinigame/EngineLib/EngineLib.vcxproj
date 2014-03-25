@@ -71,6 +71,7 @@
     <ClInclude Include="RDFTEngine.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EngineCommon.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="RDFTEngine.cpp" />
   </ItemGroup>

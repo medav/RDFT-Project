@@ -17,20 +17,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 	// Create the window.
 
 	HWND hwnd = CreateWindowEx(
-		0,                              // Optional window styles.
-		CLASS_NAME,                     // Window class
-		"RDFT Engine Demo",				// Window text
-		WS_OVERLAPPEDWINDOW,            // Window style
-
-		// Size and position
-		
-		CW_USEDEFAULT, CW_USEDEFAULT, 500, 500,
-
-		NULL,       // Parent window    
-		NULL,       // Menu
-		hInstance,  // Instance handle
-		NULL        // Additional application data
-		);
+		0, CLASS_NAME,
+		"RDFT Engine Demo",
+		WS_OVERLAPPEDWINDOW,
+		CW_USEDEFAULT, CW_USEDEFAULT, 1024, 768,
+		NULL, NULL,
+		hInstance,
+		NULL);
 
 	if (hwnd == NULL)
 		return 0;
@@ -47,11 +40,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 
 	Engine()->GetGlDevice()->SetWindowSize();
 
-	ENTITY e(50, 50, 20, 20);
-
-	ENTITY f(50, 50, 15, 15);
-
-	ENTITY g(50, 50, 10, 10);
+	//ENTITY * ball = new Ball(VectorOf(20, 20));
 
 	float t = 0;
 
@@ -74,20 +63,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 			DispatchMessage(&msg);
 		}
 
-		e.SetY(200 + 100 * sinf(t / 200.0f));
-		e.SetX(200 + 100 * cosf(t / 200.0f));
-
-		f.SetY(200 + 60 * sinf(t / 220.0f));
-		f.SetX(200 + 60 * cosf(t / 220.0f));
-
-		g.SetY(200 + 20 * sinf(t / 240.0f));
-		g.SetX(200 + 20 * cosf(t / 240.0f));
-
-
 		Engine()->GetGlDevice()->BeginScene();
-		Engine()->GetGlDevice()->Render(&e);
-		Engine()->GetGlDevice()->Render(&f);
-		Engine()->GetGlDevice()->Render(&g);
 		Engine()->GetGlDevice()->EndScene();
 
 		t++;
@@ -105,6 +81,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 	case WM_SIZE:
 		if (Engine()->GetGlDevice())
 			Engine()->GetGlDevice()->SetWindowSize();
+
+		MinigameGame::Instance()->Resize();
 		return 0;
 
 	case WM_PAINT:
