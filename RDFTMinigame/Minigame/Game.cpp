@@ -60,3 +60,10 @@ void MinigameGame::WaitingThink() {
 void MinigameGame::RunningThink() {
 	// TODO:
 }
+
+/************************************************************/
+
+void MinigameGame::NewMap() {
+	Engine()->GetPhysDevice()->Clear();
+
+}

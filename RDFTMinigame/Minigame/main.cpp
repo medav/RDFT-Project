@@ -81,6 +81,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 	case WM_SIZE:
 		if (Engine()->GetGlDevice())
 			Engine()->GetGlDevice()->SetWindowSize();
+
+		MinigameGame::Instance()->Resize();
 		return 0;
 
 	case WM_PAINT:

@@ -19,11 +19,16 @@ private:
 	MENUSTATE MenuState;
 	GAMESTATE GameState;
 
+	HWND hwnd;
+
 public:
 
 	static Minigame * Instance() {
 		return NULL;
 	}
+
+	void Setup(HWND hwnd);
+	void Resize();
 
 	void Think();
 
@@ -44,6 +49,7 @@ public:
 	void Think();
 	void MainThink();
 	void SettingsThink();
+	void Resize();
 
 	static MinigameMenu * Instance() {
 		return NULL;
@@ -60,6 +66,7 @@ private:
 	int NumMoves;
 
 	void NewMap();
+	void Resize();
 
 public:
 	void Think();

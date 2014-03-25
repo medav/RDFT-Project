@@ -14,6 +14,7 @@ typedef struct {
 	double x, y, w, h;
 } BOUNDINGBOX;
 
-GLVECTOR2 VectorOf(float x, float y);
+GLVECTOR2 VectorOf(double x, double y);
+double Magnitude(GLVECTOR2 vec);
 
 #endif

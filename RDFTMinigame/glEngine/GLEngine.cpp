@@ -1,4 +1,5 @@
 #include "GLEngine.h"
+#include <math.h>
 
 GLENGINE::GLENGINE(HWND hwnd) {
 	this->CreateRenderDevice(hwnd);
@@ -51,7 +52,7 @@ bool GLENGINE::BeginScene() {
 	return true;
 }
 
-void GLENGINE::Render(ENTITY * ent) {
+void DrawRect(GLVERTEX2 pos, GLVECTOR2 size, GLCOLOR color) {
 	glPushMatrix();
 	glBegin(GL_QUADS);
 
@@ -59,6 +60,29 @@ void GLENGINE::Render(ENTITY * ent) {
 
 	glEnd();
 	glPopMatrix();
+}
+
+void DrawCircle(GLVERTEX2 pos, GLVECTOR2 size, GLCOLOR color) {
+	float theta = 2 * 3.1415926 / 300.0;
+	float c = cosf(theta);
+	float s = sinf(theta);
+	float t;
+
+	float x = Magnitude(size);
+	float y = 0;
+	int i;
+
+	glBegin(GL_LINE_LOOP);
+	glColor3f(0.95f, 0.95f, 0.95f);
+
+	for (int i = 0; i < 300.0; i++) {
+		glVertex2f(x + pos.x, y + pos.y);
+
+		t = x;
+		x = c * x - s * y;
+		y = s * t + c * y;
+	}
+	glEnd();
 }
 
 bool GLENGINE::EndScene() {
