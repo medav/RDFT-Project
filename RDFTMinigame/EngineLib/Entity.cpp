@@ -8,6 +8,7 @@ void Ball::Think() {
 	if (Vel.x == 0 && Vel.y == 0)
 		return;
 
+	double frictionAcc = -1 * mk;
 	// Update Pos based on velocity Vel
 	double dT = ck.DeltaT();
 
@@ -18,10 +19,14 @@ void Ball::Think() {
 	Vel.x *= mk;
 	Vel.y *= mk;
 
+	//Uncomment when you get your time figured out Michael Davies
+	//Vel.x += (frictionAcc * dT);
+	//Vel.y += (frictionAcc * dT);
+
 	if ((Vel.x * Vel.x + Vel.y * Vel.y) < 0.001) {
 		Vel.x = 0;
 		Vel.y = 0;
-}
+	}
 }
 
 void Ball::ApplyVelocity(float x, float y){
