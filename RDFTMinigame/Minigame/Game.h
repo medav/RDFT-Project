@@ -4,8 +4,6 @@
 #include "..\EngineLib\RDFTEngine.h"
 #include <math.h>
 
-RDFTENGINE * Engine();
-
 class Minigame {
 public:
 	enum STATE { MENU, GAME };
@@ -13,9 +11,6 @@ public:
 	enum GAMESTATE { WAITING, RUNNING };
 
 private:
-	Minigame();
-	static Minigame * _Instance;
-
 	STATE MinigameState;
 	MENUSTATE MenuState;
 	GAMESTATE GameState;
@@ -23,13 +18,7 @@ private:
 	HWND hwnd;
 
 public:
-
-	static Minigame * Instance() {
-		if (!_Instance)
-			_Instance = new Minigame();
-
-		return _Instance;
-	}
+	Minigame();
 
 	void Setup(HWND hwnd);
 	void Resize();
@@ -46,9 +35,6 @@ public:
 
 class MinigameMenu {
 private:
-	MinigameMenu() {}
-	static MinigameMenu * _Instance;
-
 	Minigame::MENUSTATE MenuState;
 
 	void MainThink();
@@ -58,24 +44,16 @@ private:
 	void SettingsDraw();
 
 public:
+	MinigameMenu() {}
+
 	void Think();
 	void Draw();
 	
 	void Resize();
-
-	static MinigameMenu * Instance() {
-		if (!_Instance)
-			_Instance = new MinigameMenu();
-
-		return _Instance;
-	}
 };
 
 class MinigameGame {
 private:
-	MinigameGame();
-	static MinigameGame * _Instance;
-
 	Minigame::GAMESTATE GameState;
 
 	int Level;
@@ -89,17 +67,17 @@ private:
 	void RunningDraw();
 
 public:
+	MinigameGame();
+
 	void Think();
 	void Draw();
 
-	static MinigameGame * Instance() {
-		if (!_Instance)
-			_Instance = new MinigameGame();
-
-		return _Instance;
-	}
-
 	void Resize();
 };
+
+RDFTENGINE * Engine();
+Minigame * MG();
+MinigameMenu * MGM();
+MinigameGame * MGG();
 
 #endif

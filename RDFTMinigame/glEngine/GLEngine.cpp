@@ -52,7 +52,7 @@ bool GLENGINE::BeginScene() {
 	return true;
 }
 
-void DrawRect(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color) {
+void GLENGINE::DrawRect(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color) {
 	glBegin(GL_QUADS);
 
 	glColor3f(color.r, color.g, color.b);
@@ -65,13 +65,13 @@ void DrawRect(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color) {
 	glEnd();
 }
 
-void DrawCircle(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color) {
+void GLENGINE::DrawCircle(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color) {
 	float theta = 2 * 3.1416 / 300.0;
 	float c = cosf(theta);
 	float s = sinf(theta);
 	float t;
 
-	float x = Magnitude(size);
+	float x = sqrt(size.x * size.x + size.y + size.y);
 	float y = 0;
 	int i;
 

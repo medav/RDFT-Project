@@ -1,7 +1,23 @@
 #include "Game.h"
 
 RDFTENGINE * Engine() {
-	return RDFTENGINE::Instance();
+	static RDFTENGINE * rdft = new RDFTENGINE();
+	return rdft;
+}
+
+Minigame * MG() {
+	static Minigame * mg = new Minigame();
+	return mg;
+}
+
+MinigameMenu * MGM() {
+	static MinigameMenu * mgm = new MinigameMenu();
+	return mgm;
+}
+
+MinigameGame * MGG() {
+	static MinigameGame * mgg = new MinigameGame();
+	return mgg;
 }
 
 Minigame::Minigame() {
@@ -13,10 +29,10 @@ Minigame::Minigame() {
 void Minigame::Think() {
 	switch (MinigameState) {
 	case MENU:
-		MinigameMenu::Instance()->Think();
+		MGM()->Think();
 		break;
 	case GAME:
-		MinigameGame::Instance()->Think();
+		MGG()->Think();
 		break;
 	default:
 		break;
@@ -26,10 +42,10 @@ void Minigame::Think() {
 void Minigame::Draw() {
 	switch (MinigameState) {
 	case MENU:
-		MinigameMenu::Instance()->Draw();
+		MGM()->Draw();
 		break;
 	case GAME:
-		MinigameGame::Instance()->Draw();
+		MGG()->Draw();
 		break;
 	default:
 		break;

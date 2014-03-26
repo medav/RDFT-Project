@@ -30,9 +30,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 
 
 	// This will call the constructors for our singletons
-	Minigame::Instance();
-	MinigameMenu::Instance();
-	MinigameGame::Instance();
+	MG();
+	MGM();
+	MGG();
 
 	ShowWindow(hwnd, nCmdShow);
 
@@ -69,8 +69,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 			DispatchMessage(&msg);
 		}
 
-		Minigame::Instance()->Think();
-		Minigame::Instance()->Draw();
+		MG()->Think();
+		MG()->Draw();
 
 		t++;
 	}
@@ -88,7 +88,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 		if (Engine()->GetGlDevice())
 			Engine()->GetGlDevice()->SetWindowSize();
 
-		Minigame::Instance()->Resize();
+		MG()->Resize();
 		return 0;
 
 	case WM_PAINT:
