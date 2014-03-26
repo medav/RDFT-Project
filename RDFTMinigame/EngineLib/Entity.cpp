@@ -14,23 +14,27 @@ void Ball::Think() {
 	
 
 	double frictionForce = mk * 9.8 * mass;
-	double frictionAcc = (-1 * frictionForce) / mass;
+	double frictionAccMag = (-1 * frictionForce) / mass;
+
+	// Scale magnitudes according to each component
+	double frictionX = frictionAccMag * Vel.x / (Vel.x * Vel.x + Vel.y * Vel.y);
+	double frictionY = frictionAccMag * Vel.y / (Vel.x * Vel.x + Vel.y * Vel.y);
 
 	if (Vel.x > 0){
-		Vel.x += frictionAcc * dT;
+		Vel.x += frictionX * dT;
 	}
 	else{
-		Vel.x += (-1 * frictionAcc * dT);
+		Vel.x += (-1 * frictionX * dT);
 	}
 
 	if (Vel.y > 0){
-		Vel.y += frictionAcc * dT;
+		Vel.y += frictionY * dT;
 	}
 	else{
-		Vel.y += (-1 * frictionAcc * dT);
+		Vel.y += (-1 * frictionY * dT);
 	}
 
-	if ((Vel.x * Vel.x + Vel.y * Vel.y) < 0.001) {
+	if ((Vel.x * Vel.x + Vel.y * Vel.y) < 0.005) {
 		Vel.x = 0;
 		Vel.y = 0;
 	}
