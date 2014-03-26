@@ -12,16 +12,16 @@ class LMENGINE : public LMENGINEDEVICE {
 private:
 	HWND hwnd;
 	Leap::Controller ctrl;
-
+	bool init;
+	GLVECTOR2 start;
+	GLVECTOR2 last;
 
 public:
 	LMENGINE(HWND hwnd) : ctrl() {
 		this->hwnd = hwnd;
 	}
-
-	virtual bool LMInitiate();
 	virtual bool LMRefresh();
-	virtual GLVECTOR2 LMGetVector(GLVECTOR2 start, GLVECTOR2 end);
+	virtual GLVECTOR2 LMGetVector(GLVECTOR2 vector);
 
 	~LMENGINE();
 };
