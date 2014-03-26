@@ -18,7 +18,7 @@ void Ball::Think() {
 	Vel.x *= mk;
 	Vel.y *= mk;
 
-	if ((Vel.x * Vel.x + Vel.y * Vel.y) < 0.001) {
+	if ((Vel.x * Vel.x + Vel.y * Vel.y) < 0.0005) {
 		Vel.x = 0;
 		Vel.y = 0;
 	}
@@ -99,11 +99,18 @@ void Wall::Draw(PGLENGINE glEngine) {
 }
 
 void Ball::Draw(PGLENGINE glEngine) {
-	glEngine->DrawCircle(this->Pos, VectorOf(this->radius, 0), ColorOf(0.95f, 0.95f, 0.95f));
-
 	GLVECTOR2 end;
-	end.x = Pos.x + Vel.x * 10;
-	end.y = Pos.y + Vel.y * 10;
+	double mag = sqrt(Vel.x * Vel.x + Vel.y * Vel.y);
 
-	glEngine->DrawArrow(this->Pos, end, 4.0, ColorOf(0.95f, 0.0f, 0.0f));
+	end.x = Pos.x + Vel.x * Vel.x * 50.0;
+	end.y = Pos.y + Vel.y * Vel.y * 50.0;
+
+	float r = (float)mag / 10;
+
+	if (r > 1.0)
+		r = 1.0;
+
+	glEngine->DrawArrow(this->Pos, end, 4.0, ColorOf(r, 1.0 - r, 0.0f));
+
+	glEngine->DrawCircle(this->Pos, VectorOf(this->radius, 0), ColorOf(0.95f, 0.95f, 0.95f));
 }
