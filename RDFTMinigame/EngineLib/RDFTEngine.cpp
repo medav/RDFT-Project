@@ -73,10 +73,33 @@ bool RDFTENGINE::CreatePhysDevice() {
 	return _CreatePhysEngineDevice(&this->physEngine, this->hwnd);
 }
 
+bool RDFTENGINE::CreateLmDevice() {
+	if (!hLmDLL) {
+		MessageBox(NULL, "lmEngine.dll not loaded, could not create device", "Engine error", MB_ICONERROR | MB_OK);
+		return false;
+	}
+
+	CREATELMENGINEDEVICE _CreateLmEngineDevice = 0;
+	_CreateLmEngineDevice = (CREATELMENGINEDEVICE)GetProcAddress(hGlDLL, "CreateLmDevice");
+
+	if (!_CreateLmEngineDevice) {
+		MessageBox(NULL, "Could not call CreateLmDevice()", "Engine error", MB_ICONERROR | MB_OK);
+		return false;
+	}
+
+	return _CreateLmEngineDevice(&this->lmEngine, this->hwnd);
+}
+
 bool RDFTENGINE::CreateDevices() {
 	bool result = true;
 	
 	if (!CreateGlDevice())
+		result = false;
+
+	if (!CreatePhysDevice())
+		result = false;
+
+	if (!CreateLmDevice())
 		result = false;
 
 	return result;

@@ -15,6 +15,9 @@ public:
 
 	virtual void init();
 
+	virtual void AddEntity(ENTITY * ent) = 0;
+	virtual void Clear() = 0;
+
 	virtual void Think();
 
 	~PHYSENGINE();
