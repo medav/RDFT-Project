@@ -8,7 +8,7 @@ LMENGINE::LMENGINE(HWND hwnd) {
 }
 
 bool LMENGINE::LMInitiate() {
-	// TODO: Finish me!
+	start = false;
 	return true;
 }
 

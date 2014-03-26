@@ -24,6 +24,10 @@ void Minigame::Think() {
 	}
 }
 
+void Resize() {
+
+}
+
 /************************************************************/
 
 void MinigameMenu::Think() {
@@ -48,6 +52,11 @@ void MinigameMenu::SettingsThink() {
 }
 
 /************************************************************/
+
+MinigameGame::MinigameGame() {
+	Level = 0;
+	NewMap();
+}
 
 void MinigameGame::Think() {
 	// TODO:

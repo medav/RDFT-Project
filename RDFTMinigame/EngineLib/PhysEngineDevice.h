@@ -86,10 +86,13 @@ private:
 
 	GLVECTOR2 Vel;
 
+	double radius;
+
 public:
 	Ball(GLVECTOR2 Pos) : ENTITY(Pos) {
 		Vel.x = 0;
 		Vel.y = 0;
+		radius = 8;
 	}
 
 	virtual void Think();
