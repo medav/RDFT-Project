@@ -10,10 +10,11 @@ public:
 
 protected:
 	GLVECTOR2 Pos;
+	ClockKeeper ck;
 
 public:
 
-	ENTITY() {
+	ENTITY() : ck() {
 		Pos.x = 0;
 		Pos.y = 0;
 	}
@@ -50,6 +51,8 @@ public:
 		Height = h;
 	}
 
+	virtual BOUNDINGBOX BoudingBox();
+
 	virtual ENTITY::TYPE Type() {
 		return ENTITY::STATIC;
 	}
@@ -60,16 +63,14 @@ class Wall : public World {
 public:
 	Wall(GLVECTOR2 Pos, float w, float h) : World(Pos, w, h) {}
 
-	virtual void Draw();
-
-	}
+	virtual void Draw(PGLENGINE gl);
 };
 
 class Hole : public ENTITY {
 public:
 	Hole(GLVECTOR2 Pos) : ENTITY(Pos) {}
 
-	virtual void Draw();
+	virtual void Draw(PGLENGINE gl);
 
 	virtual ENTITY::TYPE Type() {
 		return ENTITY::STATIC;
@@ -86,14 +87,20 @@ private:
 
 	GLVECTOR2 Vel;
 
+	double radius;
+
 public:
 	Ball(GLVECTOR2 Pos) : ENTITY(Pos) {
 		Vel.x = 0;
 		Vel.y = 0;
+		radius = 8;
 	}
 
 	virtual void Think();
+	virtual void Draw(PGLENGINE gl);
 	virtual void Collide(ENTITY * other);
+
+	virtual BOUNDINGBOX BoudingBox();
 
 	void ApplyVelocity(float x, float y);
 
@@ -106,8 +113,10 @@ class PHYSENGINEDEVICE {
 public:
 	PHYSENGINEDEVICE() {}
 
-	virtual void init() = 0;
+	virtual void Init() = 0;
 	virtual void Think() = 0;
+	virtual void Draw(PGLENGINE glEngine) = 0;
+
 	virtual void AddEntity(ENTITY * ent) = 0;
 	virtual void Clear() = 0;
 

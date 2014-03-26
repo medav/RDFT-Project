@@ -14,18 +14,28 @@ public:
 
 private:
 	Minigame();
+	static Minigame * _Instance;
 
 	STATE MinigameState;
 	MENUSTATE MenuState;
 	GAMESTATE GameState;
 
+	HWND hwnd;
+
 public:
 
 	static Minigame * Instance() {
-		return NULL;
+		if (!_Instance)
+			_Instance = new Minigame();
+
+		return _Instance;
 	}
 
+	void Setup(HWND hwnd);
+	void Resize();
+
 	void Think();
+	void Draw();
 
 	void SetState(STATE state) {
 		MinigameState = state;
@@ -37,38 +47,59 @@ public:
 class MinigameMenu {
 private:
 	MinigameMenu();
+	static MinigameMenu * _Instance;
 
 	Minigame::MENUSTATE MenuState;
 
-public:
-	void Think();
 	void MainThink();
 	void SettingsThink();
 
+	void MainDraw();
+	void SettingsDraw();
+
+public:
+	void Think();
+	void Draw();
+	
+	void Resize();
+
 	static MinigameMenu * Instance() {
-		return NULL;
+		if (!_Instance)
+			_Instance = new MinigameMenu();
+
+		return _Instance;
 	}
 };
 
 class MinigameGame {
 private:
 	MinigameGame();
+	static MinigameGame * _Instance;
 
-	Minigame::GAMESTATE state;
+	Minigame::GAMESTATE GameState;
 
 	int Level;
 	int NumMoves;
 
 	void NewMap();
-
-public:
-	void Think();
 	void WaitingThink();
 	void RunningThink();
 
+	void WaitingDraw();
+	void RunningDraw();
+
+public:
+	void Think();
+	void Draw();
+
 	static MinigameGame * Instance() {
-		return NULL;
+		if (!_Instance)
+			_Instance = new MinigameGame();
+
+		return _Instance;
 	}
+
+	void Resize();
 };
 
 #endif

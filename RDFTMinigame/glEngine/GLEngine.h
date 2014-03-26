@@ -16,17 +16,20 @@ private:
 	HDC hdc;
 	HWND hwnd;
 
-	GLCOLOR clearColor;
+	GLCOLORARGB clearColor;
 
 public:
 	GLENGINE(HWND hwnd);
 	bool CreateRenderDevice(HWND hwnd);
 	void SetWindowSize();
 
-	void SetClearColor(GLCOLOR bgcolor);
+	void SetClearColor(GLCOLORARGB bgcolor);
 
 	bool BeginScene();
-	void Render(ENTITY * ent);
+
+	virtual void DrawRect(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color);
+	virtual void DrawCircle(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color);
+
 	bool EndScene();
 
 	bool ReleaseRenderDevice();

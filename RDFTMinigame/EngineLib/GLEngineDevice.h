@@ -11,6 +11,9 @@ public:
 
 	//virtual void SetClearColor(ARGBCOLOR bgcolor) = 0;
 
+	virtual void DrawRect(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color) = 0;
+	virtual void DrawCircle(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color) = 0;
+
 	virtual bool BeginScene() = 0;
 	virtual bool EndScene() = 0;
 

@@ -3,8 +3,8 @@
 #include <Windows.h>
 
 typedef struct {
-	double r, b, g, a;
-} GLCOLOR;
+	float r, b, g, a;
+} GLCOLORARGB;
 
 typedef struct {
 	double x, y;
@@ -14,6 +14,20 @@ typedef struct {
 	double x, y, w, h;
 } BOUNDINGBOX;
 
-GLVECTOR2 VectorOf(float x, float y);
+class ClockKeeper {
+private:
+	time_t prev;
+
+public:
+	ClockKeeper();
+
+	double DeltaT();
+};
+
+GLVECTOR2 VectorOf(double x, double y);
+GLCOLORARGB AColorOf(float a, float r, float g, float b);
+GLCOLORARGB ColorOf(float r, float g, float b);
+
+double Magnitude(GLVECTOR2 vec);
 
 #endif
