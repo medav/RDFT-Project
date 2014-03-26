@@ -154,4 +154,17 @@ void MinigameGame::RunningDraw() {
 void MinigameGame::NewMap() {
 	Engine()->GetPhysDevice()->Clear();
 
+	ENTITY * WorldTop = new World(VectorOf(Engine()->ScreenX() / 2.0, Engine()->ScreenY() + 4), Engine()->ScreenX(), 8);
+	ENTITY * WorldBottom = new World(VectorOf(Engine()->ScreenX() / 2.0, -4), Engine()->ScreenX(), 8);
+	ENTITY * WorldLeft = new World(VectorOf(-4, Engine()->ScreenY() / 2.0), 8, Engine()->ScreenY());
+	ENTITY * WorldRight = new World(VectorOf(Engine()->ScreenX() + 4, Engine()->ScreenY() / 2.0), 8, Engine()->ScreenY());
+
+	Engine()->GetPhysDevice()->AddEntity(WorldTop);
+	Engine()->GetPhysDevice()->AddEntity(WorldBottom);
+	Engine()->GetPhysDevice()->AddEntity(WorldLeft);
+	Engine()->GetPhysDevice()->AddEntity(WorldRight);
+
+	ENTITY * ball = new Ball(VectorOf(50, 50));
+
+	Engine()->GetPhysDevice()->AddEntity(ball);
 }

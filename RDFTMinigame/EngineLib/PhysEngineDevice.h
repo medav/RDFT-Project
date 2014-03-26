@@ -34,7 +34,7 @@ public:
 	virtual void Think() {}
 	virtual void Draw(PGLENGINE gl) {}
 	virtual void Collide(ENTITY * other) {}
-	virtual bool CollidesWith(ENTITY * other) = 0;
+	virtual bool CollidesWith(ENTITY * other) {}
 	virtual BOUNDINGBOX BoudingBox() = 0;
 
 	virtual TYPE Type() = 0;

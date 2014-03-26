@@ -61,6 +61,18 @@ public:
 		return hLmDLL;
 	}
 
+	double ScreenX() {
+		RECT r;
+		GetWindowRect(hwnd, &r);
+		return (double) r.right;
+	}
+
+	double ScreenY() {
+		RECT r;
+		GetWindowRect(hwnd, &r);
+		return (double) r.top;
+	}
+
 	void ReleaseGl();
 	void ReleasePhys();
 	void ReleaseLm();
