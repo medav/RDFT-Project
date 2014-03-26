@@ -103,8 +103,8 @@ void Ball::Draw(PGLENGINE glEngine) {
 	GLVECTOR2 end;
 	double mag = sqrt(Vel.x * Vel.x + Vel.y * Vel.y);
 
-	end.x = Pos.x + Vel.x * Vel.x * 50.0;
-	end.y = Pos.y + Vel.y * Vel.y * 50.0;
+	end.x = Pos.x + Vel.x * 10.0;
+	end.y = Pos.y + Vel.y * 10.0;
 
 	float r = (float)mag / 10;
 
