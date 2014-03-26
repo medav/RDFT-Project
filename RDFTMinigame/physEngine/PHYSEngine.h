@@ -1,6 +1,5 @@
 #ifndef __PHYSENGINE__
 #define __PHYSENGINE__
-#include <Windows.h>
 #include <vector>
 #include "..\EngineLib\PhysEngineDevice.h"
 #include "..\EngineLib\EngineCommon.h"
