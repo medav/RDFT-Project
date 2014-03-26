@@ -12,9 +12,9 @@ class LMENGINE : public LMENGINEDEVICE {
 private:
 	HWND hwnd;
 	Leap::Controller ctrl;
-	bool init;
+	bool init=false;
 	GLVECTOR2 start;
-	GLVECTOR2 last;
+	GLVECTOR2 last = { 0, 0 };
 
 public:
 	LMENGINE(HWND hwnd) : ctrl() {
