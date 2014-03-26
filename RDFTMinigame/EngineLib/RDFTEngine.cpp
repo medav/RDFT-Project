@@ -12,7 +12,18 @@ RDFTENGINE::RDFTENGINE() {
 }
 
 RDFTENGINE::~RDFTENGINE() {
-	
+	ReleaseGlDevice();
+	ReleasePhysDevice();
+	ReleaseLmDevice();
+
+	if (hGlDLL)
+		FreeLibrary(hGlDLL);
+
+	if (hPhysDLL)
+		FreeLibrary(hPhysDLL);
+
+	if (hLmDLL)
+		FreeLibrary(hLmDLL);
 }
 
 bool RDFTENGINE::LoadDLLs() {
@@ -90,6 +101,60 @@ bool RDFTENGINE::CreateLmDevice() {
 	return _CreateLmEngineDevice(&this->lmEngine, this->hwnd);
 }
 
+void RDFTENGINE::ReleaseGlDevice() {
+	if (!hGlDLL) {
+		MessageBox(NULL, "glEngine.dll not loaded, could not release device", "Engine error", MB_ICONERROR | MB_OK);
+		return;
+	}
+
+	RELEASEGLENGINEDEVICE _ReleaseGLEngineDevice = 0;
+	_ReleaseGLEngineDevice = (RELEASEGLENGINEDEVICE)GetProcAddress(hGlDLL, "ReleaseGlDevice");
+
+	if (!_ReleaseGLEngineDevice) {
+		MessageBox(NULL, "Could not call ReleaseGlDevice()", "Engine error", MB_ICONERROR | MB_OK);
+		return;
+	}
+
+	_ReleaseGLEngineDevice(this->glEngine);
+	this->glEngine = NULL;
+}
+
+void RDFTENGINE::ReleasePhysDevice() {
+	if (!hPhysDLL) {
+		MessageBox(NULL, "physEngine.dll not loaded, could not release device", "Engine error", MB_ICONERROR | MB_OK);
+		return;
+	}
+
+	RELEASEPHYSENGINEDEVICE _ReleasePhysEngineDevice = 0;
+	_ReleasePhysEngineDevice = (RELEASEPHYSENGINEDEVICE)GetProcAddress(hPhysDLL, "ReleasePhysDevice");
+
+	if (!_ReleasePhysEngineDevice) {
+		MessageBox(NULL, "Could not call ReleasePhysDevice()", "Engine error", MB_ICONERROR | MB_OK);
+		return;
+	}
+
+	_ReleasePhysEngineDevice(this->physEngine);
+	this->glEngine = NULL;
+}
+
+void RDFTENGINE::ReleaseLmDevice() {
+	if (!hLmDLL) {
+		MessageBox(NULL, "lmEngine.dll not loaded, could not release device", "Engine error", MB_ICONERROR | MB_OK);
+		return;
+	}
+
+	RELEASELMENGINEDEVICE _ReleaseLmEngineDevice = 0;
+	_ReleaseLmEngineDevice = (RELEASELMENGINEDEVICE)GetProcAddress(hLmDLL, "ReleaseLmDevice");
+
+	if (!_ReleaseLmEngineDevice) {
+		MessageBox(NULL, "Could not call ReleaseLmDevice()", "Engine error", MB_ICONERROR | MB_OK);
+		return;
+	}
+
+	_ReleaseLmEngineDevice(this->lmEngine);
+	this->glEngine = NULL;
+}
+
 bool RDFTENGINE::CreateDevices() {
 	bool result = true;
 	
@@ -99,8 +164,8 @@ bool RDFTENGINE::CreateDevices() {
 	if (!CreatePhysDevice())
 		result = false;
 
-	//if (!CreateLmDevice())
-	//	result = false;
+	if (!CreateLmDevice())
+		result = false;
 
 	return result;
 }

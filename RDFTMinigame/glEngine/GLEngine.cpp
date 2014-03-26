@@ -82,13 +82,24 @@ void GLENGINE::DrawCircle(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color) {
 	glVertex2f(pos.x, pos.y);
 
 
-	for (int i = 0; i < 300.0; i++) {
+	for (int i = 0; i < 302; i++) {
 		glVertex2f(x + pos.x, y + pos.y);
 
 		t = x;
 		x = c * x - s * y;
 		y = s * t + c * y;
 	}
+	glEnd();
+}
+
+void GLENGINE::DrawArrow(GLVECTOR2 begin, GLVECTOR2 end, float weight, GLCOLORARGB color) {
+	glLineWidth(weight);
+	glBegin(GL_LINES);
+
+	glColor3f(color.r, color.g, color.b);
+	glVertex2f(begin.x, begin.y);
+	glVertex2f(end.x, end.y);
+
 	glEnd();
 }
 
