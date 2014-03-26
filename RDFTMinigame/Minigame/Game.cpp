@@ -23,6 +23,23 @@ void Minigame::Think() {
 	}
 }
 
+void Minigame::Draw() {
+	switch (MinigameState) {
+	case MENU:
+		MinigameMenu::Instance()->Draw();
+		break;
+	case GAME:
+		MinigameGame::Instance()->Draw();
+		break;
+	default:
+		break;
+	}
+}
+
+void Minigame::Resize() {
+
+}
+
 /************************************************************/
 
 void MinigameMenu::Think() {
@@ -109,6 +126,10 @@ void MinigameGame::Draw() {
 }
 
 void MinigameGame::WaitingDraw() {
+
+}
+
+void MinigameGame::RunningDraw() {
 
 }
 
