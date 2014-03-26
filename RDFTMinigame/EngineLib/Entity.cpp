@@ -8,20 +8,21 @@ void Ball::Think() {
 	if (Vel.x == 0 && Vel.y == 0)
 		return;
 
+	double frictionAcc = -1 * mk;
 	// Update Pos based on velocity Vel
 	double dT = ck.DeltaT();
 
 	Pos.x += Vel.x * dT;
 	Pos.y += Vel.y * dT;
 
-	// Reduce Vel according to mk
-	Vel.x *= mk;
-	Vel.y *= mk;
+
+	Vel.x += (frictionAcc * dT);
+	Vel.y += (frictionAcc * dT);
 
 	if ((Vel.x * Vel.x + Vel.y * Vel.y) < 0.001) {
 		Vel.x = 0;
 		Vel.y = 0;
-	}
+}
 }
 
 void Ball::ApplyVelocity(float x, float y){
