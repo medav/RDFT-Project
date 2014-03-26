@@ -28,12 +28,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 	if (hwnd == NULL)
 		return 0;
 
-
-	// This will call the constructors for our singletons
-	MG();
-	MGM();
-	MGG();
-
 	ShowWindow(hwnd, nCmdShow);
 
 	Engine()->SetHWND(hwnd);
@@ -45,6 +39,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 		return 0;
 
 	Engine()->GetGlDevice()->SetWindowSize();
+
+	// This will call the constructors for our singletons
+	MG();
+	MGM();
+	MGG();
 
 	//ENTITY * ball = new Ball(VectorOf(20, 20));
 

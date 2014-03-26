@@ -3,7 +3,7 @@
 using namespace Leap;
 
 bool LMENGINE::LMRefresh() {
-	if (ctrl.isConnected){
+	if (ctrl.isConnected()){
 		const Frame frame = ctrl.frame();
 		if (ctrl.frame(1).hands()[0].fingers()[0].tipPosition().z - ctrl.frame(0).hands()[0].fingers()[0].tipPosition().z > 10 && !init || init){
 			init = true;

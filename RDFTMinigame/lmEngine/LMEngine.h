@@ -14,11 +14,13 @@ private:
 	Leap::Controller ctrl;
 	bool init=false;
 	GLVECTOR2 start;
-	GLVECTOR2 last = { 0, 0 };
+	GLVECTOR2 last;
 
 public:
 	LMENGINE(HWND hwnd) : ctrl() {
 		this->hwnd = hwnd;
+		last.x = 0;
+		last.y = 0;
 	}
 
 	virtual bool LMRefresh();

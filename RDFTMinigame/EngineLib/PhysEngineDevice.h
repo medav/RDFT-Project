@@ -32,9 +32,9 @@ public:
 	}
 
 	virtual void Think() {}
-	virtual void Draw(PGLENGINE gl) {}
+	virtual void Draw(PGLENGINE glEngine) {}
 	virtual void Collide(ENTITY * other) {}
-	virtual bool CollidesWith(ENTITY * other) {}
+	virtual bool CollidesWith(ENTITY * other) { return false; }
 	virtual BOUNDINGBOX BoudingBox() = 0;
 
 	virtual TYPE Type() = 0;
@@ -70,7 +70,7 @@ class Hole : public ENTITY {
 public:
 	Hole(GLVECTOR2 Pos) : ENTITY(Pos) {}
 
-	virtual void Draw(PGLENGINE gl);
+	virtual void Draw(PGLENGINE glEngine);
 
 	virtual ENTITY::TYPE Type() {
 		return ENTITY::STATIC;
@@ -97,7 +97,7 @@ public:
 	}
 
 	virtual void Think();
-	virtual void Draw(PGLENGINE gl);
+	virtual void Draw(PGLENGINE glEngine);
 	virtual void Collide(ENTITY * other);
 
 	virtual BOUNDINGBOX BoudingBox();

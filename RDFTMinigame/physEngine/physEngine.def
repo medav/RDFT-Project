@@ -1,0 +1,5 @@
+﻿;The following functions are exported from this DLL
+LIBRARY   "physEngine.dll"
+EXPORTS
+	CreatePhysDevice
+	ReleasePhysDevice

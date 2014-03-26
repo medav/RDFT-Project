@@ -13,12 +13,14 @@ private:
 public:
 	PHYSENGINE(HWND hwnd);
 
-	virtual void init();
+	virtual void Init();
 
 	virtual void AddEntity(ENTITY * ent);
 	virtual void Clear();
 
 	virtual void Think();
+	virtual void Draw(PGLENGINE glEngine);
+
 
 	~PHYSENGINE();
 };

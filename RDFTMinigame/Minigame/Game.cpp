@@ -22,8 +22,6 @@ MinigameGame * MGG() {
 
 Minigame::Minigame() {
 	MinigameState = GAME;
-	MenuState = MAIN;
-	GameState = WAITING;
 }
 
 void Minigame::Think() {
@@ -103,6 +101,7 @@ void MinigameMenu::SettingsDraw() {
 /************************************************************/
 
 MinigameGame::MinigameGame() {
+	GameState = Minigame::RUNNING;
 	Level = 0;
 	NewMap();
 }
@@ -164,7 +163,8 @@ void MinigameGame::NewMap() {
 	Engine()->GetPhysDevice()->AddEntity(WorldLeft);
 	Engine()->GetPhysDevice()->AddEntity(WorldRight);
 
-	ENTITY * ball = new Ball(VectorOf(50, 50));
+	Ball * ball = new Ball(VectorOf(50, 50));
 
 	Engine()->GetPhysDevice()->AddEntity(ball);
+	ball->ApplyVelocity(50, 50);
 }

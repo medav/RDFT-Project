@@ -63,7 +63,7 @@ bool RDFTENGINE::CreatePhysDevice() {
 	}
 
 	CREATEPHYSENGINEDEVICE _CreatePhysEngineDevice = 0;
-	_CreatePhysEngineDevice = (CREATEPHYSENGINEDEVICE)GetProcAddress(hGlDLL, "CreatePhysDevice");
+	_CreatePhysEngineDevice = (CREATEPHYSENGINEDEVICE)GetProcAddress(hPhysDLL, "CreatePhysDevice");
 
 	if (!_CreatePhysEngineDevice) {
 		MessageBox(NULL, "Could not call CreatePhysDevice()", "Engine error", MB_ICONERROR | MB_OK);
@@ -99,8 +99,8 @@ bool RDFTENGINE::CreateDevices() {
 	if (!CreatePhysDevice())
 		result = false;
 
-	if (!CreateLmDevice())
-		result = false;
+	//if (!CreateLmDevice())
+	//	result = false;
 
 	return result;
 }

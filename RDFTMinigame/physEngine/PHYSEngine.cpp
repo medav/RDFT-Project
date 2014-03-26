@@ -5,17 +5,20 @@ PHYSENGINE::PHYSENGINE(HWND hwnd) {
 
 }
 
-void PHYSENGINE::init() {
+void PHYSENGINE::Init() {
 
 }
-void PHYSENGINE::AddEntity(ENTITY * ent){
+
+void PHYSENGINE::AddEntity(ENTITY * ent) {
 	ents.push_back(ent);
 }
-void PHYSENGINE::Clear(){
+
+void PHYSENGINE::Clear() {
 	for (unsigned int i = 0; i < ents.size(); i++){
 		delete ents[i];
 	}
 }
+
 void PHYSENGINE::Think() {
 	ENTITY * temp;
 
@@ -33,25 +36,31 @@ void PHYSENGINE::Think() {
 	}
 }
 
+void PHYSENGINE::Draw(PGLENGINE glEngine) {
+	for (unsigned int i = 0; i < ents.size(); i++){
+		ents[i]->Draw(glEngine);
+	}
+}
+
 PHYSENGINE::~PHYSENGINE() {
 
 }
-/*
-bool CreatePhysDevice(LPLMENGINE device, HWND hwnd) {
-	*device = new LMENGINE(hwnd);
+
+bool CreatePhysDevice(LPPHYSENGINE device, HWND hwnd) {
+	*device = new PHYSENGINE(hwnd);
 
 	return true;
 }
 
-bool ReleasePhysDevice(LMENGINEDEVICE * device) {
+bool ReleasePhysDevice(PHYSENGINEDEVICE * device) {
 	if (!device)
 		return true;
 
-	LMENGINE * engine = (LMENGINE *)device;
+	PHYSENGINE * engine = (PHYSENGINE *)device;
 	delete engine;
 
 	return true;
-}*/
+}
 
 bool APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved) {
 	switch (ul_reason_for_call)

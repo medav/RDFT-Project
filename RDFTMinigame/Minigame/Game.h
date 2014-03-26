@@ -12,8 +12,6 @@ public:
 
 private:
 	STATE MinigameState;
-	MENUSTATE MenuState;
-	GAMESTATE GameState;
 
 	HWND hwnd;
 
