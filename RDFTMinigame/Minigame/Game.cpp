@@ -164,10 +164,10 @@ void MinigameGame::NewMap() {
 
 	//MessageBox(NULL, buffer, "Engine Info", MB_ICONINFORMATION | MB_OK);
 
-	ENTITY * WorldTop = new Wall(VectorOf(Engine()->ScreenX() / 2.0, Engine()->ScreenY() - 4), Engine()->ScreenX(), 16);
-	ENTITY * WorldBottom = new Wall(VectorOf(Engine()->ScreenX() / 2.0, 4), Engine()->ScreenX(), 16);
-	ENTITY * WorldLeft = new Wall(VectorOf(4, Engine()->ScreenY() / 2.0), 16, Engine()->ScreenY());
-	ENTITY * WorldRight = new Wall(VectorOf(Engine()->ScreenX() - 4, Engine()->ScreenY() / 2.0), 16, Engine()->ScreenY());
+	ENTITY * WorldTop = new Wall(VectorOf(Engine()->ScreenX() / 2.0, Engine()->ScreenY() - 4), Engine()->ScreenX() + 8, 16);
+	ENTITY * WorldBottom = new Wall(VectorOf(Engine()->ScreenX() / 2.0, 4), Engine()->ScreenX() + 8, 16);
+	ENTITY * WorldLeft = new Wall(VectorOf(4, Engine()->ScreenY() / 2.0), 16, Engine()->ScreenY() + 8);
+	ENTITY * WorldRight = new Wall(VectorOf(Engine()->ScreenX() - 4, Engine()->ScreenY() / 2.0), 16, Engine()->ScreenY() + 8);
 
 	Engine()->GetPhysDevice()->AddEntity(WorldTop);
 	Engine()->GetPhysDevice()->AddEntity(WorldBottom);
@@ -181,19 +181,19 @@ void MinigameGame::NewMap() {
 	Engine()->GetPhysDevice()->AddEntity(Obstruction2);
 
 	Ball * ball1 = new Ball(VectorOf(50, 600));
-	ball1->ApplyVelocity(2, 1);
+	ball1->ApplyVelocity(15, 10);
 
 	Ball * ball2 = new Ball(VectorOf(80, 30));
-	ball2->ApplyVelocity(1, -2);
+	ball2->ApplyVelocity(10, -15);
 
 	Ball * ball3 = new Ball(VectorOf(200, 120));
-	ball3->ApplyVelocity(-1, 2);
+	ball3->ApplyVelocity(-10, 15);
 
 	Ball * ball4 = new Ball(VectorOf(500, 120));
-	ball4->ApplyVelocity(-1, -2);
+	ball4->ApplyVelocity(-10, -15);
 
 	Ball * ball5 = new Ball(VectorOf(50, 50));
-	ball5->ApplyVelocity(-1, -1);
+	ball5->ApplyVelocity(-10, -10);
 
 	Engine()->GetPhysDevice()->AddEntity(ball1);
 	Engine()->GetPhysDevice()->AddEntity(ball2);

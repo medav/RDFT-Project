@@ -93,11 +93,45 @@ void GLENGINE::DrawCircle(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color) {
 }
 
 void GLENGINE::DrawArrow(GLVECTOR2 begin, GLVECTOR2 end, float weight, GLCOLORARGB color) {
+	
+	const double PI = 3.14159;
+	double phi = atan2(end.y - begin.y, end.x - begin.x);
+	double theta1 = phi - PI / 6.0;
+	double theta2 = PI / 3.0 - phi;
+
+	GLVECTOR2 line;
+	line.x = end.x - begin.x;
+	line.y = end.y - begin.y;
+
+	double mag = sqrt(line.x * line.x + line.y * line.y);
+	double L = mag / 4;
+
+	GLVECTOR2 e1;
+	e1.x = end.x - L * cos(theta1);
+	e1.y = end.y - L * sin(theta1);
+
+	GLVECTOR2 e2;
+	e2.x = end.x - L * sin(theta2);
+	e2.y = end.y - L * cos(theta2);
+
 	glLineWidth(weight);
 	glBegin(GL_LINES);
 
 	glColor3f(color.r, color.g, color.b);
 	glVertex2f(begin.x, begin.y);
+	glVertex2f(end.x, end.y);
+
+	glEnd();
+
+	glLineWidth(2.0 * weight / 3.0);
+	glBegin(GL_LINES);
+
+	glColor3f(color.r, color.g, color.b);
+
+	glVertex2f(e1.x, e1.y);
+	glVertex2f(end.x, end.y);
+	
+	glVertex2f(e2.x, e2.y);
 	glVertex2f(end.x, end.y);
 
 	glEnd();

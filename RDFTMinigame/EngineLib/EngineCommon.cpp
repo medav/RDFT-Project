@@ -24,16 +24,17 @@ GLCOLORARGB ColorOf(float r, float g, float b) {
 
 
 ClockKeeper::ClockKeeper() {
-	time(&prev);
+	prev = std::chrono::high_resolution_clock::now();
 }
 
 double ClockKeeper::DeltaT() {
-	time_t temp;
-	time(&temp);
+	using namespace std::chrono;
 
-	double dT = difftime(temp, prev);
-	prev = temp;
+	high_resolution_clock::time_point temp;
+	temp = high_resolution_clock::now();
 
-	return dT;
+	duration<long double> time_span = duration_cast<duration<double>>(temp - prev);
+	
+	return time_span.count();
 }
 
