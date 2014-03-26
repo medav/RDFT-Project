@@ -175,13 +175,13 @@ void MinigameGame::NewMap() {
 	Engine()->GetPhysDevice()->AddEntity(WorldRight);
 
 	Ball * ball1 = new Ball(VectorOf(50, 80));
-	ball1->ApplyVelocity(1, 1);
+	ball1->ApplyVelocity(2, 2);
 
 	Ball * ball2 = new Ball(VectorOf(80, 30));
-	ball2->ApplyVelocity(1, -1);
+	ball2->ApplyVelocity(2, -2);
 
 	Ball * ball3 = new Ball(VectorOf(200, 120));
-	ball3->ApplyVelocity(-1, 1);
+	ball3->ApplyVelocity(-2, 2);
 
 	Engine()->GetPhysDevice()->AddEntity(ball1);
 	Engine()->GetPhysDevice()->AddEntity(ball2);

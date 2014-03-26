@@ -35,7 +35,7 @@ void Ball::Collide(ENTITY * other){
 	*/
 
 	// If y's are intersecting
-	if ((this->BoundingBox().y + this->BoundingBox().h == other->BoundingBox().h) || 
+	if ((this->BoundingBox().y + this->BoundingBox().h == other->BoundingBox().y) || 
 		(this->BoundingBox().y == other->BoundingBox().y + other->BoundingBox().h))
 	{
 		Vel.y = -1 * Vel.y;
