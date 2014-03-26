@@ -1,8 +1,7 @@
 #include "Game.h"
 
 RDFTENGINE * Engine() {
-	static RDFTENGINE rdft;
-	return &rdft;
+	return RDFTENGINE::Instance();
 }
 
 Minigame::Minigame() {
@@ -47,18 +46,70 @@ void MinigameMenu::SettingsThink() {
 	// TODO:
 }
 
+void MinigameMenu::Draw() {
+	switch (MenuState) {
+	case Minigame::MAIN:
+		MainDraw();
+		break;
+	case Minigame::SETTINGS:
+		SettingsDraw();
+		break;
+	default:
+		break;
+	}
+}
+
+void MinigameMenu::MainDraw() {
+
+}
+
+void MinigameMenu::SettingsDraw() {
+
+}
+
 /************************************************************/
 
+MinigameGame::MinigameGame() {
+	Level = 0;
+	NewMap();
+}
+
 void MinigameGame::Think() {
-	// TODO:
+	switch (GameState) {
+	case Minigame::WAITING:
+		WaitingThink();
+		break;
+	case Minigame::RUNNING:
+		RunningThink();
+		break;
+	default:
+		break;
+	}
 }
 
 void MinigameGame::WaitingThink() {
-	// TODO:
+	
 }
 
 void MinigameGame::RunningThink() {
 	// TODO:
+}
+
+void MinigameGame::Draw() {
+	switch (GameState) {
+	case Minigame::WAITING:
+		WaitingDraw();
+		break;
+	case Minigame::RUNNING:
+		RunningDraw();
+		break;
+	default:
+		break;
+	}
+}
+
+void MinigameGame::WaitingDraw() {
+
 }
 
 /************************************************************/

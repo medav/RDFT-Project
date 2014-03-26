@@ -10,6 +10,8 @@ typedef bool(*CREATELMENGINEDEVICE)(LPLMENGINE engine, HWND hwnd);
 
 class RDFTENGINE {
 private:
+	RDFTENGINE();
+
 	PGLENGINE glEngine;
 	PPHYSENGINE physEngine;
 	PLMENGINE lmEngine;
@@ -21,9 +23,16 @@ private:
 	HMODULE hPhysDLL;
 	HMODULE hLmDLL;
 
+	static RDFTENGINE * _Instance;
+
 public:
-	RDFTENGINE();
-	~RDFTENGINE();
+
+	static RDFTENGINE * Instance() {
+		if (_Instance)
+			_Instance = new RDFTENGINE();
+
+		return _Instance;
+	}
 
 	void SetHWND(HWND hwnd) {
 		this->hwnd = hwnd;
@@ -65,6 +74,7 @@ public:
 	void ReleasePhys();
 	void ReleaseLm();
 
+	~RDFTENGINE();
 };
 
 #endif
