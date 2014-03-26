@@ -23,10 +23,10 @@ bool LMENGINE::LMRefresh() {
 		
 	}
 
-	return ;
+	return init;
 }
 
-GLVECTOR2 LMENGINE::LMGetVector(GLVECTOR2 vector) {
+GLVECTOR2 LMENGINE::LMGetVector() {
 	return last;
 }
 
