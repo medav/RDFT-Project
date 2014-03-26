@@ -25,12 +25,25 @@ void Ball::Collide(ENTITY * other){
 	//Vel.x = -1 * (Vel.x);
 	//Vel.y = -1 * (Vel.y);
 
+	/*
 	double angleBetween = atan2(Vel.y, Vel.x);
-	double secondAngle = (2 * PI) - angleBetween;
+	double secondAngle = -1 * angleBetween;
 	double vectorMagnitude = sqrt(((Vel.x * Vel.x) + (Vel.y * Vel.y)));
 
 	Vel.y = (sin(secondAngle) * vectorMagnitude) * cc;
 	Vel.x = (cos(secondAngle) * vectorMagnitude) * cc;
+	*/
+
+	// If y's are intersecting
+	if ((this->BoundingBox().y + this->BoundingBox().h == other->BoundingBox().h) || 
+		(this->BoundingBox().y == other->BoundingBox().y + other->BoundingBox().h))
+	{
+		Vel.y = -1 * Vel.y;
+	}
+	else
+	{
+		Vel.x = -1 * Vel.x;
+	}
 }
 
 // Bounding Box Methods
