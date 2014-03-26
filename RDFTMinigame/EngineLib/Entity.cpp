@@ -1,6 +1,6 @@
 #include <math.h>
 #include "PhysEngineDevice.h"
-#include <math.h>
+#include "EngineCommon.h"
 
 #define PI 3.1415926
 
@@ -22,7 +22,7 @@ void Ball::Think() {
 	if ((Vel.x * Vel.x + Vel.y * Vel.y) < 0.0005) {
 		Vel.x = 0;
 		Vel.y = 0;
-}
+	}
 }
 
 void Ball::ApplyVelocity(float x, float y){
@@ -101,7 +101,7 @@ void Wall::Draw(PGLENGINE glEngine) {
 
 void Ball::Draw(PGLENGINE glEngine) {
 	GLVECTOR2 end;
-	double mag = sqrt(Vel.x * Vel.x + Vel.y * Vel.y);
+	double mag = Magnitude(Vel);
 
 	end.x = Pos.x + Vel.x * 10.0;
 	end.y = Pos.y + Vel.y * 10.0;
@@ -112,6 +112,5 @@ void Ball::Draw(PGLENGINE glEngine) {
 		r = 1.0;
 
 	glEngine->DrawArrow(this->Pos, end, 4.0, ColorOf(r, 1.0 - r, 0.0f));
-
 	glEngine->DrawCircle(this->Pos, VectorOf(this->radius, 0), ColorOf(0.95f, 0.95f, 0.95f));
 }

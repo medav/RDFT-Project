@@ -38,3 +38,7 @@ double ClockKeeper::DeltaT() {
 	return time_span.count() / 4;
 }
 
+
+double Magnitude(GLVECTOR2 vec) {
+	return sqrt(vec.x * vec.x + vec.y * vec.y);
+}
