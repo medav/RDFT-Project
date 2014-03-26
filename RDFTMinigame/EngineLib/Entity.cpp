@@ -11,8 +11,8 @@ void Ball::Think() {
 	// Update Pos based on velocity Vel
 	double dT = ck.DeltaT();
 
-	Pos.x += Vel.x * 0.5;
-	Pos.y += Vel.y * 0.5;
+	Pos.x += Vel.x * dT;
+	Pos.y += Vel.y * dT;
 
 	// Reduce Vel according to mk
 	Vel.x *= mk;
@@ -21,7 +21,7 @@ void Ball::Think() {
 	if ((Vel.x * Vel.x + Vel.y * Vel.y) < 0.001) {
 		Vel.x = 0;
 		Vel.y = 0;
-}
+	}
 }
 
 void Ball::ApplyVelocity(float x, float y){
@@ -102,8 +102,8 @@ void Ball::Draw(PGLENGINE glEngine) {
 	glEngine->DrawCircle(this->Pos, VectorOf(this->radius, 0), ColorOf(0.95f, 0.95f, 0.95f));
 
 	GLVECTOR2 end;
-	end.x = Pos.x + Vel.x * 50;
-	end.y = Pos.y + Vel.y * 50;
+	end.x = Pos.x + Vel.x * 10;
+	end.y = Pos.y + Vel.y * 10;
 
 	glEngine->DrawArrow(this->Pos, end, 4.0, ColorOf(0.95f, 0.0f, 0.0f));
 }
