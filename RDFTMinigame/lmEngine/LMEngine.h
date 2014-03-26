@@ -20,8 +20,9 @@ public:
 	LMENGINE(HWND hwnd) : ctrl() {
 		this->hwnd = hwnd;
 	}
+
 	virtual bool LMRefresh();
-	virtual GLVECTOR2 LMGetVector(GLVECTOR2 vector);
+	virtual GLVECTOR2 LMGetVector();
 
 	~LMENGINE();
 };

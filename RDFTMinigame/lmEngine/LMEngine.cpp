@@ -2,11 +2,6 @@
 
 using namespace Leap;
 
-LMENGINE::LMENGINE(HWND hwnd) {
-	this->hwnd = hwnd;
-	this->LMInitiate();
-}
-
 bool LMENGINE::LMRefresh() {
 	const Frame frame = ctrl.frame();
 	if (ctrl.frame(1).hands()[0].fingers()[0].tipPosition().z - ctrl.frame(0).hands()[0].fingers()[0].tipPosition().z > 10 && !init||init){

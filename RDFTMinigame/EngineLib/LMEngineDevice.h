@@ -13,7 +13,7 @@ public:
 	virtual void Resume() = 0;
 
 	virtual bool LMRefresh() = 0;
-	virtual GLVECTOR2 LMGetVector(GLVECTOR2 start, GLVECTOR2 end) = 0;
+	virtual GLVECTOR2 LMGetVector() = 0;
 	virtual ~LMENGINEDEVICE() {}
 };
 
