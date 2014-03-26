@@ -53,13 +53,16 @@ bool GLENGINE::BeginScene() {
 }
 
 void DrawRect(GLVERTEX2 pos, GLVECTOR2 size, GLCOLOR color) {
-	glPushMatrix();
 	glBegin(GL_QUADS);
 
-	glColor3f(0.95f, 0.95f, 0.95f);
+	glColor3f(color.r, color.g, color.b);
+
+	glVertex2f(pos.x - size.x / 2, pos.y - size.y / 2);
+	glVertex2f(pos.x + size.x / 2, pos.y - size.y / 2);
+	glVertex2f(pos.x - size.x / 2, pos.y + size.y / 2);
+	glVertex2f(pos.x + size.x / 2, pos.y + size.y / 2);
 
 	glEnd();
-	glPopMatrix();
 }
 
 void DrawCircle(GLVERTEX2 pos, GLVECTOR2 size, GLCOLOR color) {
@@ -72,8 +75,11 @@ void DrawCircle(GLVERTEX2 pos, GLVECTOR2 size, GLCOLOR color) {
 	float y = 0;
 	int i;
 
-	glBegin(GL_LINE_LOOP);
-	glColor3f(0.95f, 0.95f, 0.95f);
+	glBegin(GL_TRIANGLE_FAN);
+
+	glColor3f(color.r, color.g, color.b);
+	glVertex2f(pos.x, pos.y);
+
 
 	for (int i = 0; i < 300.0; i++) {
 		glVertex2f(x + pos.x, y + pos.y);
