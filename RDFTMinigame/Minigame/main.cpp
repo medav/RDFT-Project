@@ -20,7 +20,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 		0, CLASS_NAME,
 		"RDFT Engine Demo",
 		WS_OVERLAPPEDWINDOW,
-		CW_USEDEFAULT, CW_USEDEFAULT, 1024, 768,
+		20, 20, 1024, 768,
 		NULL, NULL,
 		hInstance,
 		NULL);
@@ -47,8 +47,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 
 	//ENTITY * ball = new Ball(VectorOf(20, 20));
 
-	float t = 0;
-
+	int ct = 0;
 
 	// Run the message loop.
 
@@ -68,10 +67,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 			DispatchMessage(&msg);
 		}
 
+
 		MG()->Think();
+	
 		MG()->Draw();
 
-		t++;
+		ct++;
 	}
 
 	return 0;

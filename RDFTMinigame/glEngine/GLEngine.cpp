@@ -3,6 +3,7 @@
 
 GLENGINE::GLENGINE(HWND hwnd) {
 	this->CreateRenderDevice(hwnd);
+	this->SetWindowSize();
 	r = 0;
 }
 
@@ -59,9 +60,9 @@ void GLENGINE::DrawRect(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color) {
 
 	glVertex2f(pos.x - size.x / 2.0, pos.y - size.y / 2.0);
 	glVertex2f(pos.x + size.x / 2.0, pos.y - size.y / 2.0);
-	glVertex2f(pos.x - size.x / 2.0, pos.y + size.y / 2.0);
 	glVertex2f(pos.x + size.x / 2.0, pos.y + size.y / 2.0);
-
+	glVertex2f(pos.x - size.x / 2.0, pos.y + size.y / 2.0);
+	
 	glEnd();
 }
 

@@ -19,20 +19,38 @@ void PHYSENGINE::Clear() {
 	}
 }
 
+bool Collide(BOUNDINGBOX b1, BOUNDINGBOX b2) {
+	if (b1.x + b1.w < b2.x ||
+		b2.x + b2.w < b1.x ||
+		b1.y + b1.h < b2.y ||
+		b2.y + b2.h < b1.y)
+		return false;
+
+	return true;
+}
+
 void PHYSENGINE::Think() {
 	ENTITY * temp;
 
 	// Call Think() for all ENTITYs
 	for (unsigned int i = 0; i < ents.size(); i++){
 		ents[i]->Think();
-		if (ents[i]->Type() == ENTITY::MOVING){
-			temp = ents[i];
-		}
+		//if (ents[i]->Type() == ENTITY::MOVING){
+		//	temp = ents[i];
+		//}
 	}
 
 	// Search for collisions
 	for (unsigned int i = 0; i < ents.size(); i++){
-
+		if (ents[i]->Type() == ENTITY::MOVING){
+			//MessageBox(NULL, "Moving", "Engine Info", MB_ICONINFORMATION | MB_OK);
+			for (unsigned int j = 0; j < ents.size(); j++){
+				if (ents[i] != ents[j]) {
+					if (Collide(ents[i]->BoundingBox(), ents[j]->BoundingBox()))
+						ents[i]->Collide(ents[j]);
+				}
+			}
+		}
 	}
 }
 

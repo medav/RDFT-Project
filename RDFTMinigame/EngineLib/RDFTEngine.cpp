@@ -30,8 +30,8 @@ bool RDFTENGINE::LoadDLLs() {
 		result = false;
 	}
 
-	hPhysDLL = LoadLibrary("lmEngine.dll");
-	if (!hPhysDLL) {
+	hLmDLL = LoadLibrary("lmEngine.dll");
+	if (!hLmDLL) {
 		MessageBox(NULL, "Could not load lmEngine.dll", "Engine error", MB_ICONERROR | MB_OK);
 		result = false;
 	}
@@ -63,7 +63,7 @@ bool RDFTENGINE::CreatePhysDevice() {
 	}
 
 	CREATEPHYSENGINEDEVICE _CreatePhysEngineDevice = 0;
-	_CreatePhysEngineDevice = (CREATEPHYSENGINEDEVICE)GetProcAddress(hPhysDLL, "CreatePhysDevice");
+	_CreatePhysEngineDevice = (CREATEPHYSENGINEDEVICE) GetProcAddress(hPhysDLL, "CreatePhysDevice");
 
 	if (!_CreatePhysEngineDevice) {
 		MessageBox(NULL, "Could not call CreatePhysDevice()", "Engine error", MB_ICONERROR | MB_OK);

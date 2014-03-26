@@ -1,4 +1,7 @@
+//#include <stdio.h>
+//#include <string.h>
 #include "Game.h"
+
 
 RDFTENGINE * Engine() {
 	static RDFTENGINE * rdft = new RDFTENGINE();
@@ -124,7 +127,7 @@ void MinigameGame::WaitingThink() {
 }
 
 void MinigameGame::RunningThink() {
-	// TODO:
+	Engine()->GetPhysDevice()->Think();
 }
 
 void MinigameGame::Draw() {
@@ -145,7 +148,9 @@ void MinigameGame::WaitingDraw() {
 }
 
 void MinigameGame::RunningDraw() {
-
+	Engine()->GetGlDevice()->BeginScene();
+	Engine()->GetPhysDevice()->Draw(Engine()->GetGlDevice());
+	Engine()->GetGlDevice()->EndScene();
 }
 
 /************************************************************/
@@ -153,18 +158,32 @@ void MinigameGame::RunningDraw() {
 void MinigameGame::NewMap() {
 	Engine()->GetPhysDevice()->Clear();
 
-	ENTITY * WorldTop = new World(VectorOf(Engine()->ScreenX() / 2.0, Engine()->ScreenY() + 4), Engine()->ScreenX(), 8);
-	ENTITY * WorldBottom = new World(VectorOf(Engine()->ScreenX() / 2.0, -4), Engine()->ScreenX(), 8);
-	ENTITY * WorldLeft = new World(VectorOf(-4, Engine()->ScreenY() / 2.0), 8, Engine()->ScreenY());
-	ENTITY * WorldRight = new World(VectorOf(Engine()->ScreenX() + 4, Engine()->ScreenY() / 2.0), 8, Engine()->ScreenY());
+	//char buffer[500];
+	//sprintf_s(buffer, "Screen height = %lf\nScreen width = %lf", Engine()->ScreenY(), Engine()->ScreenX());
+
+	//MessageBox(NULL, buffer, "Engine Info", MB_ICONINFORMATION | MB_OK);
+
+	ENTITY * WorldTop = new Wall(VectorOf(Engine()->ScreenX() / 2.0, Engine()->ScreenY() - 4), Engine()->ScreenX(), 16);
+	ENTITY * WorldBottom = new Wall(VectorOf(Engine()->ScreenX() / 2.0, 4), Engine()->ScreenX(), 16);
+	ENTITY * WorldLeft = new Wall(VectorOf(4, Engine()->ScreenY() / 2.0), 16, Engine()->ScreenY());
+	ENTITY * WorldRight = new Wall(VectorOf(Engine()->ScreenX() - 4, Engine()->ScreenY() / 2.0), 16, Engine()->ScreenY());
 
 	Engine()->GetPhysDevice()->AddEntity(WorldTop);
 	Engine()->GetPhysDevice()->AddEntity(WorldBottom);
 	Engine()->GetPhysDevice()->AddEntity(WorldLeft);
 	Engine()->GetPhysDevice()->AddEntity(WorldRight);
 
-	Ball * ball = new Ball(VectorOf(50, 50));
+	Ball * ball1 = new Ball(VectorOf(50, 80));
+	ball1->ApplyVelocity(1, 1);
 
-	Engine()->GetPhysDevice()->AddEntity(ball);
-	ball->ApplyVelocity(50, 50);
+	Ball * ball2 = new Ball(VectorOf(80, 30));
+	ball2->ApplyVelocity(1, -1);
+
+	Ball * ball3 = new Ball(VectorOf(200, 120));
+	ball3->ApplyVelocity(-1, 1);
+
+	Engine()->GetPhysDevice()->AddEntity(ball1);
+	Engine()->GetPhysDevice()->AddEntity(ball2);
+	Engine()->GetPhysDevice()->AddEntity(ball3);
+	
 }
