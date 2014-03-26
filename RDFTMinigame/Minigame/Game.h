@@ -54,6 +54,9 @@ private:
 	void MainThink();
 	void SettingsThink();
 
+	void MainDraw();
+	void SettingsDraw();
+
 public:
 	void Think();
 	void Draw();
@@ -73,7 +76,7 @@ private:
 	MinigameGame();
 	static MinigameGame * _Instance;
 
-	Minigame::GAMESTATE state;
+	Minigame::GAMESTATE GameState;
 
 	int Level;
 	int NumMoves;
@@ -81,6 +84,9 @@ private:
 	void NewMap();
 	void WaitingThink();
 	void RunningThink();
+
+	void WaitingDraw();
+	void RunningDraw();
 
 public:
 	void Think();
