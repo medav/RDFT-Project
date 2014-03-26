@@ -80,10 +80,10 @@ public:
 class Ball : public ENTITY {
 private:
 	// Kinetic friction coef. (This isn't the traditional definition)
-	const double mk = 0.999;
+	const double mk = 0.9994;
 
 	// Collision constant: How much to decrease speed by after collision
-	const double cc = 0.997;
+	const double cc = 0.994;
 
 	GLVECTOR2 Vel;
 

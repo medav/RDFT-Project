@@ -39,47 +39,37 @@ bool PointInBox(GLVECTOR2 pt, BOUNDINGBOX box) {
 	return false;
 }
 
+bool HorizontalCollision(BOUNDINGBOX box1, BOUNDINGBOX box2) {
+	GLVECTOR2 TL1 = VectorOf(box1.x, box1.y + box1.h);
+	GLVECTOR2 TL2 = VectorOf(box2.x, box2.y + box2.h);
+	GLVECTOR2 BR1 = VectorOf(box1.x + box1.w, box1.y);
+	GLVECTOR2 BR2 = VectorOf(box2.x + box2.w, box2.y);
+
+	if (TL1.y >= BR2.y && BR1.y <= BR2.y &&
+		( (TL1.x >= TL2.x && TL1.x <= BR2.x) || 
+		  (BR1.x <= BR2.x && BR1.x >= TL2.x) ) )
+		return true;
+
+	if (BR1.y <= TL2.y && TL1.y >= TL2.y &&
+		((TL1.x >= TL2.x && TL1.x <= BR2.x) ||
+		(BR1.x <= BR2.x && BR1.x >= TL2.x)))
+		return true;
+
+	return false;
+}
+
 void Ball::Collide(ENTITY * other){
 	BOUNDINGBOX box = BoundingBox();
-
-	GLVECTOR2 TL = VectorOf(box.x, box.y + box.h);
-	GLVECTOR2 TR = VectorOf(box.x + box.w, box.y + box.h);
-	GLVECTOR2 BL = VectorOf(box.x, box.y);
-	GLVECTOR2 BR = VectorOf(box.x + box.w, box.y);
-
 	BOUNDINGBOX otherBox = other->BoundingBox();
 
-	if (PointInBox(TL, otherBox)) {
-		if (TR.y >= otherBox.y && BL.y < otherBox.y)
-			Vel.y *= (-1 * cc);
-		else
-			Vel.x *= (-1 * cc);
+	if (HorizontalCollision(box, otherBox)) {
+		Vel.y *= (-1.0 * cc);
 	} 
-	else if (PointInBox(TR, otherBox)) {
-		if (TL.y >= otherBox.y && BL.y < otherBox.y)
-			Vel.y *= (-1 * cc);
-		else
-			Vel.x *= (-1 * cc);
-	}
-	else if (PointInBox(BR, otherBox)) {
-		if (PointInBox(BL, otherBox))
-			Vel.y *= (-1 * cc);
+	else {
+		Vel.x *= (-1.0 * cc);
 	}
 
-	Vel.y = (sin(secondAngle) * vectorMagnitude) * cc;
-	Vel.x = (cos(secondAngle) * vectorMagnitude) * cc;
-	*/
-
-	// If y's are intersecting
-	if ((this->BoundingBox().y + this->BoundingBox().h == other->BoundingBox().h) || 
-		(this->BoundingBox().y == other->BoundingBox().y + other->BoundingBox().h))
-	{
-		Vel.y = -1 * Vel.y;
-	}
-	else
-	{
-		Vel.x = -1 * Vel.x;
-	}
+	Think();
 }
 
 // Bounding Box Methods
@@ -115,5 +105,5 @@ void Ball::Draw(PGLENGINE glEngine) {
 	end.x = Pos.x + Vel.x * 50;
 	end.y = Pos.y + Vel.y * 50;
 
-	glEngine->DrawArrow(this->Pos, end, 4.0, ColorOf(0.0f, 0.95f, 0.0f));
+	glEngine->DrawArrow(this->Pos, end, 4.0, ColorOf(0.95f, 0.0f, 0.0f));
 }

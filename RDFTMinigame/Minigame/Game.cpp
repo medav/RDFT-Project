@@ -174,11 +174,13 @@ void MinigameGame::NewMap() {
 	Engine()->GetPhysDevice()->AddEntity(WorldLeft);
 	Engine()->GetPhysDevice()->AddEntity(WorldRight);
 
-	ENTITY * Obstruction = new Wall(VectorOf(500, 400), 600, 300);
+	ENTITY * Obstruction1 = new Wall(VectorOf(500, 400), 600, 50);
+	Engine()->GetPhysDevice()->AddEntity(Obstruction1);
 
-	Engine()->GetPhysDevice()->AddEntity(Obstruction);
+	ENTITY * Obstruction2 = new Wall(VectorOf(700, 200), 50, 300);
+	Engine()->GetPhysDevice()->AddEntity(Obstruction2);
 
-	Ball * ball1 = new Ball(VectorOf(50, 80));
+	Ball * ball1 = new Ball(VectorOf(50, 600));
 	ball1->ApplyVelocity(2, 1);
 
 	Ball * ball2 = new Ball(VectorOf(80, 30));
@@ -190,9 +192,12 @@ void MinigameGame::NewMap() {
 	Ball * ball4 = new Ball(VectorOf(500, 120));
 	ball4->ApplyVelocity(-1, -2);
 
+	Ball * ball5 = new Ball(VectorOf(50, 50));
+	ball5->ApplyVelocity(-1, -1);
+
 	Engine()->GetPhysDevice()->AddEntity(ball1);
 	Engine()->GetPhysDevice()->AddEntity(ball2);
 	Engine()->GetPhysDevice()->AddEntity(ball3);
 	Engine()->GetPhysDevice()->AddEntity(ball4);
-
+	Engine()->GetPhysDevice()->AddEntity(ball5);
 }
