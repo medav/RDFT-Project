@@ -127,6 +127,7 @@ void MinigameGame::WaitingThink() {
 }
 
 void MinigameGame::RunningThink() {
+	//Engine()->GetLmDevice()->LMRefresh();
 	Engine()->GetPhysDevice()->Think();
 }
 

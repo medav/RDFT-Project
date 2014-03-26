@@ -33,7 +33,7 @@ bool RDFTENGINE::LoadDLLs() {
 	hLmDLL = LoadLibrary("lmEngine.dll");
 	if (!hLmDLL) {
 		MessageBox(NULL, "Could not load lmEngine.dll", "Engine error", MB_ICONERROR | MB_OK);
-		result = false;
+		//result = false;
 	}
 
 	return result;
@@ -80,7 +80,7 @@ bool RDFTENGINE::CreateLmDevice() {
 	}
 
 	CREATELMENGINEDEVICE _CreateLmEngineDevice = 0;
-	_CreateLmEngineDevice = (CREATELMENGINEDEVICE)GetProcAddress(hGlDLL, "CreateLmDevice");
+	_CreateLmEngineDevice = (CREATELMENGINEDEVICE)GetProcAddress(hLmDLL, "CreateLmDevice");
 
 	if (!_CreateLmEngineDevice) {
 		MessageBox(NULL, "Could not call CreateLmDevice()", "Engine error", MB_ICONERROR | MB_OK);
