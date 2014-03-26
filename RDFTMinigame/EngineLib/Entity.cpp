@@ -1,6 +1,7 @@
-#include <stdio.h>
-#include <string.h>
+#include <math.h>
 #include "PhysEngineDevice.h"
+
+#define PI 3.1415926
 
 void Ball::Think() {
 	// Update Pos based on velocity Vel
@@ -20,11 +21,15 @@ void Ball::ApplyVelocity(float x, float y){
 }
 
 void Ball::Collide(ENTITY * other){
-	Vel.x = -1 * (Vel.x);
-	Vel.y = -1 * (Vel.y);
+	//Vel.x = -1 * (Vel.x);
+	//Vel.y = -1 * (Vel.y);
 
-	//Pos.x += Vel.x * 4;
-	//Pos.y += Vel.y * 4;
+	double angleBetween = atan2(Vel.y, Vel.x);
+	double secondAngle = (2 * PI) - angleBetween;
+	double vectorMagnitude = sqrt(((Vel.x * Vel.x) + (Vel.y * Vel.y)));
+
+	Vel.y = (sin(secondAngle) * vectorMagnitude) * cc;
+	Vel.x = (cos(secondAngle) * vectorMagnitude) * cc;
 }
 
 // Bounding Box Methods
