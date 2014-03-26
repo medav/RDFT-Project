@@ -1,6 +1,6 @@
 #include <math.h>
 #include "PhysEngineDevice.h"
-#include <math.h>
+#include "EngineCommon.h"
 
 #define PI 3.1415926
 
@@ -8,40 +8,21 @@ void Ball::Think() {
 	if (Vel.x == 0 && Vel.y == 0)
 		return;
 
+	double frictionAcc = -1 * mk;
 	// Update Pos based on velocity Vel
 	double dT = ck.DeltaT();
 
 	Pos.x += Vel.x * dT;
 	Pos.y += Vel.y * dT;
 
-	double frictionAcc = 9.8 * mk;
 
-	if (Vel.x < 0)
-	{
-		Vel.x += frictionAcc * dT;
-	}
-	else
-	{
-		Vel.x += (-1 * frictionAcc * dT);
-	}
+	Vel.x += (frictionAcc * dT);
+	Vel.y += (frictionAcc * dT);
 
-	if (Vel.y < 0)
-	{
-		Vel.y += frictionAcc * dT;
-	}
-	else
-	{
-		Vel.y += (-1 * frictionAcc * dT);
-	}
-
-	//Vel.x *= 0.94;
-	//Vel.y *= 0.94;
-	
-	// Stop the ball if the velocity magnitude is small enough
-	if ((Vel.x * Vel.x + Vel.y * Vel.y) < 0.001) {
+	if ((Vel.x * Vel.x + Vel.y * Vel.y) < 0.0005) {
 		Vel.x = 0;
 		Vel.y = 0;
-}
+	}
 }
 
 void Ball::ApplyVelocity(float x, float y){
@@ -119,11 +100,17 @@ void Wall::Draw(PGLENGINE glEngine) {
 }
 
 void Ball::Draw(PGLENGINE glEngine) {
-	glEngine->DrawCircle(this->Pos, VectorOf(this->radius, 0), ColorOf(0.95f, 0.95f, 0.95f));
-
 	GLVECTOR2 end;
-	end.x = Pos.x + Vel.x * 10;
-	end.y = Pos.y + Vel.y * 10;
+	double mag = Magnitude(Vel);
 
-	glEngine->DrawArrow(this->Pos, end, 4.0, ColorOf(0.95f, 0.0f, 0.0f));
+	end.x = Pos.x + Vel.x * 10.0;
+	end.y = Pos.y + Vel.y * 10.0;
+
+	float r = (float)mag / 10;
+
+	if (r > 1.0)
+		r = 1.0;
+
+	glEngine->DrawArrow(this->Pos, end, 4.0, ColorOf(r, 1.0 - r, 0.0f));
+	glEngine->DrawCircle(this->Pos, VectorOf(this->radius, 0), ColorOf(0.95f, 0.95f, 0.95f));
 }

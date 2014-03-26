@@ -35,6 +35,10 @@ double ClockKeeper::DeltaT() {
 
 	duration<long double> time_span = duration_cast<duration<double>>(temp - prev);
 	
-	return time_span.count();
+	return time_span.count() / 4;
 }
 
+
+double Magnitude(GLVECTOR2 vec) {
+	return sqrt(vec.x * vec.x + vec.y * vec.y);
+}
