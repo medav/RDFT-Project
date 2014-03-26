@@ -52,21 +52,21 @@ bool GLENGINE::BeginScene() {
 	return true;
 }
 
-void DrawRect(GLVERTEX2 pos, GLVECTOR2 size, GLCOLOR color) {
+void DrawRect(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color) {
 	glBegin(GL_QUADS);
 
 	glColor3f(color.r, color.g, color.b);
 
-	glVertex2f(pos.x - size.x / 2, pos.y - size.y / 2);
-	glVertex2f(pos.x + size.x / 2, pos.y - size.y / 2);
-	glVertex2f(pos.x - size.x / 2, pos.y + size.y / 2);
-	glVertex2f(pos.x + size.x / 2, pos.y + size.y / 2);
+	glVertex2f(pos.x - size.x / 2.0, pos.y - size.y / 2.0);
+	glVertex2f(pos.x + size.x / 2.0, pos.y - size.y / 2.0);
+	glVertex2f(pos.x - size.x / 2.0, pos.y + size.y / 2.0);
+	glVertex2f(pos.x + size.x / 2.0, pos.y + size.y / 2.0);
 
 	glEnd();
 }
 
-void DrawCircle(GLVERTEX2 pos, GLVECTOR2 size, GLCOLOR color) {
-	float theta = 2 * 3.1415926 / 300.0;
+void DrawCircle(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color) {
+	float theta = 2 * 3.1416 / 300.0;
 	float c = cosf(theta);
 	float s = sinf(theta);
 	float t;
