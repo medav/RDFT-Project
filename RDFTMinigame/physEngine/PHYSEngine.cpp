@@ -8,7 +8,14 @@ PHYSENGINE::PHYSENGINE(HWND hwnd) {
 void PHYSENGINE::init() {
 
 }
-
+void PHYSENGINE::AddEntity(ENTITY * ent){
+	ents.push_back(ent);
+}
+void PHYSENGINE::Clear(){
+	for (unsigned int i = 0; i < ents.size(); i++){
+		delete ents[i];
+	}
+}
 void PHYSENGINE::Think() {
 	ENTITY * temp;
 
