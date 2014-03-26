@@ -21,7 +21,7 @@ void Ball::Think() {
 	if ((Vel.x * Vel.x + Vel.y * Vel.y) < 0.001) {
 		Vel.x = 0;
 		Vel.y = 0;
-	}
+}
 }
 
 void Ball::ApplyVelocity(float x, float y){
@@ -66,8 +66,20 @@ void Ball::Collide(ENTITY * other){
 			Vel.y *= (-1 * cc);
 	}
 
-	//Vel.y = (sin(secondAngle) * vectorMagnitude) * cc;
-	//Vel.x = (cos(secondAngle) * vectorMagnitude) * cc;
+	Vel.y = (sin(secondAngle) * vectorMagnitude) * cc;
+	Vel.x = (cos(secondAngle) * vectorMagnitude) * cc;
+	*/
+
+	// If y's are intersecting
+	if ((this->BoundingBox().y + this->BoundingBox().h == other->BoundingBox().h) || 
+		(this->BoundingBox().y == other->BoundingBox().y + other->BoundingBox().h))
+	{
+		Vel.y = -1 * Vel.y;
+	}
+	else
+	{
+		Vel.x = -1 * Vel.x;
+	}
 }
 
 // Bounding Box Methods
