@@ -9,6 +9,10 @@ typedef bool(*CREATEGLENGINEDEVICE)(LPGLENGINE engine, HWND hwnd);
 typedef bool (*CREATEPHYSENGINEDEVICE)(LPPHYSENGINE engine, HWND hwnd);
 typedef bool(*CREATELMENGINEDEVICE)(LPLMENGINE engine, HWND hwnd);
 
+typedef void(*RELEASEGLENGINEDEVICE)(GLENGINEDEVICE * device);
+typedef void(*RELEASEPHYSENGINEDEVICE)(PHYSENGINEDEVICE * device);
+typedef void(*RELEASELMENGINEDEVICE)(LMENGINEDEVICE * device);
+
 class RDFTENGINE {
 private:
 
@@ -26,6 +30,10 @@ private:
 	bool CreateGlDevice();
 	bool CreatePhysDevice();
 	bool CreateLmDevice();
+
+	void ReleaseGlDevice();
+	void ReleasePhysDevice();
+	void ReleaseLmDevice();
 
 public:
 	RDFTENGINE();

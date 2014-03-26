@@ -29,6 +29,7 @@ public:
 
 	virtual void DrawRect(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color);
 	virtual void DrawCircle(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color);
+	virtual void DrawArrow(GLVECTOR2 begin, GLVECTOR2 end, float weight, GLCOLORARGB color);
 
 	bool EndScene();
 
