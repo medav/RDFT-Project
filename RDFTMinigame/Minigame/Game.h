@@ -46,7 +46,7 @@ public:
 
 class MinigameMenu {
 private:
-	MinigameMenu();
+	MinigameMenu() {}
 	static MinigameMenu * _Instance;
 
 	Minigame::MENUSTATE MenuState;
