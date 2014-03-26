@@ -35,7 +35,7 @@ public:
 	virtual void Draw(PGLENGINE glEngine) {}
 	virtual void Collide(ENTITY * other) {}
 	virtual bool CollidesWith(ENTITY * other) { return false; }
-	virtual BOUNDINGBOX BoudingBox() = 0;
+	virtual BOUNDINGBOX BoundingBox() = 0;
 
 	virtual TYPE Type() = 0;
 };
@@ -51,7 +51,7 @@ public:
 		Height = h;
 	}
 
-	virtual BOUNDINGBOX BoudingBox();
+	virtual BOUNDINGBOX BoundingBox();
 
 	virtual ENTITY::TYPE Type() {
 		return ENTITY::STATIC;
@@ -80,10 +80,10 @@ public:
 class Ball : public ENTITY {
 private:
 	// Kinetic friction coef. (This isn't the traditional definition)
-	const double mk = 0.95;
+	const double mk = 0.997;
 
 	// Collision constant: How much to decrease speed by after collision
-	const double cc = 0.9;
+	const double cc = 1.0;
 
 	GLVECTOR2 Vel;
 
@@ -100,7 +100,7 @@ public:
 	virtual void Draw(PGLENGINE glEngine);
 	virtual void Collide(ENTITY * other);
 
-	virtual BOUNDINGBOX BoudingBox();
+	virtual BOUNDINGBOX BoundingBox();
 
 	void ApplyVelocity(float x, float y);
 

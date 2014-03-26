@@ -1,15 +1,18 @@
-#include "PhysEngineDevice.h"
 #include <math.h>
-#define PI 3.14159265358979323846
+#include "PhysEngineDevice.h"
+
+#define PI 3.1415926
 
 void Ball::Think() {
 	// Update Pos based on velocity Vel
-	SetX(Pos.x + (Vel.x * ck.DeltaT()));
-	SetY(Pos.y + (Vel.y * ck.DeltaT()));
+	double dT = ck.DeltaT();
+
+	Pos.x += Vel.x * 0.5;
+	Pos.y += Vel.y * 0.5;
 
 	// Reduce Vel according to mk
-	Vel.x *= mk;
-	Vel.y *= mk;
+	//Vel.x *= mk;
+	//Vel.y *= mk;
 }
 
 void Ball::ApplyVelocity(float x, float y){
@@ -18,6 +21,9 @@ void Ball::ApplyVelocity(float x, float y){
 }
 
 void Ball::Collide(ENTITY * other){
+	//Vel.x = -1 * (Vel.x);
+	//Vel.y = -1 * (Vel.y);
+
 	double angleBetween = atan2(Vel.y, Vel.x);
 	double secondAngle = (2 * PI) - angleBetween;
 	double vectorMagnitude = sqrt(((Vel.x * Vel.x) + (Vel.y * Vel.y)));
@@ -27,7 +33,7 @@ void Ball::Collide(ENTITY * other){
 }
 
 // Bounding Box Methods
-BOUNDINGBOX World::BoudingBox() {
+BOUNDINGBOX World::BoundingBox() {
 	BOUNDINGBOX box;
 	box.x = Pos.x - Width / 2;
 	box.y = Pos.y - Height / 2;
@@ -37,7 +43,7 @@ BOUNDINGBOX World::BoudingBox() {
 	return box;
 }
 
-BOUNDINGBOX Ball::BoudingBox() {
+BOUNDINGBOX Ball::BoundingBox() {
 	BOUNDINGBOX box;
 	box.x = Pos.x - radius;
 	box.y = Pos.y - radius;

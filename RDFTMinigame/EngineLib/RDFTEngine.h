@@ -1,5 +1,6 @@
 #ifndef __RDFTENGINE__
 #define __RDFTENGINE__
+#include <math.h>
 #include "GLEngineDevice.h"
 #include "PhysEngineDevice.h"
 #include "LMEngineDevice.h"
@@ -22,6 +23,10 @@ private:
 	HMODULE hPhysDLL;
 	HMODULE hLmDLL;
 
+	bool CreateGlDevice();
+	bool CreatePhysDevice();
+	bool CreateLmDevice();
+
 public:
 	RDFTENGINE();
 
@@ -33,9 +38,7 @@ public:
 	bool LoadDLLs();
 	bool CreateDevices();
 
-	bool CreateGlDevice();
-	bool CreatePhysDevice();
-	bool CreateLmDevice();
+	
 
 	PGLENGINE GetGlDevice() {
 		return glEngine; 
@@ -49,28 +52,16 @@ public:
 		return lmEngine;
 	}
 
-	HINSTANCE GetGlModule() { 
-		return hGlDLL; 
-	}
-
-	HINSTANCE GetPhysModule() {
-		return hPhysDLL;
-	}
-
-	HINSTANCE GetLmModule() {
-		return hLmDLL;
-	}
-
 	double ScreenX() {
 		RECT r;
-		GetWindowRect(hwnd, &r);
-		return (double) r.right;
+		GetClientRect(hwnd, &r);
+		return fabs((double)r.right - (double)r.left);
 	}
 
 	double ScreenY() {
 		RECT r;
-		GetWindowRect(hwnd, &r);
-		return (double) r.top;
+		GetClientRect(hwnd, &r);
+		return fabs((double)r.bottom - (double)r.top);
 	}
 
 	void ReleaseGl();
