@@ -2,6 +2,9 @@
 
 using namespace Leap;
 
+bool LMENGINE::initLM(){
+	return true;
+}
 bool LMENGINE::LMRefresh() {
 	if (ctrl.isConnected()){
 		const Frame frame = ctrl.frame();
