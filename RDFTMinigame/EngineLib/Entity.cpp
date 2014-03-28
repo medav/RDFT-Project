@@ -11,29 +11,25 @@ void Ball::Think() {
 	// Update Pos based on velocity Vel
 	double dT = ck.DeltaT();
 
-	// Ff = mk * Fn * mass
-	double frictionForce = mk * 9.8 * mass;
-	// Sum of forces = -Ff = ma, a = Ff / m
-	double frictionAccMag = (-1 * frictionForce) / mass;
-	// Vf = Vi + (at) <- this part
-	double frictionVelMag = frictionAccMag * dT;
+	double velAngle = atan2(Vel.y, Vel.x);
+	double frictionMag = mk * mass * 9.8;
+	double frictionAccX = (cos(velAngle) * frictionMag) / mass;
+	double frictionAccY = (sin(velAngle) * frictionMag) / mass;
 
-	// Scale magnitudes according to each component using similar triangles
-	double frictionX = (frictionVelMag * Vel.x) / sqrt(Vel.x * Vel.x + Vel.y * Vel.y);
-	double frictionY = (frictionVelMag * Vel.y) / sqrt(Vel.x * Vel.x + Vel.y * Vel.y);
+	// If the computed friction component is greater than the current speed, don't do it
+	if (abs(frictionAccX) <= abs(Vel.x)){
+		Vel.x -= (frictionAccX * dT);
+		}
+	else{
+		Vel.x = 0;
+	}
 
-	if (Vel.x > 0){
-		Vel.x += (frictionX);
+	// Same as prev but for y
+	if (abs(frictionAccY) <= abs(Vel.y)){
+		Vel.y -= (frictionAccY * dT);
 	}
 	else{
-		Vel.x += (-1 * frictionX);
-	}
-
-	if (Vel.y > 0){
-		Vel.y += (frictionY);
-	}
-	else{
-		Vel.y += (-1 * frictionY);
+		Vel.y = 0;
 	}
 
 	if ((Vel.x * Vel.x + Vel.y * Vel.y) < 0.005) {
