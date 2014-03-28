@@ -13,7 +13,7 @@ private:
 	HWND hwnd;
 	Leap::Controller ctrl;
 	bool init=false;
-	GLVECTOR2 start;
+	GLVECTOR2 start;	
 	GLVECTOR2 last;
 
 public:
@@ -25,6 +25,7 @@ public:
 
 	virtual bool LMRefresh();
 	virtual GLVECTOR2 LMGetVector();
+	virtual bool initLM();
 
 	~LMENGINE();
 };
