@@ -21,7 +21,7 @@ bool LMENGINE::LMRefresh() {
 					}
 					avgPos /= (float)fingers.count();
 					last = { avgPos.x, avgPos.y };
-					if (ctrl.frame(1).hands()[0].fingers()[0].tipPosition().z - ctrl.frame(0).hands()[0].fingers()[0].tipPosition().z < 10)
+					if (ctrl.frame(1).hands()[0].fingers()[0].tipPosition().z - ctrl.frame(0).hands()[0].fingers()[0].tipPosition().z < 5)
 						init = false;
 				}
 			}
