@@ -32,7 +32,7 @@ void Ball::Think() {
 		Vel.y = 0;
 	}
 
-	if ((Vel.x * Vel.x + Vel.y * Vel.y) < 0.005) {
+	if ((Vel.x * Vel.x + Vel.y * Vel.y) < 0.001) {
 		Vel.x = 0;
 		Vel.y = 0;
 	}
@@ -128,5 +128,6 @@ void Ball::Draw(PGLENGINE glEngine) {
 		r = 1.0;
 
 	glEngine->DrawArrow(this->Pos, end, 4.0, ColorOf(r, 1.0 - r, 0.0f));
-	glEngine->DrawCircle(this->Pos, VectorOf(this->radius, 0), ColorOf(0.95f, 0.95f, 0.95f));
+	//glEngine->DrawCircle(this->Pos, VectorOf(this->radius, 0), ColorOf(0.95f, 0.95f, 0.95f));
+	glEngine->DrawTexturedRect(this->Pos, VectorOf(this->radius, this->radius), "ball");
 }

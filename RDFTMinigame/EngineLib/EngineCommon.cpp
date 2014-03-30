@@ -35,7 +35,7 @@ double ClockKeeper::DeltaT() {
 
 	duration<long double> time_span = duration_cast<duration<double>>(temp - prev);
 	
-	return time_span.count() / 64;
+	return time_span.count();
 }
 
 

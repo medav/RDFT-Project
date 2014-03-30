@@ -42,10 +42,8 @@ public:
 		this->hwnd = hwnd;
 	}
 
-	bool GetOK();
 	bool LoadDLLs();
 	bool CreateDevices();
-
 	
 
 	PGLENGINE GetGlDevice() {
@@ -71,10 +69,6 @@ public:
 		GetClientRect(hwnd, &r);
 		return fabs((double)r.bottom - (double)r.top);
 	}
-
-	void ReleaseGl();
-	void ReleasePhys();
-	void ReleaseLm();
 
 	~RDFTENGINE();
 };
