@@ -1,6 +1,6 @@
 #include <math.h>
 #include "PhysEngineDevice.h"
-#include <math.h>
+#include "EngineCommon.h"
 
 #define PI 3.1415926
 
@@ -11,17 +11,34 @@ void Ball::Think() {
 	// Update Pos based on velocity Vel
 	double dT = ck.DeltaT();
 
-	Pos.x += Vel.x * 0.5;
-	Pos.y += Vel.y * 0.5;
+	double velAngle = atan2(Vel.y, Vel.x);
+	double frictionMag = mk * mass * 9.8;
+	double frictionAccX = (cos(velAngle) * frictionMag) / mass;
+	double frictionAccY = (sin(velAngle) * frictionMag) / mass;
 
-	// Reduce Vel according to mk
-	Vel.x *= mk;
-	Vel.y *= mk;
+	// If the computed friction component is greater than the current speed, don't do it
+	if (abs(frictionAccX) <= abs(Vel.x)){
+		Vel.x -= (frictionAccX * dT);
+		}
+	else{
+		Vel.x = 0;
+	}
 
-	if ((Vel.x * Vel.x + Vel.y * Vel.y) < 0.001) {
+	// Same as prev but for y
+	if (abs(frictionAccY) <= abs(Vel.y)){
+		Vel.y -= (frictionAccY * dT);
+	}
+	else{
+		Vel.y = 0;
+	}
+
+	if ((Vel.x * Vel.x + Vel.y * Vel.y) < 0.005) {
 		Vel.x = 0;
 		Vel.y = 0;
-}
+	}
+
+	Pos.x += Vel.x * dT;
+	Pos.y += Vel.y * dT;
 }
 
 void Ball::ApplyVelocity(float x, float y){
@@ -99,11 +116,17 @@ void Wall::Draw(PGLENGINE glEngine) {
 }
 
 void Ball::Draw(PGLENGINE glEngine) {
-	glEngine->DrawCircle(this->Pos, VectorOf(this->radius, 0), ColorOf(0.95f, 0.95f, 0.95f));
-
 	GLVECTOR2 end;
-	end.x = Pos.x + Vel.x * 50;
-	end.y = Pos.y + Vel.y * 50;
+	double mag = Magnitude(Vel);
 
-	glEngine->DrawArrow(this->Pos, end, 4.0, ColorOf(0.95f, 0.0f, 0.0f));
+	end.x = Pos.x + Vel.x * 10.0;
+	end.y = Pos.y + Vel.y * 10.0;
+
+	float r = (float)mag / 10;
+
+	if (r > 1.0)
+		r = 1.0;
+
+	glEngine->DrawArrow(this->Pos, end, 4.0, ColorOf(r, 1.0 - r, 0.0f));
+	glEngine->DrawCircle(this->Pos, VectorOf(this->radius, 0), ColorOf(0.95f, 0.95f, 0.95f));
 }

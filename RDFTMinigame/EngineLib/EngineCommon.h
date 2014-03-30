@@ -1,6 +1,7 @@
 #ifndef __ENGINECOMMON__
 #define __ENGINECOMMON__
 #include <Windows.h>
+#include <chrono>
 
 typedef struct {
 	float r, b, g, a;
@@ -16,7 +17,7 @@ typedef struct {
 
 class ClockKeeper {
 private:
-	time_t prev;
+	std::chrono::high_resolution_clock::time_point prev;
 
 public:
 	ClockKeeper();
