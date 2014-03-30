@@ -166,11 +166,6 @@ void MinigameGame::RunningDraw() {
 void MinigameGame::NewMap() {
 	Engine()->GetPhysDevice()->Clear();
 
-	//char buffer[500];
-	//sprintf_s(buffer, "Screen height = %lf\nScreen width = %lf", Engine()->ScreenY(), Engine()->ScreenX());
-
-	//MessageBox(NULL, buffer, "Engine Info", MB_ICONINFORMATION | MB_OK);
-
 	ENTITY * WorldTop = new Wall(VectorOf(Engine()->ScreenX() / 2.0, Engine()->ScreenY() - 4), Engine()->ScreenX() + 8, 16);
 	ENTITY * WorldBottom = new Wall(VectorOf(Engine()->ScreenX() / 2.0, 4), Engine()->ScreenX() + 8, 16);
 	ENTITY * WorldLeft = new Wall(VectorOf(4, Engine()->ScreenY() / 2.0), 16, Engine()->ScreenY() + 8);

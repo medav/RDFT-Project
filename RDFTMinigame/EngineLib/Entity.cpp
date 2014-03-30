@@ -128,7 +128,7 @@ void Ball::Draw(PGLENGINE glEngine) {
 	if (r > 1.0)
 		r = 1.0;
 
-	glEngine->DrawArrow(this->Pos, end, 4.0, ColorOf(r, 1.0 - r, 0.0f));
+	glEngine->DrawArrow(this->Pos, end, 4.0f, ColorOf(r, 1.0f - r, 0.0f));
 	//glEngine->DrawCircle(this->Pos, VectorOf(this->radius, 0), ColorOf(0.95f, 0.95f, 0.95f));
 	glEngine->DrawTexturedRect(this->Pos, VectorOf(this->radius, this->radius), "ball");
 }
