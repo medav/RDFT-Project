@@ -1,9 +1,16 @@
 #include "GLEngine.h"
 #include <math.h>
+#include <fstream>
 
-GLENGINE::GLENGINE(HWND hwnd) {
+GLENGINE::GLENGINE(HWND hwnd) : textures() {
 	this->CreateRenderDevice(hwnd);
 	this->SetWindowSize();
+	
+	bgColor.r = 0.0f;
+	bgColor.g = 0.0f;
+	bgColor.b = 0.0f;
+	bgColor.a = 0.0f;
+
 	r = 0;
 }
 
@@ -18,6 +25,103 @@ void GLENGINE::SetWindowSize() {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0.0f, width, 0.0f, height, 0.0f, 1.0f);
+}
+
+// This was written by following a tutorial on the internet:
+// http://www.cplusplus.com/articles/GwvU7k9E/
+bool LoadBMP(const char* location, GLuint *texture) {
+	uint8_t* datBuff[2] = { nullptr, nullptr };
+	uint8_t* temp = nullptr;
+	uint8_t* pixels = nullptr;
+
+	*texture = -1;
+
+	BITMAPFILEHEADER* bmpHeader = nullptr;
+	BITMAPINFOHEADER* bmpInfo = nullptr;
+
+	// The file... We open it with it's constructor
+	std::ifstream file(location, std::ios::binary);
+	if (!file)
+		return false;
+
+	// Allocate byte memory that will hold the two headers
+	datBuff[0] = new uint8_t[sizeof(BITMAPFILEHEADER)];
+	datBuff[1] = new uint8_t[sizeof(BITMAPINFOHEADER)];
+
+	file.read((char*)datBuff[0], sizeof(BITMAPFILEHEADER));
+	file.read((char*)datBuff[1], sizeof(BITMAPINFOHEADER));
+
+	// Construct the values from the buffers
+	bmpHeader = (BITMAPFILEHEADER*)datBuff[0];
+	bmpInfo = (BITMAPINFOHEADER*)datBuff[1];
+
+	// Check if the file is an actual BMP file
+	if (bmpHeader->bfType != 0x4D42)
+		return false;
+
+	// First allocate pixel memory
+	temp = new uint8_t[bmpInfo->biSizeImage];
+
+	// Go to where image data starts, then read in image data
+	file.seekg(bmpHeader->bfOffBits);
+	file.read((char*)temp, bmpInfo->biSizeImage);
+
+	pixels = new uint8_t[bmpInfo->biSizeImage + bmpInfo->biSizeImage / 3];
+
+	// We're almost done. We have our image loaded, however it's not in the right format.
+	// .bmp files store image data in the BGR format, and we have to convert it to RGB.
+	// Since we have the value in bytes, this shouldn't be to hard to accomplish
+	unsigned long i;
+	unsigned long j;
+
+	for (i = 0, j = 0; i < bmpInfo->biSizeImage; i += 3, j+=4) {
+		pixels[j] = temp[i + 2];
+		pixels[j + 1] = temp[i + 1];
+		pixels[j + 2] = temp[i];
+
+		// Remove pink
+		if (temp[i] > 220 && temp[i + 1] < 30 && temp[i + 2] > 220)
+			pixels[j + 3] = 0x00;
+		else
+			pixels[j + 3] = 0xFF;
+	}
+
+	// Set width and height to the values loaded from the file
+	GLuint w = bmpInfo->biWidth;
+	GLuint h = bmpInfo->biHeight;
+
+	/*******************GENERATING TEXTURES*******************/
+
+	glGenTextures(1, texture);             // Generate a texture
+	glBindTexture(GL_TEXTURE_2D, *texture);
+
+	GLint mode = GL_RGBA;
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, mode, w, h, 0, mode, GL_UNSIGNED_BYTE, pixels);
+	glBindTexture(GL_TEXTURE_2D, NULL);
+
+	// Delete the two buffers.
+	delete[] datBuff[0];
+	delete[] datBuff[1];
+	delete[] temp;
+	//delete[] pixels;
+	file.close();
+
+	return true; // Return success code 
+}
+
+bool GLENGINE::LoadTexture(const char * filename, const char * name) {
+	GLuint texture = 0;
+	
+	if (!LoadBMP(filename, &texture))
+		return false;
+
+	std::string str(name);
+	textures[str] = texture;
+
+	return true;
 }
 
 bool GLENGINE::CreateRenderDevice(HWND hwnd) {
@@ -48,7 +152,7 @@ bool GLENGINE::CreateRenderDevice(HWND hwnd) {
 }
 
 bool GLENGINE::BeginScene() {
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
 	glClear(GL_COLOR_BUFFER_BIT);
 	return true;
 }
@@ -58,38 +162,80 @@ void GLENGINE::DrawRect(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color) {
 
 	glColor3f(color.r, color.g, color.b);
 
-	glVertex2f(pos.x - size.x / 2.0, pos.y - size.y / 2.0);
-	glVertex2f(pos.x + size.x / 2.0, pos.y - size.y / 2.0);
-	glVertex2f(pos.x + size.x / 2.0, pos.y + size.y / 2.0);
-	glVertex2f(pos.x - size.x / 2.0, pos.y + size.y / 2.0);
+	glVertex2f((GLfloat)(pos.x - size.x / 2.0), (GLfloat)(pos.y - size.y / 2.0));
+	glVertex2f((GLfloat)(pos.x + size.x / 2.0), (GLfloat)(pos.y - size.y / 2.0));
+	glVertex2f((GLfloat)(pos.x + size.x / 2.0), (GLfloat)(pos.y + size.y / 2.0));
+	glVertex2f((GLfloat)(pos.x - size.x / 2.0), (GLfloat)(pos.y + size.y / 2.0));
 	
 	glEnd();
 }
 
+void GLENGINE::DrawTexturedRect(GLVERTEX2 pos, GLVECTOR2 size, const char * textureName) {
+	std::string str(textureName);
+	GLuint texture = textures[textureName];
+
+	glEnable(GL_TEXTURE_2D);
+
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glBegin(GL_QUADS);
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+
+	glTexCoord2f(0.0, 0.0);
+	glVertex2f((GLfloat)(pos.x - size.x / 2.0), (GLfloat)(pos.y - size.y / 2.0));
+
+	glTexCoord2f(1.0, 0.0);
+	glVertex2f((GLfloat)(pos.x + size.x / 2.0), (GLfloat)(pos.y - size.y / 2.0));
+
+	glTexCoord2f(1.0, 1.0);
+	glVertex2f((GLfloat)(pos.x + size.x / 2.0), (GLfloat)(pos.y + size.y / 2.0));
+
+	glTexCoord2f(0.0, 1.0);
+	glVertex2f((GLfloat)(pos.x - size.x / 2.0), (GLfloat)(pos.y + size.y / 2.0));
+
+	glEnd();
+
+	glBindTexture(GL_TEXTURE_2D, NULL);
+
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
+}
+
 void GLENGINE::DrawCircle(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color) {
-	float theta = 2 * 3.1416 / 300.0;
+	float theta = 2.0f * 3.14159f / 300.0f;
 	float c = cosf(theta);
 	float s = sinf(theta);
 	float t;
 
-	float x = sqrt(size.x * size.x + size.y + size.y);
+	float x = (float) sqrt(size.x * size.x + size.y + size.y);
 	float y = 0;
 	int i;
 
 	glBegin(GL_TRIANGLE_FAN);
 
 	glColor3f(color.r, color.g, color.b);
-	glVertex2f(pos.x, pos.y);
+	glVertex2f((GLfloat)pos.x, (GLfloat)pos.y);
 
 
-	for (int i = 0; i < 302; i++) {
-		glVertex2f(x + pos.x, y + pos.y);
+	for (i = 0; i < 302; i++) {
+		glVertex2f((GLfloat)(x + pos.x), (GLfloat)(y + pos.y));
 
 		t = x;
 		x = c * x - s * y;
 		y = s * t + c * y;
 	}
 	glEnd();
+}
+
+void GLENGINE::DrawCircleHollow(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color) {
+
+}
+
+void GLENGINE::SetClearColor(GLCOLORARGB bgcolor) {
+	this->bgColor = bgcolor;
 }
 
 void GLENGINE::DrawArrow(GLVECTOR2 begin, GLVECTOR2 end, float weight, GLCOLORARGB color) {
@@ -118,21 +264,21 @@ void GLENGINE::DrawArrow(GLVECTOR2 begin, GLVECTOR2 end, float weight, GLCOLORAR
 	glBegin(GL_LINES);
 
 	glColor3f(color.r, color.g, color.b);
-	glVertex2f(begin.x, begin.y);
-	glVertex2f(end.x, end.y);
+	glVertex2f((GLfloat)begin.x, (GLfloat)begin.y);
+	glVertex2f((GLfloat)end.x, (GLfloat)end.y);
 
 	glEnd();
 
-	glLineWidth(2.0 * weight / 3.0);
+	glLineWidth(2.0f * weight / 3.0f);
 	glBegin(GL_LINES);
 
 	glColor3f(color.r, color.g, color.b);
 
-	glVertex2f(e1.x, e1.y);
-	glVertex2f(end.x, end.y);
+	glVertex2f((GLfloat)e1.x, (GLfloat)e1.y);
+	glVertex2f((GLfloat)end.x, (GLfloat)end.y);
 	
-	glVertex2f(e2.x, e2.y);
-	glVertex2f(end.x, end.y);
+	glVertex2f((GLfloat)e2.x, (GLfloat)e2.y);
+	glVertex2f((GLfloat)end.x, (GLfloat)end.y);
 
 	glEnd();
 }

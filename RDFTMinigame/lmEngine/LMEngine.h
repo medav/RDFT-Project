@@ -19,6 +19,7 @@ private:
 public:
 	LMENGINE(HWND hwnd) : ctrl() {
 		this->hwnd = hwnd;
+
 		last.x = 0;
 		last.y = 0;
 	}

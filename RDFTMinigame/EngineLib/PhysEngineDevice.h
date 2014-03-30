@@ -23,11 +23,11 @@ public:
 		this->Pos = Pos;
 	}
 
-	virtual void SetX(float x) {
+	virtual void SetX(double x) {
 		this->Pos.x = x;
 	}
 
-	virtual void SetY(float y) {
+	virtual void SetY(double y) {
 		this->Pos.y = y;
 	}
 
@@ -42,11 +42,11 @@ public:
 
 class World : public ENTITY {
 protected:
-	float Width;
-	float Height;
+	double Width;
+	double Height;
 
 public:
-	World(GLVECTOR2 Pos, float w, float h) : ENTITY(Pos) {
+	World(GLVECTOR2 Pos, double w, double h) : ENTITY(Pos) {
 		Width = w;
 		Height = h;
 	}
@@ -61,7 +61,7 @@ public:
 class Wall : public World {
 
 public:
-	Wall(GLVECTOR2 Pos, float w, float h) : World(Pos, w, h) {}
+	Wall(GLVECTOR2 Pos, double w, double h) : World(Pos, w, h) {}
 
 	virtual void Draw(PGLENGINE gl);
 };
@@ -80,11 +80,11 @@ public:
 class Ball : public ENTITY {
 private:
 	// Kinetic friction coef.
-	const double mk = 0.001;
+	const double mk = 0.0003;
 
-	const double mass = 2.0;
+	const double mass = 5.0;
 	// Collision constant: How much to decrease speed by after collision
-	const double cc = 0.99;
+	const double cc = 0.994;
 
 	GLVECTOR2 Vel;
 
@@ -94,7 +94,7 @@ public:
 	Ball(GLVECTOR2 Pos) : ENTITY(Pos) {
 		Vel.x = 0;
 		Vel.y = 0;
-		radius = 8;
+		radius = 40;
 	}
 
 	virtual void Think();

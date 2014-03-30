@@ -17,21 +17,25 @@ void Ball::Think() {
 	double frictionAccY = (sin(velAngle) * frictionMag) / mass;
 
 	// If the computed friction component is greater than the current speed, don't do it
-	//if (abs(frictionAccX * dT) <= abs(Vel.x))
+	if (abs(frictionAccX) <= abs(Vel.x)){
 		Vel.x -= (frictionAccX * dT);
-	//else
-	//	Vel.x = 0;
+		}
+	else{
+		Vel.x = 0;
+	}
 
 	// Same as prev but for y
-	//if (abs(frictionAccY * dT) <= abs(Vel.y))
+	if (abs(frictionAccY) <= abs(Vel.y)){
 		Vel.y -= (frictionAccY * dT);
-	//else
-	//	Vel.y = 0;
+	}
+	else{
+		Vel.y = 0;
+	}
 
-	//if ((Vel.x * Vel.x + Vel.y * Vel.y) < 0.0005) {
-	//	Vel.x = 0;
-	//	Vel.y = 0;
-	//}
+	if ((Vel.x * Vel.x + Vel.y * Vel.y) < 0.001) {
+		Vel.x = 0;
+		Vel.y = 0;
+	}
 
 	Pos.x += Vel.x * dT;
 	Pos.y += Vel.y * dT;
@@ -75,10 +79,12 @@ void Ball::Collide(ENTITY * other){
 	BOUNDINGBOX box = BoundingBox();
 	BOUNDINGBOX otherBox = other->BoundingBox();
 
-	if (HorizontalCollision(box, otherBox))
+	if (HorizontalCollision(box, otherBox)) {
 		Vel.y *= (-1.0 * cc);
-	else
+	} 
+	else {
 		Vel.x *= (-1.0 * cc);
+	}
 
 	Think();
 }
@@ -96,10 +102,10 @@ BOUNDINGBOX World::BoundingBox() {
 
 BOUNDINGBOX Ball::BoundingBox() {
 	BOUNDINGBOX box;
-	box.x = Pos.x - radius;
-	box.y = Pos.y - radius;
-	box.w = radius * 2;
-	box.h = radius * 2;
+	box.x = Pos.x - radius / 2;
+	box.y = Pos.y - radius / 2;
+	box.w = radius;
+	box.h = radius;
 
 	return box;
 }
@@ -107,6 +113,7 @@ BOUNDINGBOX Ball::BoundingBox() {
 // Draw methods
 void Wall::Draw(PGLENGINE glEngine) {
 	glEngine->DrawRect(this->Pos, VectorOf(this->Width, this->Height), ColorOf(0.95f, 0.95f, 0.95f));
+	//glEngine->DrawTexturedRect(this->Pos, VectorOf(this->Width, this->Height), "wall");
 }
 
 void Ball::Draw(PGLENGINE glEngine) {
@@ -121,6 +128,7 @@ void Ball::Draw(PGLENGINE glEngine) {
 	if (r > 1.0)
 		r = 1.0;
 
-	glEngine->DrawArrow(this->Pos, end, 4.0, ColorOf(r, 1.0 - r, 0.0f));
-	glEngine->DrawCircle(this->Pos, VectorOf(this->radius, 0), ColorOf(0.95f, 0.95f, 0.95f));
+	glEngine->DrawArrow(this->Pos, end, 4.0f, ColorOf(r, 1.0f - r, 0.0f));
+	//glEngine->DrawCircle(this->Pos, VectorOf(this->radius, 0), ColorOf(0.95f, 0.95f, 0.95f));
+	glEngine->DrawTexturedRect(this->Pos, VectorOf(this->radius, this->radius), "ball");
 }

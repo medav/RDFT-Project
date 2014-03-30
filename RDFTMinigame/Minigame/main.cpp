@@ -45,16 +45,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 	MGM();
 	MGG();
 
-	//ENTITY * ball = new Ball(VectorOf(20, 20));
-
+	// This is for testing - delay the game 
 	int ct = 0;
 
 	// Run the message loop.
 
 	MSG msg = {};
 	bool done = false; 
-	while (!done)
-	{
+	while (!done) {
 		PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE);
 		if (msg.message == WM_QUIT) {
 			done = true;

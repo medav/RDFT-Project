@@ -123,11 +123,11 @@ void MinigameGame::Think() {
 }
 
 void MinigameGame::WaitingThink() {
-	
+	Engine()->GetLmDevice()->LMRefresh();
 }
 
 void MinigameGame::RunningThink() {
-	//Engine()->GetLmDevice()->LMRefresh();
+	Engine()->GetLmDevice()->LMRefresh();
 	Engine()->GetPhysDevice()->Think();
 }
 
@@ -151,6 +151,13 @@ void MinigameGame::WaitingDraw() {
 void MinigameGame::RunningDraw() {
 	Engine()->GetGlDevice()->BeginScene();
 	Engine()->GetPhysDevice()->Draw(Engine()->GetGlDevice());
+
+	GLVECTOR2 beg = VectorOf(Engine()->ScreenX() / 2, Engine()->ScreenY() / 2);
+	GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
+	GLVECTOR2 end = VectorOf(beg.x + vec.x, beg.y + vec.y);
+
+	Engine()->GetGlDevice()->DrawArrow(beg, end, 8, ColorOf(0.0f, 1.0f, 0.0f));
+	
 	Engine()->GetGlDevice()->EndScene();
 }
 
@@ -158,11 +165,6 @@ void MinigameGame::RunningDraw() {
 
 void MinigameGame::NewMap() {
 	Engine()->GetPhysDevice()->Clear();
-
-	//char buffer[500];
-	//sprintf_s(buffer, "Screen height = %lf\nScreen width = %lf", Engine()->ScreenY(), Engine()->ScreenX());
-
-	//MessageBox(NULL, buffer, "Engine Info", MB_ICONINFORMATION | MB_OK);
 
 	ENTITY * WorldTop = new Wall(VectorOf(Engine()->ScreenX() / 2.0, Engine()->ScreenY() - 4), Engine()->ScreenX() + 8, 16);
 	ENTITY * WorldBottom = new Wall(VectorOf(Engine()->ScreenX() / 2.0, 4), Engine()->ScreenX() + 8, 16);
@@ -180,10 +182,11 @@ void MinigameGame::NewMap() {
 	ENTITY * Obstruction2 = new Wall(VectorOf(700, 200), 50, 300);
 	Engine()->GetPhysDevice()->AddEntity(Obstruction2);
 
-	Ball * ball = new Ball(VectorOf(50, 600));
-	ball->ApplyVelocity(10, 2);
+	Ball * ball = new Ball(VectorOf(50, 60));
+	ball->ApplyVelocity(8, 2);
 
+	Engine()->GetGlDevice()->LoadTexture("Ball.bmp", "ball");
+	Engine()->GetGlDevice()->LoadTexture("bricks.bmp", "wall");
 
 	Engine()->GetPhysDevice()->AddEntity(ball);
-
 }
