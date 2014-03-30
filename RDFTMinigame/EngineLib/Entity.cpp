@@ -17,25 +17,21 @@ void Ball::Think() {
 	double frictionAccY = (sin(velAngle) * frictionMag) / mass;
 
 	// If the computed friction component is greater than the current speed, don't do it
-	if (abs(frictionAccX) <= abs(Vel.x)){
+	//if (abs(frictionAccX * dT) <= abs(Vel.x))
 		Vel.x -= (frictionAccX * dT);
-		}
-	else{
-		Vel.x = 0;
-	}
+	//else
+	//	Vel.x = 0;
 
 	// Same as prev but for y
-	if (abs(frictionAccY) <= abs(Vel.y)){
+	//if (abs(frictionAccY * dT) <= abs(Vel.y))
 		Vel.y -= (frictionAccY * dT);
-	}
-	else{
-		Vel.y = 0;
-	}
+	//else
+	//	Vel.y = 0;
 
-	if ((Vel.x * Vel.x + Vel.y * Vel.y) < 0.005) {
-		Vel.x = 0;
-		Vel.y = 0;
-	}
+	//if ((Vel.x * Vel.x + Vel.y * Vel.y) < 0.0005) {
+	//	Vel.x = 0;
+	//	Vel.y = 0;
+	//}
 
 	Pos.x += Vel.x * dT;
 	Pos.y += Vel.y * dT;
@@ -79,12 +75,10 @@ void Ball::Collide(ENTITY * other){
 	BOUNDINGBOX box = BoundingBox();
 	BOUNDINGBOX otherBox = other->BoundingBox();
 
-	if (HorizontalCollision(box, otherBox)) {
+	if (HorizontalCollision(box, otherBox))
 		Vel.y *= (-1.0 * cc);
-	} 
-	else {
+	else
 		Vel.x *= (-1.0 * cc);
-	}
 
 	Think();
 }
