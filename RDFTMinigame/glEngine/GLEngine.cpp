@@ -80,7 +80,7 @@ bool LoadBMP(const char* location, GLuint *texture) {
 		pixels[j + 2] = temp[i];
 
 		// Remove pink
-		if (temp[i] > 225 && temp[i + 1] < 25 && temp[i + 2] > 225)
+		if (temp[i] > 220 && temp[i + 1] < 30 && temp[i + 2] > 220)
 			pixels[j + 3] = 0x00;
 		else
 			pixels[j + 3] = 0xFF;

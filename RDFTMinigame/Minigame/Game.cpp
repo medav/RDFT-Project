@@ -123,11 +123,11 @@ void MinigameGame::Think() {
 }
 
 void MinigameGame::WaitingThink() {
-	
+	Engine()->GetLmDevice()->LMRefresh();
 }
 
 void MinigameGame::RunningThink() {
-	//Engine()->GetLmDevice()->LMRefresh();
+	Engine()->GetLmDevice()->LMRefresh();
 	Engine()->GetPhysDevice()->Think();
 }
 
@@ -151,6 +151,13 @@ void MinigameGame::WaitingDraw() {
 void MinigameGame::RunningDraw() {
 	Engine()->GetGlDevice()->BeginScene();
 	Engine()->GetPhysDevice()->Draw(Engine()->GetGlDevice());
+
+	GLVECTOR2 beg = VectorOf(Engine()->ScreenX() / 2, Engine()->ScreenY() / 2);
+	GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
+	GLVECTOR2 end = VectorOf(beg.x + vec.x, beg.y + vec.y);
+
+	Engine()->GetGlDevice()->DrawArrow(beg, end, 8, ColorOf(0.0f, 1.0f, 0.0f));
+	
 	Engine()->GetGlDevice()->EndScene();
 }
 
@@ -184,6 +191,7 @@ void MinigameGame::NewMap() {
 	ball->ApplyVelocity(8, 2);
 
 	Engine()->GetGlDevice()->LoadTexture("Ball.bmp", "ball");
+	Engine()->GetGlDevice()->LoadTexture("bricks.bmp", "wall");
 
 	Engine()->GetPhysDevice()->AddEntity(ball);
 }
