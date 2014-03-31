@@ -15,6 +15,7 @@ private:
 	bool init=false;
 	GLVECTOR2 start;	
 	GLVECTOR2 last;
+	bool first = true;
 
 public:
 	LMENGINE(HWND hwnd) : ctrl() {

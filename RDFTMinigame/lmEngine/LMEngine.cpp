@@ -20,9 +20,16 @@ bool LMENGINE::LMRefresh() {
 						avgPos += fingers[i].tipPosition();
 					}
 					avgPos /= (float)fingers.count();
-					last = { avgPos.x, avgPos.y };
-					if (ctrl.frame(1).hands()[0].fingers()[0].tipPosition().z - ctrl.frame(0).hands()[0].fingers()[0].tipPosition().z < -5)
+					if (first){
+						start.x = avgPos.x;
+						start.y = avgPos.y;
+						first = false;
+					}
+					last = { avgPos.x - start.x, avgPos.y - start.y };
+					if (ctrl.frame(1).hands()[0].fingers()[0].tipPosition().z - ctrl.frame(0).hands()[0].fingers()[0].tipPosition().z < -5){
 						init = false;
+						first = true;
+					}
 				}
 			}
 		}
