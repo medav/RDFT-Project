@@ -31,6 +31,10 @@ public:
 		this->Pos.y = y;
 	}
 
+	virtual GLVECTOR2 getPos() {
+		return Pos;
+	}
+
 	virtual void Think() {}
 	virtual void Draw(PGLENGINE glEngine) {}
 	virtual void Collide(ENTITY * other) {}

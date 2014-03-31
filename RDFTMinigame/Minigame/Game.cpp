@@ -123,11 +123,17 @@ void MinigameGame::Think() {
 }
 
 void MinigameGame::WaitingThink() {
-	Engine()->GetLmDevice()->LMRefresh();
+	if (Engine()->GetLmDevice()->LMRefresh()) {
+		GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
+		ball->ApplyVelocity(vec.x / 64, vec.y / 64);
+	}
 }
 
 void MinigameGame::RunningThink() {
-	Engine()->GetLmDevice()->LMRefresh();
+	if (Engine()->GetLmDevice()->LMRefresh()) {
+		GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
+		ball->ApplyVelocity(vec.x, vec.y);
+	}
 	Engine()->GetPhysDevice()->Think();
 }
 
@@ -152,7 +158,7 @@ void MinigameGame::RunningDraw() {
 	Engine()->GetGlDevice()->BeginScene();
 	Engine()->GetPhysDevice()->Draw(Engine()->GetGlDevice());
 
-	GLVECTOR2 beg = VectorOf(Engine()->ScreenX() / 2, Engine()->ScreenY() / 2);
+	GLVECTOR2 beg = ball->getPos();
 	GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
 	GLVECTOR2 end = VectorOf(beg.x + vec.x, beg.y + vec.y);
 
@@ -182,7 +188,7 @@ void MinigameGame::NewMap() {
 	ENTITY * Obstruction2 = new Wall(VectorOf(700, 200), 50, 300);
 	Engine()->GetPhysDevice()->AddEntity(Obstruction2);
 
-	Ball * ball = new Ball(VectorOf(50, 60));
+	ball = new Ball(VectorOf(50, 60));
 	ball->ApplyVelocity(8, 2);
 
 	Engine()->GetGlDevice()->LoadTexture("Ball.bmp", "ball");
