@@ -46,6 +46,7 @@ void Ball::ApplyVelocity(float x, float y){
 	Vel.y = y;
 }
 
+// Returns true if GLVECTOR2 pt is inside BOUNDINGXBOX box, false otherwise
 bool PointInBox(GLVECTOR2 pt, BOUNDINGBOX box) {
 	if (pt.x <= box.x + box.w &&
 		pt.x >= box.x &&
@@ -56,10 +57,15 @@ bool PointInBox(GLVECTOR2 pt, BOUNDINGBOX box) {
 	return false;
 }
 
+/* Unused
 bool HorizontalCollision(BOUNDINGBOX box1, BOUNDINGBOX box2) {
+	// Top left corner of this box
 	GLVECTOR2 TL1 = VectorOf(box1.x, box1.y + box1.h);
+	// Top left corner of other box
 	GLVECTOR2 TL2 = VectorOf(box2.x, box2.y + box2.h);
+	// Bottom right corner of this box
 	GLVECTOR2 BR1 = VectorOf(box1.x + box1.w, box1.y);
+	// Bottom right corner of other box
 	GLVECTOR2 BR2 = VectorOf(box2.x + box2.w, box2.y);
 
 	if (TL1.y >= BR2.y && BR1.y <= BR2.y &&
@@ -74,11 +80,25 @@ bool HorizontalCollision(BOUNDINGBOX box1, BOUNDINGBOX box2) {
 
 	return false;
 }
+*/
 
 void Ball::Collide(ENTITY * other){
 	BOUNDINGBOX box = BoundingBox();
 	BOUNDINGBOX otherBox = other->BoundingBox();
 
+	// Top left corner of this box
+	GLVECTOR2 TL = VectorOf(box.x, box.y + box.h);
+	// Top right corner of this box
+	GLVECTOR2 TR = VectorOf(box.x + box.w, box.y);
+
+	// Bottom left corner of this box
+	GLVECTOR2 BL = VectorOf(box.x, box.y);
+	// Bottom right corner of this box
+	GLVECTOR2 BR = VectorOf(box.x + box.w, box.y);
+
+
+	// double testAngle = atan2(Vel.y, Vel.x);
+	/*
 	if (HorizontalCollision(box, otherBox)) {
 		Vel.y *= (-1.0 * cc);
 	} 
@@ -86,6 +106,44 @@ void Ball::Collide(ENTITY * other){
 		Vel.x *= (-1.0 * cc);
 	}
 
+	Think();
+	*/
+
+	if (PointInBox(TL, otherBox)){
+		if (PointInBox(TR, otherBox)){
+			Vel.y *= -1;
+		}
+		else if (PointInBox(BL, otherBox)){
+			Vel.x *= -1;
+		}
+		else{
+			Vel.x *= -1;
+			Vel.y *= -1;
+		}
+	}
+	else if (PointInBox(TR, otherBox)){
+		if (PointInBox(BR, otherBox)){
+			Vel.x *= -1;
+		}
+		else{
+			Vel.x *= -1;
+			Vel.y *= -1;
+		}
+	}
+	else if (PointInBox(BR, otherBox)){
+		if (PointInBox(BL, otherBox))
+		{
+			Vel.y *= -1;
+		}
+		else{
+			Vel.x *= -1;
+			Vel.y *= -1;
+		}
+	}
+	else{
+		Vel.x *= -1;
+		Vel.y *= -1;
+	}
 	Think();
 }
 
