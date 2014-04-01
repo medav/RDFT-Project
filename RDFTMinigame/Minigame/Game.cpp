@@ -123,11 +123,17 @@ void MinigameGame::Think() {
 }
 
 void MinigameGame::WaitingThink() {
-	Engine()->GetLmDevice()->LMRefresh();
+	if (Engine()->GetLmDevice()->LMRefresh()) {
+		GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
+		ball->ApplyVelocity(vec.x / 128, vec.y / 128);
+	}
 }
 
 void MinigameGame::RunningThink() {
-	Engine()->GetLmDevice()->LMRefresh();
+	if (Engine()->GetLmDevice()->LMRefresh()) {
+		GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
+		ball->ApplyVelocity(vec.x / 128, vec.y / 128);
+	}
 	Engine()->GetPhysDevice()->Think();
 }
 
@@ -150,13 +156,13 @@ void MinigameGame::WaitingDraw() {
 
 void MinigameGame::RunningDraw() {
 	Engine()->GetGlDevice()->BeginScene();
-	Engine()->GetPhysDevice()->Draw(Engine()->GetGlDevice());
-
-	GLVECTOR2 beg = VectorOf(Engine()->ScreenX() / 2, Engine()->ScreenY() / 2);
+	
+	GLVECTOR2 beg = ball->getPos();
 	GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
 	GLVECTOR2 end = VectorOf(beg.x + vec.x, beg.y + vec.y);
 
 	Engine()->GetGlDevice()->DrawArrow(beg, end, 8, ColorOf(0.0f, 1.0f, 0.0f));
+	Engine()->GetPhysDevice()->Draw(Engine()->GetGlDevice());
 	
 	Engine()->GetGlDevice()->EndScene();
 }
@@ -176,13 +182,13 @@ void MinigameGame::NewMap() {
 	Engine()->GetPhysDevice()->AddEntity(WorldLeft);
 	Engine()->GetPhysDevice()->AddEntity(WorldRight);
 
-	//ENTITY * Obstruction1 = new Wall(VectorOf(500, 400), 600, 50);
-	//Engine()->GetPhysDevice()->AddEntity(Obstruction1);
+	ENTITY * Obstruction1 = new Wall(VectorOf(500, 400), 600, 50);
+	Engine()->GetPhysDevice()->AddEntity(Obstruction1);
 
-	//ENTITY * Obstruction2 = new Wall(VectorOf(700, 200), 50, 300);
-	//Engine()->GetPhysDevice()->AddEntity(Obstruction2);
+	ENTITY * Obstruction2 = new Wall(VectorOf(700, 200), 50, 300);
+	Engine()->GetPhysDevice()->AddEntity(Obstruction2);
 
-	Ball * ball = new Ball(VectorOf(150, 160));
+	ball = new Ball(VectorOf(50, 60));
 	ball->ApplyVelocity(8, 2);
 
 	Engine()->GetGlDevice()->LoadTexture("Ball.bmp", "ball");

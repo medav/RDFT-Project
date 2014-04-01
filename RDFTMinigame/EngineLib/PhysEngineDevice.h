@@ -31,6 +31,10 @@ public:
 		this->Pos.y = y;
 	}
 
+	virtual GLVECTOR2 getPos() {
+		return Pos;
+	}
+
 	virtual void Think() {}
 	virtual void Draw(PGLENGINE glEngine) {}
 	virtual void Collide(ENTITY * other) {}
@@ -94,7 +98,7 @@ public:
 	Ball(GLVECTOR2 Pos) : ENTITY(Pos) {
 		Vel.x = 0;
 		Vel.y = 0;
-		radius = 100;
+		radius = 70;
 	}
 
 	virtual void Think();
