@@ -125,14 +125,14 @@ void MinigameGame::Think() {
 void MinigameGame::WaitingThink() {
 	if (Engine()->GetLmDevice()->LMRefresh()) {
 		GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
-		ball->ApplyVelocity(vec.x / 64, vec.y / 64);
+		ball->ApplyVelocity(vec.x / 128, vec.y / 128);
 	}
 }
 
 void MinigameGame::RunningThink() {
 	if (Engine()->GetLmDevice()->LMRefresh()) {
 		GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
-		ball->ApplyVelocity(vec.x, vec.y);
+		ball->ApplyVelocity(vec.x / 128, vec.y / 128);
 	}
 	Engine()->GetPhysDevice()->Think();
 }
@@ -156,13 +156,13 @@ void MinigameGame::WaitingDraw() {
 
 void MinigameGame::RunningDraw() {
 	Engine()->GetGlDevice()->BeginScene();
-	Engine()->GetPhysDevice()->Draw(Engine()->GetGlDevice());
-
+	
 	GLVECTOR2 beg = ball->getPos();
 	GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
 	GLVECTOR2 end = VectorOf(beg.x + vec.x, beg.y + vec.y);
 
 	Engine()->GetGlDevice()->DrawArrow(beg, end, 8, ColorOf(0.0f, 1.0f, 0.0f));
+	Engine()->GetPhysDevice()->Draw(Engine()->GetGlDevice());
 	
 	Engine()->GetGlDevice()->EndScene();
 }
