@@ -183,7 +183,7 @@ void MinigameGame::NewMap() {
 	Ball * ball = new Ball(VectorOf(50, 60));
 	ball->ApplyVelocity(8, 2);
 
-	Engine()->GetGlDevice()->LoadTexture("Ball.bmp", "ball");
+	Engine()->GetGlDevice()->LoadTexture("ball.bmp", "ball");
 
 	Engine()->GetPhysDevice()->AddEntity(ball);
 }
