@@ -80,7 +80,7 @@ bool LoadBMP(const char* location, GLuint *texture) {
 		pixels[j + 2] = temp[i];
 
 		// Remove pink
-		if (temp[i] > 225 && temp[i + 1] < 25 && temp[i + 2] > 225)
+		if (temp[i] > 220 && temp[i + 1] < 30 && temp[i + 2] > 220)
 			pixels[j + 3] = 0x00;
 		else
 			pixels[j + 3] = 0xFF;
@@ -162,10 +162,10 @@ void GLENGINE::DrawRect(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color) {
 
 	glColor3f(color.r, color.g, color.b);
 
-	glVertex2f(pos.x - size.x / 2.0, pos.y - size.y / 2.0);
-	glVertex2f(pos.x + size.x / 2.0, pos.y - size.y / 2.0);
-	glVertex2f(pos.x + size.x / 2.0, pos.y + size.y / 2.0);
-	glVertex2f(pos.x - size.x / 2.0, pos.y + size.y / 2.0);
+	glVertex2f((GLfloat)(pos.x - size.x / 2.0), (GLfloat)(pos.y - size.y / 2.0));
+	glVertex2f((GLfloat)(pos.x + size.x / 2.0), (GLfloat)(pos.y - size.y / 2.0));
+	glVertex2f((GLfloat)(pos.x + size.x / 2.0), (GLfloat)(pos.y + size.y / 2.0));
+	glVertex2f((GLfloat)(pos.x - size.x / 2.0), (GLfloat)(pos.y + size.y / 2.0));
 	
 	glEnd();
 }
@@ -185,16 +185,16 @@ void GLENGINE::DrawTexturedRect(GLVERTEX2 pos, GLVECTOR2 size, const char * text
 	glColor3f(1.0f, 1.0f, 1.0f);
 
 	glTexCoord2f(0.0, 0.0);
-	glVertex2f(pos.x - size.x / 2.0, pos.y - size.y / 2.0);
+	glVertex2f((GLfloat)(pos.x - size.x / 2.0), (GLfloat)(pos.y - size.y / 2.0));
 
 	glTexCoord2f(1.0, 0.0);
-	glVertex2f(pos.x + size.x / 2.0, pos.y - size.y / 2.0);
+	glVertex2f((GLfloat)(pos.x + size.x / 2.0), (GLfloat)(pos.y - size.y / 2.0));
 
 	glTexCoord2f(1.0, 1.0);
-	glVertex2f(pos.x + size.x / 2.0, pos.y + size.y / 2.0);
+	glVertex2f((GLfloat)(pos.x + size.x / 2.0), (GLfloat)(pos.y + size.y / 2.0));
 
 	glTexCoord2f(0.0, 1.0);
-	glVertex2f(pos.x - size.x / 2.0, pos.y + size.y / 2.0);
+	glVertex2f((GLfloat)(pos.x - size.x / 2.0), (GLfloat)(pos.y + size.y / 2.0));
 
 	glEnd();
 
@@ -205,23 +205,23 @@ void GLENGINE::DrawTexturedRect(GLVERTEX2 pos, GLVECTOR2 size, const char * text
 }
 
 void GLENGINE::DrawCircle(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color) {
-	float theta = 2 * 3.1416 / 300.0;
+	float theta = 2.0f * 3.14159f / 300.0f;
 	float c = cosf(theta);
 	float s = sinf(theta);
 	float t;
 
-	float x = sqrt(size.x * size.x + size.y + size.y);
+	float x = (float) sqrt(size.x * size.x + size.y + size.y);
 	float y = 0;
 	int i;
 
 	glBegin(GL_TRIANGLE_FAN);
 
 	glColor3f(color.r, color.g, color.b);
-	glVertex2f(pos.x, pos.y);
+	glVertex2f((GLfloat)pos.x, (GLfloat)pos.y);
 
 
-	for (int i = 0; i < 302; i++) {
-		glVertex2f(x + pos.x, y + pos.y);
+	for (i = 0; i < 302; i++) {
+		glVertex2f((GLfloat)(x + pos.x), (GLfloat)(y + pos.y));
 
 		t = x;
 		x = c * x - s * y;
@@ -264,21 +264,21 @@ void GLENGINE::DrawArrow(GLVECTOR2 begin, GLVECTOR2 end, float weight, GLCOLORAR
 	glBegin(GL_LINES);
 
 	glColor3f(color.r, color.g, color.b);
-	glVertex2f(begin.x, begin.y);
-	glVertex2f(end.x, end.y);
+	glVertex2f((GLfloat)begin.x, (GLfloat)begin.y);
+	glVertex2f((GLfloat)end.x, (GLfloat)end.y);
 
 	glEnd();
 
-	glLineWidth(2.0 * weight / 3.0);
+	glLineWidth(2.0f * weight / 3.0f);
 	glBegin(GL_LINES);
 
 	glColor3f(color.r, color.g, color.b);
 
-	glVertex2f(e1.x, e1.y);
-	glVertex2f(end.x, end.y);
+	glVertex2f((GLfloat)e1.x, (GLfloat)e1.y);
+	glVertex2f((GLfloat)end.x, (GLfloat)end.y);
 	
-	glVertex2f(e2.x, e2.y);
-	glVertex2f(end.x, end.y);
+	glVertex2f((GLfloat)e2.x, (GLfloat)e2.y);
+	glVertex2f((GLfloat)end.x, (GLfloat)end.y);
 
 	glEnd();
 }

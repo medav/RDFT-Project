@@ -2,13 +2,14 @@
 
 using namespace Leap;
 
-bool LMENGINE::initLM(){
+bool LMENGINE::initLM() {
 	return true;
 }
+
 bool LMENGINE::LMRefresh() {
-	if (ctrl.isConnected()){
+	if (ctrl.isConnected()) {
 		const Frame frame = ctrl.frame();
-		if (ctrl.frame(1).hands()[0].fingers()[0].tipPosition().z - ctrl.frame(0).hands()[0].fingers()[0].tipPosition().z > 10 && !init || init){
+		if (ctrl.frame(1).hands()[0].fingers()[0].tipPosition().z - ctrl.frame(0).hands()[0].fingers()[0].tipPosition().z > 5 && !init || init){
 			init = true;
 			if (!frame.hands().isEmpty()){
 				const Hand hand = frame.hands()[0];
@@ -19,9 +20,16 @@ bool LMENGINE::LMRefresh() {
 						avgPos += fingers[i].tipPosition();
 					}
 					avgPos /= (float)fingers.count();
-					last = { avgPos.x, avgPos.y };
-					if (ctrl.frame(1).hands()[0].fingers()[0].tipPosition().z - ctrl.frame(0).hands()[0].fingers()[0].tipPosition().z < 10)
+					if (first){
+						start.x = avgPos.x;
+						start.y = avgPos.y;
+						first = false;
+					}
+					last = { avgPos.x - start.x, avgPos.y - start.y };
+					if (ctrl.frame(1).hands()[0].fingers()[0].tipPosition().z - ctrl.frame(0).hands()[0].fingers()[0].tipPosition().z < -5){
 						init = false;
+						first = true;
+					}
 				}
 			}
 		}

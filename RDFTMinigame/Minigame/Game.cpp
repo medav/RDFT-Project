@@ -123,11 +123,17 @@ void MinigameGame::Think() {
 }
 
 void MinigameGame::WaitingThink() {
-	
+	if (Engine()->GetLmDevice()->LMRefresh()) {
+		GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
+		ball->ApplyVelocity(vec.x / 128, vec.y / 128);
+	}
 }
 
 void MinigameGame::RunningThink() {
-	//Engine()->GetLmDevice()->LMRefresh();
+	if (Engine()->GetLmDevice()->LMRefresh()) {
+		GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
+		ball->ApplyVelocity(vec.x / 128, vec.y / 128);
+	}
 	Engine()->GetPhysDevice()->Think();
 }
 
@@ -150,7 +156,14 @@ void MinigameGame::WaitingDraw() {
 
 void MinigameGame::RunningDraw() {
 	Engine()->GetGlDevice()->BeginScene();
+	
+	GLVECTOR2 beg = ball->getPos();
+	GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
+	GLVECTOR2 end = VectorOf(beg.x + vec.x, beg.y + vec.y);
+
+	Engine()->GetGlDevice()->DrawArrow(beg, end, 8, ColorOf(0.0f, 1.0f, 0.0f));
 	Engine()->GetPhysDevice()->Draw(Engine()->GetGlDevice());
+	
 	Engine()->GetGlDevice()->EndScene();
 }
 
@@ -158,11 +171,6 @@ void MinigameGame::RunningDraw() {
 
 void MinigameGame::NewMap() {
 	Engine()->GetPhysDevice()->Clear();
-
-	//char buffer[500];
-	//sprintf_s(buffer, "Screen height = %lf\nScreen width = %lf", Engine()->ScreenY(), Engine()->ScreenX());
-
-	//MessageBox(NULL, buffer, "Engine Info", MB_ICONINFORMATION | MB_OK);
 
 	ENTITY * WorldTop = new Wall(VectorOf(Engine()->ScreenX() / 2.0, Engine()->ScreenY() - 4), Engine()->ScreenX() + 8, 16);
 	ENTITY * WorldBottom = new Wall(VectorOf(Engine()->ScreenX() / 2.0, 4), Engine()->ScreenX() + 8, 16);
@@ -180,10 +188,11 @@ void MinigameGame::NewMap() {
 	ENTITY * Obstruction2 = new Wall(VectorOf(700, 200), 50, 300);
 	Engine()->GetPhysDevice()->AddEntity(Obstruction2);
 
-	Ball * ball = new Ball(VectorOf(50, 60));
+	ball = new Ball(VectorOf(50, 60));
 	ball->ApplyVelocity(8, 2);
 
-	Engine()->GetGlDevice()->LoadTexture("ball.bmp", "ball");
+	Engine()->GetGlDevice()->LoadTexture("Ball.bmp", "ball");
+	Engine()->GetGlDevice()->LoadTexture("bricks.bmp", "wall");
 
 	Engine()->GetPhysDevice()->AddEntity(ball);
 }

@@ -23,12 +23,16 @@ public:
 		this->Pos = Pos;
 	}
 
-	virtual void SetX(float x) {
+	virtual void SetX(double x) {
 		this->Pos.x = x;
 	}
 
-	virtual void SetY(float y) {
+	virtual void SetY(double y) {
 		this->Pos.y = y;
+	}
+
+	virtual GLVECTOR2 getPos() {
+		return Pos;
 	}
 
 	virtual void Think() {}
@@ -42,11 +46,11 @@ public:
 
 class World : public ENTITY {
 protected:
-	float Width;
-	float Height;
+	double Width;
+	double Height;
 
 public:
-	World(GLVECTOR2 Pos, float w, float h) : ENTITY(Pos) {
+	World(GLVECTOR2 Pos, double w, double h) : ENTITY(Pos) {
 		Width = w;
 		Height = h;
 	}
@@ -61,7 +65,7 @@ public:
 class Wall : public World {
 
 public:
-	Wall(GLVECTOR2 Pos, float w, float h) : World(Pos, w, h) {}
+	Wall(GLVECTOR2 Pos, double w, double h) : World(Pos, w, h) {}
 
 	virtual void Draw(PGLENGINE gl);
 };
@@ -94,7 +98,7 @@ public:
 	Ball(GLVECTOR2 Pos) : ENTITY(Pos) {
 		Vel.x = 0;
 		Vel.y = 0;
-		radius = 20;
+		radius = 70;
 	}
 
 	virtual void Think();

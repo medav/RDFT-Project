@@ -56,6 +56,8 @@ private:
 	int Level;
 	int NumMoves;
 
+	Ball * ball;
+
 	void NewMap();
 	void WaitingThink();
 	void RunningThink();

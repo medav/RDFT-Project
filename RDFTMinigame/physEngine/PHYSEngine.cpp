@@ -30,20 +30,16 @@ bool Collide(BOUNDINGBOX b1, BOUNDINGBOX b2) {
 }
 
 void PHYSENGINE::Think() {
-	ENTITY * temp;
 
 	// Call Think() for all ENTITYs
 	for (unsigned int i = 0; i < ents.size(); i++){
 		ents[i]->Think();
-		//if (ents[i]->Type() == ENTITY::MOVING){
-		//	temp = ents[i];
-		//}
+
 	}
 
 	// Search for collisions
 	for (unsigned int i = 0; i < ents.size(); i++){
 		if (ents[i]->Type() == ENTITY::MOVING){
-			//MessageBox(NULL, "Moving", "Engine Info", MB_ICONINFORMATION | MB_OK);
 			for (unsigned int j = 0; j < ents.size(); j++){
 				if (ents[i] != ents[j]) {
 					if (Collide(ents[i]->BoundingBox(), ents[j]->BoundingBox()))

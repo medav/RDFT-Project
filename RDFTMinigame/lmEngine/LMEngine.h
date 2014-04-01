@@ -15,10 +15,12 @@ private:
 	bool init=false;
 	GLVECTOR2 start;	
 	GLVECTOR2 last;
+	bool first = true;
 
 public:
 	LMENGINE(HWND hwnd) : ctrl() {
 		this->hwnd = hwnd;
+
 		last.x = 0;
 		last.y = 0;
 	}

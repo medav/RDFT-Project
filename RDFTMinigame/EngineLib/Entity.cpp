@@ -102,10 +102,10 @@ BOUNDINGBOX World::BoundingBox() {
 
 BOUNDINGBOX Ball::BoundingBox() {
 	BOUNDINGBOX box;
-	box.x = Pos.x - radius;
-	box.y = Pos.y - radius;
-	box.w = radius * 2;
-	box.h = radius * 2;
+	box.x = Pos.x - radius / 2;
+	box.y = Pos.y - radius / 2;
+	box.w = radius;
+	box.h = radius;
 
 	return box;
 }
@@ -113,6 +113,7 @@ BOUNDINGBOX Ball::BoundingBox() {
 // Draw methods
 void Wall::Draw(PGLENGINE glEngine) {
 	glEngine->DrawRect(this->Pos, VectorOf(this->Width, this->Height), ColorOf(0.95f, 0.95f, 0.95f));
+	//glEngine->DrawTexturedRect(this->Pos, VectorOf(this->Width, this->Height), "wall");
 }
 
 void Ball::Draw(PGLENGINE glEngine) {
@@ -127,7 +128,7 @@ void Ball::Draw(PGLENGINE glEngine) {
 	if (r > 1.0)
 		r = 1.0;
 
-	glEngine->DrawArrow(this->Pos, end, 4.0, ColorOf(r, 1.0 - r, 0.0f));
+	glEngine->DrawArrow(this->Pos, end, 4.0f, ColorOf(r, 1.0f - r, 0.0f));
 	//glEngine->DrawCircle(this->Pos, VectorOf(this->radius, 0), ColorOf(0.95f, 0.95f, 0.95f));
 	glEngine->DrawTexturedRect(this->Pos, VectorOf(this->radius, this->radius), "ball");
 }
