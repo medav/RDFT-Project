@@ -116,40 +116,57 @@ void Ball::Collide(ENTITY * other){
 	Think();
 	*/
 
+
 	if (PointInBox(TL, otherBox)){
+		// Case 1
 		if (PointInBox(TR, otherBox)){
 			Vel.y *= -1;
+			std::cout << ("Case 1") << std::endl;
 		}
+		// Case 3
 		else if (PointInBox(BL, otherBox)){
 			Vel.x *= -1;
+			std::cout << ("Case 3 ") << std::endl;
 		}
+		// Case 2
 		else{
 			Vel.x *= -1;
 			Vel.y *= -1;
+			std::cout << ("Case 2") << std::endl;
 		}
 	}
 	else if (PointInBox(TR, otherBox)){
+		// Case 7
 		if (PointInBox(BR, otherBox)){
 			Vel.x *= -1;
+			std::cout << ("Case 7") << std::endl;
 		}
+		// Case 8
 		else{
 			Vel.x *= -1;
 			Vel.y *= -1;
+			std::cout << ("Case 8") << std::endl;
 		}
 	}
 	else if (PointInBox(BR, otherBox)){
+		// Case 5
 		if (PointInBox(BL, otherBox))
 		{
 			Vel.y *= -1;
+			std::cout << ("Case 5") << std::endl;
 		}
+		// Case 6
 		else{
 			Vel.x *= -1;
 			Vel.y *= -1;
+			std::cout << ("Case 6") << std::endl;
 		}
 	}
+	// Case 4
 	else{
 		Vel.x *= -1;
 		Vel.y *= -1;
+		std::cout << ("Case 4") << std::endl;
 	}
 	Think();
 }

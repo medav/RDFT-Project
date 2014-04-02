@@ -6,11 +6,11 @@ bool LMENGINE::initLM() {
 	return true;
 }
 
-bool LMENGINE::LMRefresh() {
+unsigned char LMENGINE::LMRefresh() {
 	if (ctrl.isConnected()) {
 		const Frame frame = ctrl.frame();
 		if (ctrl.frame(1).hands()[0].fingers()[0].tipPosition().z - ctrl.frame(0).hands()[0].fingers()[0].tipPosition().z > 7 && !init || init){
-			init = true;
+			init = 1;
 			if (!frame.hands().isEmpty()){
 				const Hand hand = frame.hands()[0];
 				const FingerList fingers = hand.fingers();
@@ -26,8 +26,8 @@ bool LMENGINE::LMRefresh() {
 						first = false;
 					}
 					last = { avgPos.x - start.x, avgPos.y - start.y };
-					if (ctrl.frame(1).hands()[0].fingers()[0].tipPosition().z - ctrl.frame(0).hands()[0].fingers()[0].tipPosition().z < -7){
-						init = false;
+					if (ctrl.frame(1).hands()[0].fingers()[0].tipPosition().z - ctrl.frame(0).hands()[0].fingers()[0].tipPosition().z < -7 && init == 1){
+						init = 2;
 						first = true;
 					}
 				}
@@ -37,7 +37,9 @@ bool LMENGINE::LMRefresh() {
 
 	return init;
 }
-
+void LMENGINE::reset(){
+	init = 0;
+}
 GLVECTOR2 LMENGINE::LMGetVector() {
 	if (init)
 		return last;
