@@ -15,7 +15,7 @@ Minigame * MG() {
 
 
 Minigame::Minigame() {
-	GameState = Minigame::RUNNING;
+	GameState = Minigame::WAITING;
 	Level = 0;
 	lmState = 0;
 
@@ -126,7 +126,6 @@ void Minigame::NewMap() {
 	//Engine()->GetPhysDevice()->AddEntity(Obstruction2);
 
 	ball = new Ball(VectorOf(50, 60));
-	ball->ApplyVelocity(80, 20);
 
 	Engine()->GetPhysDevice()->AddEntity(ball);
 }
