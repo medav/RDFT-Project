@@ -2,63 +2,24 @@
 #define __GAME__
 #include "..\EngineLib\RDFTEngine.h"
 #include <math.h>
+#include <mutex>
+
 
 class Minigame {
 public:
-	enum STATE { MENU, GAME };
-	enum MENUSTATE { MAIN, SETTINGS };
 	enum GAMESTATE { WAITING, RUNNING };
 
 private:
-	STATE MinigameState;
+	Minigame::GAMESTATE GameState;
 
 	HWND hwnd;
-
-public:
-	Minigame();
-
 	void Setup(HWND hwnd);
-	void Resize();
-
-	void Think();
-	void Draw();
-
-	void SetState(STATE state) {
-		MinigameState = state;
-	}
-
-	~Minigame();
-};
-
-class MinigameMenu {
-private:
-	Minigame::MENUSTATE MenuState;
-
-	void MainThink();
-	void SettingsThink();
-
-	void MainDraw();
-	void SettingsDraw();
-
-public:
-	MinigameMenu() {}
-
-	void Think();
-	void Draw();
-	
-	void Resize();
-};
-
-class MinigameGame {
-private:
-	Minigame::GAMESTATE GameState;
 
 	int Level;
 	int NumMoves;
 
 	Ball * ball;
-
-	void NewMap();
+	
 	void WaitingThink();
 	void RunningThink();
 
@@ -66,17 +27,22 @@ private:
 	void RunningDraw();
 
 public:
-	MinigameGame();
+	Minigame();
 
 	void Think();
 	void Draw();
+	void NewMap();
+
+	std::mutex gameMutex;
+
+	void SetState(GAMESTATE state) {
+		GameState = state;
+	}
 
 	void Resize();
 };
 
 RDFTENGINE * Engine();
 Minigame * MG();
-MinigameMenu * MGM();
-MinigameGame * MGG();
 
 #endif

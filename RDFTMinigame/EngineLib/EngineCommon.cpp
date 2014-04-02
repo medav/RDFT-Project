@@ -24,7 +24,7 @@ GLCOLORARGB ColorOf(float r, float g, float b) {
 
 
 ClockKeeper::ClockKeeper() {
-	prev = std::chrono::high_resolution_clock::now();
+	run = false;
 }
 
 double ClockKeeper::DeltaT() {
@@ -33,8 +33,13 @@ double ClockKeeper::DeltaT() {
 	high_resolution_clock::time_point temp;
 	temp = high_resolution_clock::now();
 
-	duration<long double> time_span = duration_cast<duration<double>>(temp - prev);
+	if (!run) {
+		run = true;
+		prev = temp;
+		return 0.00;
+	}
 
+	duration<long double> time_span = duration_cast<duration<double>>(temp - prev);
 	prev = temp;
 	
 	return time_span.count() / 4;

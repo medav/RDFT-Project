@@ -40,8 +40,6 @@ void Ball::Think() {
 		Vel.y = 0;
 	}
 
-	std::cout << "dT = " << dT << std::endl;
-
 	Pos.x += Vel.x * dT;
 	Pos.y += Vel.y * dT;
 }
@@ -183,8 +181,8 @@ void Ball::Draw(PGLENGINE glEngine) {
 	GLVECTOR2 end;
 	double mag = Magnitude(Vel);
 
-	end.x = Pos.x + Vel.x * 10.0;
-	end.y = Pos.y + Vel.y * 10.0;
+	end.x = Pos.x + Vel.x * 2.0;
+	end.y = Pos.y + Vel.y * 2.0;
 
 	float r = (float)mag / 10;
 

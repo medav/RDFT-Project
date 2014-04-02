@@ -8,7 +8,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 	// Register the window class.
 	const char CLASS_NAME[] = "RDFT Systems, Inc.";
 
-	SetupConsole();
+	Con();
+
 	std::cout << "*********************************************************\n";
 	std::cout << "*             RDFT Minigame and Engine Demo             *\n";
 	std::cout << "*          Copyright (c) 2014 RDFT Systems, Inc.        *\n";
@@ -57,10 +58,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 	// This will call the constructors for our singletons
 	std::cout << "Creating game...\n";
 	MG();
-	MGM();
-	MGG();
 
 	std::cout << "Setup complete!\n";
+
+	Con()->Start();
+
 	// This is for testing - delay the game 
 	int ct = 0;
 
@@ -78,12 +80,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 			DispatchMessage(&msg);
 		}
 
-		if (ct > 100)
+		if (ct > 1000)
 			MG()->Think();
 
 		MG()->Draw();
 		ct++;
 	}
+
+	Con()->Stop();
 
 	return 0;
 }
@@ -95,10 +99,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 		break;
 
 	case WM_SIZE:
-		if (Engine()->GetGlDevice())
+		if (Engine()->GetGlDevice()) {
 			Engine()->GetGlDevice()->SetWindowSize();
-
-		MG()->Resize();
+			MG()->Resize();
+		}
 		break;
 
 	case WM_PAINT:

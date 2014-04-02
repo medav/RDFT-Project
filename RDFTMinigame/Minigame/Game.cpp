@@ -13,103 +13,25 @@ Minigame * MG() {
 	return mg;
 }
 
-MinigameMenu * MGM() {
-	static MinigameMenu * mgm = new MinigameMenu();
-	return mgm;
-}
-
-MinigameGame * MGG() {
-	static MinigameGame * mgg = new MinigameGame();
-	return mgg;
-}
 
 Minigame::Minigame() {
-	MinigameState = GAME;
+	GameState = Minigame::RUNNING;
+	Level = 0;
+
+	NewMap();
+
+	Engine()->GetGlDevice()->LoadTexture("Ball.bmp", "ball");
+	Engine()->GetGlDevice()->LoadTexture("bricks.bmp", "wall");
 }
 
-void Minigame::Think() {
-	switch (MinigameState) {
-	case MENU:
-		MGM()->Think();
-		break;
-	case GAME:
-		MGG()->Think();
-		break;
-	default:
-		break;
-	}
-}
-
-void Minigame::Draw() {
-	switch (MinigameState) {
-	case MENU:
-		MGM()->Draw();
-		break;
-	case GAME:
-		MGG()->Draw();
-		break;
-	default:
-		break;
-	}
-}
 
 void Minigame::Resize() {
 
 }
 
-/************************************************************/
+void Minigame::Think() {
+	gameMutex.lock();
 
-void MinigameMenu::Think() {
-	switch (MenuState) {
-	case Minigame::MAIN:
-		MainThink();
-		break;
-	case Minigame::SETTINGS:
-		SettingsThink();
-		break;
-	default:
-		break;
-	}
-}
-
-void MinigameMenu::MainThink() {
-	// TODO:
-}
-
-void MinigameMenu::SettingsThink() {
-	// TODO:
-}
-
-void MinigameMenu::Draw() {
-	switch (MenuState) {
-	case Minigame::MAIN:
-		MainDraw();
-		break;
-	case Minigame::SETTINGS:
-		SettingsDraw();
-		break;
-	default:
-		break;
-	}
-}
-
-void MinigameMenu::MainDraw() {
-
-}
-
-void MinigameMenu::SettingsDraw() {
-
-}
-
-/************************************************************/
-
-MinigameGame::MinigameGame() {
-	GameState = Minigame::RUNNING;
-	Level = 0;
-	NewMap();
-}
-
-void MinigameGame::Think() {
 	switch (GameState) {
 	case Minigame::WAITING:
 		WaitingThink();
@@ -120,16 +42,18 @@ void MinigameGame::Think() {
 	default:
 		break;
 	}
+
+	gameMutex.unlock();
 }
 
-void MinigameGame::WaitingThink() {
+void Minigame::WaitingThink() {
 	if (Engine()->GetLmDevice()->LMRefresh()) {
 		GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
 		ball->ApplyVelocity(vec.x / 128, vec.y / 128);
 	}
 }
 
-void MinigameGame::RunningThink() {
+void Minigame::RunningThink() {
 	if (Engine()->GetLmDevice()->LMRefresh()) {
 		GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
 		ball->ApplyVelocity(vec.x / 128, vec.y / 128);
@@ -137,7 +61,9 @@ void MinigameGame::RunningThink() {
 	Engine()->GetPhysDevice()->Think();
 }
 
-void MinigameGame::Draw() {
+void Minigame::Draw() {
+	gameMutex.lock();
+
 	switch (GameState) {
 	case Minigame::WAITING:
 		WaitingDraw();
@@ -148,13 +74,24 @@ void MinigameGame::Draw() {
 	default:
 		break;
 	}
+
+	gameMutex.unlock();
 }
 
-void MinigameGame::WaitingDraw() {
+void Minigame::WaitingDraw() {
+	Engine()->GetGlDevice()->BeginScene();
 
+	GLVECTOR2 beg = ball->getPos();
+	GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
+	GLVECTOR2 end = VectorOf(beg.x + vec.x, beg.y + vec.y);
+
+	Engine()->GetGlDevice()->DrawArrow(beg, end, 8, ColorOf(0.0f, 1.0f, 0.0f));
+	Engine()->GetPhysDevice()->Draw(Engine()->GetGlDevice());
+
+	Engine()->GetGlDevice()->EndScene();
 }
 
-void MinigameGame::RunningDraw() {
+void Minigame::RunningDraw() {
 	Engine()->GetGlDevice()->BeginScene();
 	
 	GLVECTOR2 beg = ball->getPos();
@@ -169,7 +106,7 @@ void MinigameGame::RunningDraw() {
 
 /************************************************************/
 
-void MinigameGame::NewMap() {
+void Minigame::NewMap() {
 	Engine()->GetPhysDevice()->Clear();
 
 	ENTITY * WorldTop = new Wall(VectorOf(Engine()->ScreenX() / 2.0, Engine()->ScreenY() - 4), Engine()->ScreenX() + 8, 16);
@@ -190,9 +127,6 @@ void MinigameGame::NewMap() {
 
 	ball = new Ball(VectorOf(50, 60));
 	ball->ApplyVelocity(80, 20);
-
-	Engine()->GetGlDevice()->LoadTexture("Ball.bmp", "ball");
-	Engine()->GetGlDevice()->LoadTexture("bricks.bmp", "wall");
 
 	Engine()->GetPhysDevice()->AddEntity(ball);
 }

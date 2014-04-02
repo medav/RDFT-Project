@@ -7,7 +7,7 @@
 class PHYSENGINE : public PHYSENGINEDEVICE {
 private:
 	HWND hwnd;
-	std::vector<ENTITY *> ents;
+	std::vector<ENTITY *> * ents;
 
 public:
 	PHYSENGINE(HWND hwnd);

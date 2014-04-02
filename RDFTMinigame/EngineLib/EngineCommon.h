@@ -18,6 +18,7 @@ typedef struct {
 class ClockKeeper {
 private:
 	std::chrono::high_resolution_clock::time_point prev;
+	bool run;
 
 public:
 	ClockKeeper();

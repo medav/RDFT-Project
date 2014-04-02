@@ -2,7 +2,7 @@
 
 PHYSENGINE::PHYSENGINE(HWND hwnd) {
 	this->hwnd = hwnd;
-
+	ents = new std::vector<ENTITY *>();
 }
 
 void PHYSENGINE::Init() {
@@ -10,13 +10,15 @@ void PHYSENGINE::Init() {
 }
 
 void PHYSENGINE::AddEntity(ENTITY * ent) {
-	ents.push_back(ent);
+	ents->push_back(ent);
 }
 
 void PHYSENGINE::Clear() {
-	for (unsigned int i = 0; i < ents.size(); i++){
-		delete ents[i];
+	for (int i = ents->size() - 1; i >= 0; i--){
+		delete (*ents)[i];
 	}
+	delete ents;
+	ents = new std::vector<ENTITY *>();
 }
 
 bool Collide(BOUNDINGBOX b1, BOUNDINGBOX b2) {
@@ -32,18 +34,18 @@ bool Collide(BOUNDINGBOX b1, BOUNDINGBOX b2) {
 void PHYSENGINE::Think() {
 
 	// Call Think() for all ENTITYs
-	for (unsigned int i = 0; i < ents.size(); i++){
-		ents[i]->Think();
+	for (unsigned int i = 0; i < ents->size(); i++){
+		(*ents)[i]->Think();
 
 	}
 
 	// Search for collisions
-	for (unsigned int i = 0; i < ents.size(); i++){
-		if (ents[i]->Type() == ENTITY::MOVING){
-			for (unsigned int j = 0; j < ents.size(); j++){
-				if (ents[i] != ents[j]) {
-					if (Collide(ents[i]->BoundingBox(), ents[j]->BoundingBox()))
-						ents[i]->Collide(ents[j]);
+	for (unsigned int i = 0; i < ents->size(); i++){
+		if ((*ents)[i]->Type() == ENTITY::MOVING){
+			for (unsigned int j = 0; j < (*ents).size(); j++){
+				if ((*ents)[i] != (*ents)[j]) {
+					if (Collide((*ents)[i]->BoundingBox(), (*ents)[j]->BoundingBox()))
+						(*ents)[i]->Collide((*ents)[j]);
 				}
 			}
 		}
@@ -51,8 +53,8 @@ void PHYSENGINE::Think() {
 }
 
 void PHYSENGINE::Draw(PGLENGINE glEngine) {
-	for (unsigned int i = 0; i < ents.size(); i++){
-		ents[i]->Draw(glEngine);
+	for (unsigned int i = 0; i < ents->size(); i++){
+		(*ents)[i]->Draw(glEngine);
 	}
 }
 

@@ -2,22 +2,27 @@
 #define __CONSOLE__
 
 void SetupConsole();
-/*
+
+enum CMDTYPE { SET, PRINT, NEWMAP, KILL };
+
 typedef struct {
-	Console::CMDTYPE cty;
-	char args[100];
+	CMDTYPE cty;
+	char args[200];
 } COMMAND;
 
 class Console {
-public:
-	enum CMDTYPE {SET, PRINT, NEWMAP};
-
 private:
-	void Exec(COMMAND cmd);
+	HANDLE thr;
 
 public:
 	Console();
 	
-};*/
+	void Start();
+	void Exec(COMMAND cmd);
+	void Stop();
+
+};
+
+Console * Con();
 
 #endif
