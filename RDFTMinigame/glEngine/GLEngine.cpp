@@ -1,6 +1,7 @@
 #include "GLEngine.h"
 #include <math.h>
 #include <fstream>
+#include <iostream>
 
 GLENGINE::GLENGINE(HWND hwnd) : textures() {
 	this->CreateRenderDevice(hwnd);
@@ -30,6 +31,8 @@ void GLENGINE::SetWindowSize() {
 // This was written by following a tutorial on the internet:
 // http://www.cplusplus.com/articles/GwvU7k9E/
 bool LoadBMP(const char* location, GLuint *texture) {
+	std::cout << "Loading texture \"" << location << "\"\n";
+
 	uint8_t* datBuff[2] = { nullptr, nullptr };
 	uint8_t* temp = nullptr;
 	uint8_t* pixels = nullptr;

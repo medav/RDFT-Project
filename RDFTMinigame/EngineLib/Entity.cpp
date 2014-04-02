@@ -1,3 +1,4 @@
+#include <iostream>
 #include <math.h>
 #include "PhysEngineDevice.h"
 #include "EngineCommon.h"
@@ -9,7 +10,9 @@ void Ball::Think() {
 		return;
 
 	// Update Pos based on velocity Vel
-	double dT = ck.DeltaT();
+	// Multiply by 100 because it would be
+	// too slow otherwise
+	double dT = ck.DeltaT() * 100;
 
 	double velAngle = atan2(Vel.y, Vel.x);
 	double frictionMag = mk * mass * 9.8;
@@ -36,6 +39,8 @@ void Ball::Think() {
 		Vel.x = 0;
 		Vel.y = 0;
 	}
+
+	std::cout << "dT = " << dT << std::endl;
 
 	Pos.x += Vel.x * dT;
 	Pos.y += Vel.y * dT;
