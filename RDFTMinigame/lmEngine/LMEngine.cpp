@@ -10,8 +10,8 @@ unsigned char LMENGINE::LMRefresh() {
 	if (ctrl.isConnected()) {
 		const Frame frame = ctrl.frame();
 		if (ctrl.frame(1).hands()[0].fingers()[0].tipPosition().z - ctrl.frame(0).hands()[0].fingers()[0].tipPosition().z > 7 && init==0 || init==1){
-			init = 1;
 			if (!frame.hands().isEmpty()){
+				init = 1;
 				const Hand hand = frame.hands()[0];
 				const FingerList fingers = hand.fingers();
 				if (!fingers.isEmpty()){
@@ -31,6 +31,10 @@ unsigned char LMENGINE::LMRefresh() {
 						first = true;
 					}
 				}
+			}
+			else if (init == 1){
+				init = 2;
+				first = true;
 			}
 		}
 	}
