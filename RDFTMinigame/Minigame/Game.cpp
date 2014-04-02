@@ -99,7 +99,6 @@ void Minigame::WaitingDraw() {
 void Minigame::RunningDraw() {
 	Engine()->GetGlDevice()->BeginScene();
 
-	Engine()->GetGlDevice()->DrawArrow(beg, end, 8, ColorOf(0.0f, 1.0f, 0.0f));
 	Engine()->GetPhysDevice()->Draw(Engine()->GetGlDevice());
 	
 	Engine()->GetGlDevice()->EndScene();
@@ -123,8 +122,8 @@ void Minigame::NewMap() {
 	ENTITY * Obstruction1 = new Wall(VectorOf(500, 400), 600, 50);
 	Engine()->GetPhysDevice()->AddEntity(Obstruction1);
 
-	ENTITY * Obstruction2 = new Wall(VectorOf(700, 200), 50, 300);
-	Engine()->GetPhysDevice()->AddEntity(Obstruction2);
+	//ENTITY * Obstruction2 = new Wall(VectorOf(700, 200), 50, 300);
+	//Engine()->GetPhysDevice()->AddEntity(Obstruction2);
 
 	ball = new Ball(VectorOf(50, 60));
 	ball->ApplyVelocity(80, 20);
