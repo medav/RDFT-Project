@@ -54,6 +54,7 @@ void Minigame::WaitingThink() {
 		GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
 		ball->ApplyVelocity(vec.x / 16, vec.y / 16);
 		SetState(GAMESTATE::RUNNING);
+		lmState = 0;
 	}
 }
 
