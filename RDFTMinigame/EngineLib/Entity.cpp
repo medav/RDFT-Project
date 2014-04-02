@@ -38,6 +38,8 @@ void Ball::Think() {
 	if ((Vel.x * Vel.x + Vel.y * Vel.y) < 0.001) {
 		Vel.x = 0;
 		Vel.y = 0;
+
+		ck.Reset();
 	}
 
 	Pos.x += Vel.x * dT;
