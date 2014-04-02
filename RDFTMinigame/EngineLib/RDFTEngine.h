@@ -1,6 +1,9 @@
 #ifndef __RDFTENGINE__
 #define __RDFTENGINE__
+#include <map>
+#include <string>
 #include <math.h>
+#include <mutex>
 #include "GLEngineDevice.h"
 #include "PhysEngineDevice.h"
 #include "LMEngineDevice.h"
@@ -12,6 +15,15 @@ typedef bool(*CREATELMENGINEDEVICE)(LPLMENGINE engine, HWND hwnd);
 typedef void(*RELEASEGLENGINEDEVICE)(GLENGINEDEVICE * device);
 typedef void(*RELEASEPHYSENGINEDEVICE)(PHYSENGINEDEVICE * device);
 typedef void(*RELEASELMENGINEDEVICE)(LMENGINEDEVICE * device);
+
+struct ENVVAR {
+	char value[128];
+	double asDouble;
+	bool asBool;
+
+	bool boolset;
+	bool numset;
+};
 
 class RDFTENGINE {
 private:
@@ -35,6 +47,9 @@ private:
 	void ReleasePhysDevice();
 	void ReleaseLmDevice();
 
+	std::map<std::string, ENVVAR *> env;
+	ENVVAR * GetEnv(const char * varname);
+
 public:
 	RDFTENGINE();
 
@@ -57,6 +72,14 @@ public:
 	PLMENGINE GetLmDevice() {
 		return lmEngine;
 	}
+
+	std::mutex env_mutex;
+
+	bool GetBool(const char * varname);
+	double GetDouble(const char * varname);
+	int GetInt(const char * varname);
+
+	void SetEnv(const char * varname, ENVVAR * ev);
 
 	double ScreenX() {
 		RECT r;
