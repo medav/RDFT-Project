@@ -1,4 +1,6 @@
 #include "RDFTEngine.h"
+#include <string.h>
+#include <stdio.h>
 
 RDFTENGINE::RDFTENGINE() {
 	glEngine = 0;
@@ -9,6 +11,66 @@ RDFTENGINE::RDFTENGINE() {
 	hGlDLL = 0;
 	hPhysDLL = 0;
 	hLmDLL = 0;
+}
+
+ENVVAR * RDFTENGINE::GetEnv(const char * varname) {
+	std::string str(varname);
+	return env[str];
+}
+
+bool RDFTENGINE::GetBool(const char * varname) {
+	env_mutex.lock();
+	ENVVAR * ev = GetEnv(varname);
+
+	if (!ev)
+		return false;
+
+	if (!ev->boolset) {
+		ev->asBool = false;
+
+		if (strstr(ev->value, "true"))
+			ev->asBool = true;
+
+		ev->boolset = true;
+	}
+
+	bool asBool = ev->asBool;
+	env_mutex.unlock();
+
+	return asBool;
+}
+
+double RDFTENGINE::GetDouble(const char * varname) {
+	env_mutex.lock();
+	ENVVAR * ev = GetEnv(varname);
+
+	if (!ev)
+		return 0.0;
+
+	if (!ev->numset) {
+		ev->asDouble = 0.0;
+		sscanf_s(ev->value, "%lf", &ev->asDouble);
+		ev->numset  = true;
+	}
+
+	double asDouble = ev->asDouble;
+	env_mutex.unlock();
+
+	return asDouble;
+}
+int RDFTENGINE::GetInt(const char * varname) {
+	return (int)GetDouble(varname);
+}
+
+void RDFTENGINE::SetEnv(const char * varname, ENVVAR * ev) {
+	env_mutex.lock();
+	std::string str(varname);
+
+	if (env[str])
+		delete env[str];
+
+	env[str] = ev;
+	env_mutex.unlock();
 }
 
 RDFTENGINE::~RDFTENGINE() {
