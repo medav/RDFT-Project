@@ -44,11 +44,13 @@ void Ball::Think() {
 
 	Pos.x += Vel.x * dT;
 	Pos.y += Vel.y * dT;
+	std::cout << "Pos: " << Pos.x << " , " << Pos.y << std::endl;
 }
 
 void Ball::ApplyVelocity(float x, float y){
 	Vel.x = x;
 	Vel.y = y;
+	std::cout << Vel.x <<","<< Vel.y << std::endl;
 }
 
 bool Ball::isStopped() {
