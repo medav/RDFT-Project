@@ -64,6 +64,8 @@ void Minigame::RunningThink() {
 
 	if (ball->isStopped())
 		SetState(GAMESTATE::WAITING);
+
+	Sleep(50);
 }
 
 void Minigame::Draw() {
