@@ -65,7 +65,6 @@ void Minigame::RunningThink() {
 	if (ball->isStopped())
 		SetState(GAMESTATE::WAITING);
 
-	Sleep(50);
 }
 
 void Minigame::Draw() {
@@ -91,6 +90,8 @@ void Minigame::WaitingDraw() {
 	if (lmState) {
 		GLVECTOR2 beg = ball->getPos();
 		GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
+		vec.x *= -1;
+		vec.y *= -1;
 		GLVECTOR2 end = VectorOf(beg.x + vec.x, beg.y + vec.y);
 
 		Engine()->GetGlDevice()->DrawArrow(beg, end, 8, ColorOf(0.0f, 1.0f, 0.0f));
