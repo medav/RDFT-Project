@@ -1,10 +1,20 @@
 #include <windows.h>
+#include <iostream>
 #include "Game.h"
+#include "Console.h"
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow) {
 	// Register the window class.
 	const char CLASS_NAME[] = "RDFT Systems, Inc.";
+
+	SetupConsole();
+	std::cout << "*********************************************************\n";
+	std::cout << "*             RDFT Minigame and Engine Demo             *\n";
+	std::cout << "*          Copyright (c) 2014 RDFT Systems, Inc.        *\n";
+	std::cout << "*     Michael Davies, Daniel Shauger, Matt Wilkinson    *\n";
+	std::cout << "*********************************************************\n";
+	std::cout << "Creating window...\n";
 
 	WNDCLASS wc = {};
 
@@ -29,22 +39,28 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 		return 0;
 
 	ShowWindow(hwnd, nCmdShow);
-
+	
+	std::cout << "Initializing Engine...\n";
 	Engine()->SetHWND(hwnd);
 
+	std::cout << "Loading libraries...\n";
 	if (!Engine()->LoadDLLs())
 		return 0;
 
+	std::cout << "Creating devices...\n";
 	if (!Engine()->CreateDevices())
 		return 0;
 
+	std::cout << "Setting up devices...\n";
 	Engine()->GetGlDevice()->SetWindowSize();
 
 	// This will call the constructors for our singletons
+	std::cout << "Creating game...\n";
 	MG();
 	MGM();
 	MGG();
 
+	std::cout << "Setup complete!\n";
 	// This is for testing - delay the game 
 	int ct = 0;
 
