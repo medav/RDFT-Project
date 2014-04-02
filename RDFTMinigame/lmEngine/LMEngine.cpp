@@ -9,7 +9,7 @@ bool LMENGINE::initLM() {
 unsigned char LMENGINE::LMRefresh() {
 	if (ctrl.isConnected()) {
 		const Frame frame = ctrl.frame();
-		if (ctrl.frame(1).hands()[0].fingers()[0].tipPosition().z - ctrl.frame(0).hands()[0].fingers()[0].tipPosition().z > 7 && !init || init){
+		if (ctrl.frame(1).hands()[0].fingers()[0].tipPosition().z - ctrl.frame(0).hands()[0].fingers()[0].tipPosition().z > 7 && init==0 || init==1){
 			init = 1;
 			if (!frame.hands().isEmpty()){
 				const Hand hand = frame.hands()[0];
@@ -41,14 +41,7 @@ void LMENGINE::reset(){
 	init = 0;
 }
 GLVECTOR2 LMENGINE::LMGetVector() {
-	if (init)
 		return last;
-	else{
-		GLVECTOR2 notStarted;
-		notStarted.x = 0;
-		notStarted.y = 0;
-		return notStarted;
-	}
 }
 
 
