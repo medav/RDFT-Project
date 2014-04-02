@@ -51,6 +51,9 @@ void Ball::ApplyVelocity(float x, float y){
 
 bool Ball::isStopped() {
 	if (Vel.x == 0 && Vel.y == 0)
+		return true;
+
+	return false;
 }
 
 // Returns true if GLVECTOR2 pt is inside BOUNDINGXBOX box, false otherwise
