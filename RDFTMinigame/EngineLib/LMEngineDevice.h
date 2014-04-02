@@ -10,7 +10,7 @@ public:
 	// virtual (type) NAME(args) = 0;
 
 	virtual unsigned char LMRefresh() = 0;
-	virtual void reset() = 0;
+	virtual void Reset() = 0;
 	virtual GLVECTOR2 LMGetVector() = 0;
 	virtual ~LMENGINEDEVICE() {}
 };

@@ -37,7 +37,7 @@ unsigned char LMENGINE::LMRefresh() {
 
 	return init;
 }
-void LMENGINE::reset(){
+void LMENGINE::Reset(){
 	init = 0;
 }
 GLVECTOR2 LMENGINE::LMGetVector() {

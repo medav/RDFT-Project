@@ -26,7 +26,7 @@ public:
 	}
 
 	virtual unsigned char LMRefresh();
-	virtual void reset();
+	virtual void Reset();
 	virtual GLVECTOR2 LMGetVector();
 	virtual bool initLM();
 
