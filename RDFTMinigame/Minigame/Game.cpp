@@ -52,7 +52,7 @@ void Minigame::WaitingThink() {
 
 	if (lmState == 2) {
 		GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
-		ball->ApplyVelocity(-vec.x / 16, -vec.y / 16);
+		ball->ApplyVelocity(-vec.x / 8, -vec.y / 8);
 		SetState(GAMESTATE::RUNNING);
 		lmState = 0;
 		Engine()->GetLmDevice()->Reset();
