@@ -49,14 +49,15 @@ void Minigame::Think() {
 void Minigame::WaitingThink() {
 	if (Engine()->GetLmDevice()->LMRefresh()) {
 		GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
-		ball->ApplyVelocity(vec.x / 128, vec.y / 128);
+		ball->ApplyVelocity(vec.x / 16, vec.y / 16);
 	}
 }
 
 void Minigame::RunningThink() {
+	
 	if (Engine()->GetLmDevice()->LMRefresh()) {
 		GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
-		ball->ApplyVelocity(vec.x / 128, vec.y / 128);
+		ball->ApplyVelocity(vec.x / 16, vec.y / 16);
 	}
 	Engine()->GetPhysDevice()->Think();
 }
