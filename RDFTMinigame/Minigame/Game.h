@@ -11,6 +11,7 @@ public:
 
 private:
 	Minigame::GAMESTATE GameState;
+	unsigned char lmState;
 
 	HWND hwnd;
 	void Setup(HWND hwnd);
