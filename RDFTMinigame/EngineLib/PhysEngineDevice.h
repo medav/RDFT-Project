@@ -107,6 +107,8 @@ public:
 	virtual void Draw(PGLENGINE glEngine);
 	virtual void Collide(ENTITY * other);
 
+	bool isStopped();
+
 	virtual BOUNDINGBOX BoundingBox();
 
 	void ApplyVelocity(float x, float y);

@@ -24,6 +24,7 @@ public:
 	ClockKeeper();
 
 	double DeltaT();
+	void Reset();
 };
 
 GLVECTOR2 VectorOf(double x, double y);

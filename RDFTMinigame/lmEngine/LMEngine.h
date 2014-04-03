@@ -12,7 +12,7 @@ class LMENGINE : public LMENGINEDEVICE {
 private:
 	HWND hwnd;
 	Leap::Controller ctrl;
-	bool init=false;
+	unsigned char init=0;
 	GLVECTOR2 start;	
 	GLVECTOR2 last;
 	bool first = true;
@@ -25,7 +25,8 @@ public:
 		last.y = 0;
 	}
 
-	virtual bool LMRefresh();
+	virtual unsigned char LMRefresh();
+	virtual void Reset();
 	virtual GLVECTOR2 LMGetVector();
 	virtual bool initLM();
 

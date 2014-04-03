@@ -39,6 +39,8 @@ void Ball::Think() {
 	if ((Vel.x * Vel.x + Vel.y * Vel.y) < 0.001) {
 		Vel.x = 0;
 		Vel.y = 0;
+
+		ck.Reset();
 	}
 
 	Pos.x += Vel.x * dT;
@@ -49,6 +51,13 @@ void Ball::Think() {
 void Ball::ApplyVelocity(float x, float y){
 	Vel.x = x;
 	Vel.y = y;
+}
+
+bool Ball::isStopped() {
+	if (Vel.x == 0 && Vel.y == 0)
+		return true;
+
+	return false;
 }
 
 // Returns true if GLVECTOR2 pt is inside BOUNDINGXBOX box, false otherwise

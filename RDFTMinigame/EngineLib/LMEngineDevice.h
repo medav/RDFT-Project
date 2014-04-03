@@ -9,7 +9,8 @@ public:
 	// TODO: Interface functions declared here:
 	// virtual (type) NAME(args) = 0;
 
-	virtual bool LMRefresh() = 0;
+	virtual unsigned char LMRefresh() = 0;
+	virtual void Reset() = 0;
 	virtual GLVECTOR2 LMGetVector() = 0;
 	virtual ~LMENGINEDEVICE() {}
 };
