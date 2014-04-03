@@ -1,6 +1,7 @@
 #include <iostream>
 #include <math.h>
 #include "PhysEngineDevice.h"
+#include "RDFTEngine.h"
 #include "EngineCommon.h"
 
 #define PI 3.1415926
@@ -42,8 +43,22 @@ void Ball::Think() {
 		ck.Reset();
 	}
 
+	double scrX = Engine()->ScreenX();
+	double scrY = Engine()->ScreenY();
+
 	Pos.x += Vel.x * dT;
+	if (Pos.x < 0)
+		Pos.x += scrX;
+
+	if (Pos.x > scrX)
+		Pos.x -= scrX;
+
 	Pos.y += Vel.y * dT;
+	if (Pos.y < 0)
+		Pos.y += scrY;
+
+	if (Pos.y > scrY)
+		Pos.y -= scrY;
 }
 
 void Ball::ApplyVelocity(float x, float y){
@@ -207,10 +222,10 @@ void Ball::Draw(PGLENGINE glEngine) {
 	GLVECTOR2 end;
 	double mag = Magnitude(Vel);
 
-	end.x = Pos.x + Vel.x * 2.0;
-	end.y = Pos.y + Vel.y * 2.0;
+	end.x = Pos.x + Vel.x * 6.0;
+	end.y = Pos.y + Vel.y * 6.0;
 
-	float r = (float)mag / 10;
+	float r = (float)mag / 50;
 
 	if (r > 1.0)
 		r = 1.0;

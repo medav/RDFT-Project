@@ -12,6 +12,9 @@ GLENGINE::GLENGINE(HWND hwnd) : textures() {
 	bgColor.b = 0.0f;
 	bgColor.a = 0.0f;
 
+	listbase = glGenLists(256);
+	wglUseFontBitmaps(hdc, 0, 256, listbase);
+
 	r = 0;
 }
 
@@ -157,6 +160,7 @@ bool GLENGINE::CreateRenderDevice(HWND hwnd) {
 bool GLENGINE::BeginScene() {
 	glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
 	glClear(GL_COLOR_BUFFER_BIT);
+
 	return true;
 }
 
@@ -265,6 +269,7 @@ void GLENGINE::DrawArrow(GLVECTOR2 begin, GLVECTOR2 end, float weight, GLCOLORAR
 
 	glLineWidth(weight);
 	glBegin(GL_LINES);
+	glEnable(GL_LINE_SMOOTH);
 
 	glColor3f(color.r, color.g, color.b);
 	glVertex2f((GLfloat)begin.x, (GLfloat)begin.y);
@@ -283,11 +288,25 @@ void GLENGINE::DrawArrow(GLVECTOR2 begin, GLVECTOR2 end, float weight, GLCOLORAR
 	glVertex2f((GLfloat)e2.x, (GLfloat)e2.y);
 	glVertex2f((GLfloat)end.x, (GLfloat)end.y);
 
+	glDisable(GL_LINE_SMOOTH);
 	glEnd();
 }
 
 bool GLENGINE::EndScene() {
+	
+	
+	glRasterPos2f(0.0f, 0.0f);
+
+	// Must save/restore the list base.
+	glPushAttrib(GL_LIST_BIT);
+
+	glListBase(listbase);
+	glCallLists(4, GL_UNSIGNED_BYTE, (const GLvoid*) "test");
+
+	glPopAttrib();
+
 	SwapBuffers(hdc);
+
 	return true;
 }
 

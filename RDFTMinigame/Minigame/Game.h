@@ -43,7 +43,7 @@ public:
 	void Resize();
 };
 
-RDFTENGINE * Engine();
+
 Minigame * MG();
 
 #endif
