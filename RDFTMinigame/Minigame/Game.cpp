@@ -127,7 +127,7 @@ void Minigame::NewMap() {
 	Engine()->GetPhysDevice()->AddEntity(Obstruction2);
 
 	ball = new Ball(VectorOf(50, 60));
-	ball->ApplyVelocity(80, 20);
+	ball->ApplyVelocity(35, 35);
 
 	Engine()->GetPhysDevice()->AddEntity(ball);
 }
