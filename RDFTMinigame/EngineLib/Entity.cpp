@@ -279,7 +279,7 @@ void Ball::Collide(ENTITY * other){
 		std::cout << "timeInOtherReset" << std::endl;
 		std::cout << timeInOther << std::endl;
 	}
-	std::cout << "Existance status: " << entityInBox(box, otherBox) << std::endl;
+	std::cout << "Existence status: " << entityInBox(box, otherBox) << std::endl;
 	Think();
 }
 
