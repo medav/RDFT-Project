@@ -1,5 +1,6 @@
 #include <time.h>
 #include "EngineCommon.h"
+#include "RDFTEngine.h"
 
 GLVECTOR2 VectorOf(double x, double y) {
 	GLVECTOR2 pos;
@@ -52,4 +53,9 @@ void ClockKeeper::Reset() {
 
 double Magnitude(GLVECTOR2 vec) {
 	return sqrt(vec.x * vec.x + vec.y * vec.y);
+}
+
+RDFTENGINE * Engine() {
+	static RDFTENGINE * rdft = new RDFTENGINE();
+	return rdft;
 }

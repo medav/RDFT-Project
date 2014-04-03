@@ -1,6 +1,7 @@
 #include <iostream>
 #include <math.h>
 #include "PhysEngineDevice.h"
+#include "RDFTEngine.h"
 #include "EngineCommon.h"
 
 #define PI 3.1415926
@@ -43,9 +44,22 @@ void Ball::Think() {
 		ck.Reset();
 	}
 
-	Pos.x += Vel.x * dT;
-	Pos.y += Vel.y * dT;
+	double scrX = Engine()->ScreenX();
+	double scrY = Engine()->ScreenY();
 
+	Pos.x += Vel.x * dT;
+	if (Pos.x < 0)
+		Pos.x += scrX;
+
+	if (Pos.x > scrX)
+		Pos.x -= scrX;
+
+	Pos.y += Vel.y * dT;
+	if (Pos.y < 0)
+		Pos.y += scrY;
+
+	if (Pos.y > scrY)
+		Pos.y -= scrY;
 }
 
 void Ball::ApplyVelocity(float x, float y){
@@ -152,6 +166,8 @@ void Ball::Collide(ENTITY * other){
 	// Bottom right corner of this box
 	GLVECTOR2 BR = VectorOf(box.x + box.w, box.y);
 
+
+	// double testAngle = atan2(Vel.y, Vel.x);
 	/*
 	if (HorizontalCollision(box, otherBox)) {
 		Vel.y *= (-1.0 * cc);
@@ -164,16 +180,16 @@ void Ball::Collide(ENTITY * other){
 	*/
 
 	if (timeInOther == 0){
-		if (PointInBox(TL, otherBox)){
-			if (PointInBox(TR, otherBox)){
-				Vel.y *= -1;
+	if (PointInBox(TL, otherBox)){
+		if (PointInBox(TR, otherBox)){
+			Vel.y *= -1;
 				//std::cout << ("Top") << std::endl;
-			}
-			else if (PointInBox(BL, otherBox)){
-				Vel.x *= -1;
+		}
+		else if (PointInBox(BL, otherBox)){
+			Vel.x *= -1;
 				//std::cout << ("Left") << std::endl;
-			}
-			else{
+		}
+		else{
 				if (calcVelCase(Vel) == RIGHTUP || calcVelCase(Vel) == UP){
 					Vel.y *= -1;
 				}
@@ -182,7 +198,7 @@ void Ball::Collide(ENTITY * other){
 						Vel.y *= -1;
 					}
 					else{
-						Vel.x *= -1;
+			Vel.x *= -1;
 					}
 				}
 				else if (calcVelCase(Vel) == LEFT || calcVelCase(Vel) == LEFTDOWN){
@@ -192,11 +208,11 @@ void Ball::Collide(ENTITY * other){
 					//std::cout << ("ydishappen") << std::endl;
 				}
 				//std::cout << ("Top Left") << std::endl;
-			}
 		}
-		else if (PointInBox(TR, otherBox)){
-			if (PointInBox(BR, otherBox)){
-				Vel.x *= -1;
+	}
+	else if (PointInBox(TR, otherBox)){
+		if (PointInBox(BR, otherBox)){
+			Vel.x *= -1;
 				//std::cout << ("Right") << std::endl;
 			}
 			else{
@@ -206,42 +222,42 @@ void Ball::Collide(ENTITY * other){
 				else if (calcVelCase(Vel) == RIGHTUP){
 					if (PointInBox(VectorOf(box.x + box.w - 1.0, box.y + box.h), otherBox)){
 						Vel.y *= -1;
-					}
-					else{
-						Vel.x *= -1;
+		}
+		else{
+			Vel.x *= -1;
 					}
 				}
 				else if (calcVelCase(Vel) == LEFTUP || calcVelCase(Vel) == UP){
-					Vel.y *= -1;
+			Vel.y *= -1;
 				}
 				else{
 					//std::cout << "yudothis" << std::endl;
 				}
 				//std::cout << ("Top Right") << std::endl;
-			}
 		}
-		else if (PointInBox(BR, otherBox)){
-			if (PointInBox(BL, otherBox))
-			{
-				Vel.y *= -1;
+	}
+	else if (PointInBox(BR, otherBox)){
+		if (PointInBox(BL, otherBox))
+		{
+			Vel.y *= -1;
 				//std::cout << ("Bottom") << std::endl;
-			}
-			else{
+		}
+		else{
 				if (calcVelCase(Vel) == RIGHTUP || calcVelCase(Vel) == RIGHT){
 					Vel.x *= -1;
 				}
 				else if (calcVelCase(Vel) == RIGHTDOWN){
 					if (PointInBox(VectorOf(box.x + box.w, box.y + 1.0), otherBox)){
-						Vel.x *= -1;
+			Vel.x *= -1;
 					}
 					else{
-						Vel.y *= -1;
+			Vel.y *= -1;
 					}
-				}
+		}
 				else if (calcVelCase(Vel) == DOWN || calcVelCase(Vel) == LEFTDOWN){
 					Vel.y *= -1;
-				}
-				else{
+	}
+	else{
 					//std::cout << "nope" << std::endl;
 				}
 				//std::cout << ("Bottom Right") << std::endl;
@@ -253,14 +269,14 @@ void Ball::Collide(ENTITY * other){
 			}
 			else if (calcVelCase(Vel) == LEFTDOWN){
 				if (PointInBox(VectorOf(box.x, box.y + 1.0), otherBox)){
-					Vel.x *= -1;
+		Vel.x *= -1;
 				}
 				else{
 					Vel.y *= -1;
 				}
 			}
 			else if (calcVelCase(Vel) == DOWN || calcVelCase(Vel) == RIGHTDOWN){
-				Vel.y *= -1;
+		Vel.y *= -1;
 			}
 			else{
 				//std::cout << "bleh" << std::endl;
@@ -314,10 +330,10 @@ void Ball::Draw(PGLENGINE glEngine) {
 	GLVECTOR2 end;
 	double mag = Magnitude(Vel);
 
-	end.x = Pos.x + Vel.x * 2.0;
-	end.y = Pos.y + Vel.y * 2.0;
+	end.x = Pos.x + Vel.x * 6.0;
+	end.y = Pos.y + Vel.y * 6.0;
 
-	float r = (float)mag / 10;
+	float r = (float)mag / 50;
 
 	if (r > 1.0)
 		r = 1.0;

@@ -2,12 +2,6 @@
 //#include <string.h>
 #include "Game.h"
 
-
-RDFTENGINE * Engine() {
-	static RDFTENGINE * rdft = new RDFTENGINE();
-	return rdft;
-}
-
 Minigame * MG() {
 	static Minigame * mg = new Minigame();
 	return mg;
@@ -23,6 +17,7 @@ Minigame::Minigame() {
 
 	Engine()->GetGlDevice()->LoadTexture("Ball.bmp", "ball");
 	Engine()->GetGlDevice()->LoadTexture("bricks.bmp", "wall");
+	Engine()->GetGlDevice()->LoadTexture("space.bmp", "background");
 }
 
 
@@ -52,7 +47,7 @@ void Minigame::WaitingThink() {
 
 	if (lmState == 2) {
 		GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
-		ball->ApplyVelocity(-vec.x / 8, -vec.y / 8);
+		ball->ApplyVelocity(-vec.x / 4, -vec.y / 4);
 		SetState(GAMESTATE::RUNNING);
 		lmState = 0;
 		Engine()->GetLmDevice()->Reset();
@@ -61,7 +56,7 @@ void Minigame::WaitingThink() {
 
 void Minigame::RunningThink() {
 	Engine()->GetPhysDevice()->Think();
-	
+
 	if (ball->isStopped())
 		SetState(GAMESTATE::WAITING);
 
@@ -69,6 +64,9 @@ void Minigame::RunningThink() {
 
 void Minigame::Draw() {
 	gameMutex.lock();
+	Engine()->GetGlDevice()->BeginScene();
+
+	Engine()->GetGlDevice()->DrawTexturedRect(VectorOf(Engine()->ScreenX() / 2, Engine()->ScreenY() / 2), VectorOf(Engine()->ScreenX(), Engine()->ScreenY()), "background");
 
 	switch (GameState) {
 	case Minigame::WAITING:
@@ -81,32 +79,27 @@ void Minigame::Draw() {
 		break;
 	}
 
+	Engine()->GetGlDevice()->EndScene();
 	gameMutex.unlock();
 }
 
 void Minigame::WaitingDraw() {
-	Engine()->GetGlDevice()->BeginScene();
-
 	if (lmState) {
-	GLVECTOR2 beg = ball->getPos();
-	GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
-		vec.x *= -1;
-		vec.y *= -1;
-	GLVECTOR2 end = VectorOf(beg.x + vec.x, beg.y + vec.y);
+		GLVECTOR2 beg = ball->getPos();
+		GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
+		vec.x *= -2;
+		vec.y *= -2;
+		GLVECTOR2 end = VectorOf(beg.x + vec.x, beg.y + vec.y);
 
-	Engine()->GetGlDevice()->DrawArrow(beg, end, 8, ColorOf(0.0f, 1.0f, 0.0f));
+		Engine()->GetGlDevice()->DrawArrow(beg, end, 8, ColorOf(0.0f, 1.0f, 0.0f));
 	}
 	
 	Engine()->GetPhysDevice()->Draw(Engine()->GetGlDevice());
-	Engine()->GetGlDevice()->EndScene();
+	
 }
 
 void Minigame::RunningDraw() {
-	Engine()->GetGlDevice()->BeginScene();
-	
 	Engine()->GetPhysDevice()->Draw(Engine()->GetGlDevice());
-	
-	Engine()->GetGlDevice()->EndScene();
 }
 
 /************************************************************/
@@ -114,15 +107,15 @@ void Minigame::RunningDraw() {
 void Minigame::NewMap() {
 	Engine()->GetPhysDevice()->Clear();
 
-	ENTITY * WorldTop = new Wall(VectorOf(Engine()->ScreenX() / 2.0, Engine()->ScreenY() - 4), Engine()->ScreenX() + 8, 16);
-	ENTITY * WorldBottom = new Wall(VectorOf(Engine()->ScreenX() / 2.0, 4), Engine()->ScreenX() + 8, 16);
-	ENTITY * WorldLeft = new Wall(VectorOf(4, Engine()->ScreenY() / 2.0), 16, Engine()->ScreenY() + 8);
-	ENTITY * WorldRight = new Wall(VectorOf(Engine()->ScreenX() - 4, Engine()->ScreenY() / 2.0), 16, Engine()->ScreenY() + 8);
+	//ENTITY * WorldTop = new Wall(VectorOf(Engine()->ScreenX() / 2.0, Engine()->ScreenY() - 4), Engine()->ScreenX() + 8, 16);
+	//ENTITY * WorldBottom = new Wall(VectorOf(Engine()->ScreenX() / 2.0, 4), Engine()->ScreenX() + 8, 16);
+	//ENTITY * WorldLeft = new Wall(VectorOf(4, Engine()->ScreenY() / 2.0), 16, Engine()->ScreenY() + 8);
+	//ENTITY * WorldRight = new Wall(VectorOf(Engine()->ScreenX() - 4, Engine()->ScreenY() / 2.0), 16, Engine()->ScreenY() + 8);
 
-	Engine()->GetPhysDevice()->AddEntity(WorldTop);
-	Engine()->GetPhysDevice()->AddEntity(WorldBottom);
-	Engine()->GetPhysDevice()->AddEntity(WorldLeft);
-	Engine()->GetPhysDevice()->AddEntity(WorldRight);
+	//Engine()->GetPhysDevice()->AddEntity(WorldTop);
+	//Engine()->GetPhysDevice()->AddEntity(WorldBottom);
+	//Engine()->GetPhysDevice()->AddEntity(WorldLeft);
+	//Engine()->GetPhysDevice()->AddEntity(WorldRight);
 
 	ENTITY * Obstruction1 = new Wall(VectorOf(500, 400), 600, 50);
 	Engine()->GetPhysDevice()->AddEntity(Obstruction1);
@@ -131,7 +124,6 @@ void Minigame::NewMap() {
 	//Engine()->GetPhysDevice()->AddEntity(Obstruction2);
 
 	ball = new Ball(VectorOf(50, 60));
-	ball->ApplyVelocity(80, 20);
 
 	Engine()->GetPhysDevice()->AddEntity(ball);
 }

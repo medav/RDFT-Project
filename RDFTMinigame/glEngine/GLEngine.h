@@ -17,6 +17,8 @@ private:
 	HDC hdc;
 	HWND hwnd;
 
+	GLuint listbase;
+
 	std::map<std::string, GLuint> textures;
 
 	GLCOLORARGB bgColor;

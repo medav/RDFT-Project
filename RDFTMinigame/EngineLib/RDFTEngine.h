@@ -96,4 +96,6 @@ public:
 	~RDFTENGINE();
 };
 
+RDFTENGINE * Engine();
+
 #endif
