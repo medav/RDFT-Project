@@ -90,6 +90,8 @@ private:
 	// Collision constant: How much to decrease speed by after collision
 	const double cc = 0.994;
 
+	int timeInOther = 0;
+
 	GLVECTOR2 Vel;
 
 	double radius;

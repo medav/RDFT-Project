@@ -5,6 +5,7 @@
 #include "EngineCommon.h"
 
 #define PI 3.1415926
+enum velDir{ RIGHT, RIGHTUP, UP, LEFTUP, LEFT, LEFTDOWN, DOWN, RIGHTDOWN };
 
 void Ball::Think() {
 	if (Vel.x == 0 && Vel.y == 0)
@@ -84,6 +85,49 @@ bool PointInBox(GLVECTOR2 pt, BOUNDINGBOX box) {
 	return false;
 }
 
+// Returns true if this entity has a point in the other entity
+bool entityInBox(BOUNDINGBOX thisBox, BOUNDINGBOX otherBox){
+	GLVECTOR2 TL = VectorOf(thisBox.x, thisBox.y + thisBox.h);
+	GLVECTOR2 TR = VectorOf(thisBox.x + thisBox.w, thisBox.y + thisBox.h);
+	GLVECTOR2 BL = VectorOf(thisBox.x, thisBox.y);
+	GLVECTOR2 BR = VectorOf(thisBox.x + thisBox.w, thisBox.y);
+	if (PointInBox(TL, otherBox) ||
+		PointInBox(TR, otherBox) ||
+		PointInBox(BL, otherBox) ||
+		PointInBox(BR, otherBox))
+		return true;
+
+	return false;
+}
+
+velDir calcVelCase(GLVECTOR2 vel){
+	double testAngle = atan2(vel.y, vel.x);
+	if (testAngle == 0){
+		return RIGHT;
+	}
+	else if (testAngle > 0 && testAngle < (PI / 2)){
+		return RIGHTUP;
+	}
+	else if (testAngle == (PI / 2)){
+		return UP;
+	}
+	else if (testAngle > (PI / 2) && testAngle < PI){
+		return LEFTUP;
+	}
+	else if (testAngle == PI){
+		return LEFT;
+	}
+	else if (testAngle > PI && testAngle < (3 * PI) / 2){
+		return LEFTDOWN;
+	}
+	else if (testAngle == (3 * PI) / 2){
+		return DOWN;
+	}
+	else{
+		return RIGHTDOWN;
+	}
+}
+
 /* Unused
 bool HorizontalCollision(BOUNDINGBOX box1, BOUNDINGBOX box2) {
 	// Top left corner of this box
@@ -116,8 +160,7 @@ void Ball::Collide(ENTITY * other){
 	// Top left corner of this box
 	GLVECTOR2 TL = VectorOf(box.x, box.y + box.h);
 	// Top right corner of this box
-	GLVECTOR2 TR = VectorOf(box.x + box.w, box.y);
-
+	GLVECTOR2 TR = VectorOf(box.x + box.w, box.y + box.h);
 	// Bottom left corner of this box
 	GLVECTOR2 BL = VectorOf(box.x, box.y);
 	// Bottom right corner of this box
@@ -136,58 +179,123 @@ void Ball::Collide(ENTITY * other){
 	Think();
 	*/
 
-
+	if (timeInOther == 0){
 	if (PointInBox(TL, otherBox)){
-		// Case 1
 		if (PointInBox(TR, otherBox)){
 			Vel.y *= -1;
-			std::cout << ("Case 1") << std::endl;
+				//std::cout << ("Top") << std::endl;
 		}
-		// Case 3
 		else if (PointInBox(BL, otherBox)){
 			Vel.x *= -1;
-			std::cout << ("Case 3 ") << std::endl;
+				//std::cout << ("Left") << std::endl;
 		}
-		// Case 2
 		else{
+				if (calcVelCase(Vel) == RIGHTUP || calcVelCase(Vel) == UP){
+					Vel.y *= -1;
+				}
+				else if (calcVelCase(Vel) == LEFTUP){
+					if (PointInBox(VectorOf(box.x + 1.0, box.y + box.h), otherBox)){
+						Vel.y *= -1;
+					}
+					else{
 			Vel.x *= -1;
-			Vel.y *= -1;
-			std::cout << ("Case 2") << std::endl;
+					}
+				}
+				else if (calcVelCase(Vel) == LEFT || calcVelCase(Vel) == LEFTDOWN){
+					Vel.x *= -1;
+				}
+				else{
+					//std::cout << ("ydishappen") << std::endl;
+				}
+				//std::cout << ("Top Left") << std::endl;
 		}
 	}
 	else if (PointInBox(TR, otherBox)){
-		// Case 7
 		if (PointInBox(BR, otherBox)){
 			Vel.x *= -1;
-			std::cout << ("Case 7") << std::endl;
+				//std::cout << ("Right") << std::endl;
+			}
+			else{
+				if (calcVelCase(Vel) == RIGHT || calcVelCase(Vel) == RIGHTDOWN){
+					Vel.x *= -1;
+				}
+				else if (calcVelCase(Vel) == RIGHTUP){
+					if (PointInBox(VectorOf(box.x + box.w - 1.0, box.y + box.h), otherBox)){
+						Vel.y *= -1;
 		}
-		// Case 8
 		else{
 			Vel.x *= -1;
+					}
+				}
+				else if (calcVelCase(Vel) == LEFTUP || calcVelCase(Vel) == UP){
 			Vel.y *= -1;
-			std::cout << ("Case 8") << std::endl;
+				}
+				else{
+					//std::cout << "yudothis" << std::endl;
+				}
+				//std::cout << ("Top Right") << std::endl;
 		}
 	}
 	else if (PointInBox(BR, otherBox)){
-		// Case 5
 		if (PointInBox(BL, otherBox))
 		{
 			Vel.y *= -1;
-			std::cout << ("Case 5") << std::endl;
+				//std::cout << ("Bottom") << std::endl;
 		}
-		// Case 6
 		else{
+				if (calcVelCase(Vel) == RIGHTUP || calcVelCase(Vel) == RIGHT){
+					Vel.x *= -1;
+				}
+				else if (calcVelCase(Vel) == RIGHTDOWN){
+					if (PointInBox(VectorOf(box.x + box.w, box.y + 1.0), otherBox)){
 			Vel.x *= -1;
+					}
+					else{
 			Vel.y *= -1;
-			std::cout << ("Case 6") << std::endl;
+					}
 		}
+				else if (calcVelCase(Vel) == DOWN || calcVelCase(Vel) == LEFTDOWN){
+					Vel.y *= -1;
 	}
-	// Case 4
 	else{
+					//std::cout << "nope" << std::endl;
+				}
+				//std::cout << ("Bottom Right") << std::endl;
+			}
+		}
+		else if (PointInBox(BL, otherBox)){
+			if (calcVelCase(Vel) == LEFTUP || calcVelCase(Vel) == LEFT){
+				Vel.x *= -1;
+			}
+			else if (calcVelCase(Vel) == LEFTDOWN){
+				if (PointInBox(VectorOf(box.x, box.y + 1.0), otherBox)){
 		Vel.x *= -1;
+				}
+				else{
+					Vel.y *= -1;
+				}
+			}
+			else if (calcVelCase(Vel) == DOWN || calcVelCase(Vel) == RIGHTDOWN){
 		Vel.y *= -1;
-		std::cout << ("Case 4") << std::endl;
+			}
+			else{
+				//std::cout << "bleh" << std::endl;
+			}
+			//std::cout << ("Bottom Left") << std::endl;
+		}
+		else{
+			//std::cout << "Everything failed" << std::endl;
+		}
+		std::cout << "Collision" << std::endl;
+		timeInOther++;
 	}
+
+	if (!entityInBox(box, otherBox)){
+		timeInOther = 0;
+		std::cout << "timeInOtherReset" << std::endl;
+		std::cout << timeInOther << std::endl;
+	}
+	std::cout << "Existance status: " << entityInBox(box, otherBox) << std::endl;
 	Think();
 }
 

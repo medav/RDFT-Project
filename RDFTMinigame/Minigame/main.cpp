@@ -78,8 +78,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 			DispatchMessage(&msg);
 		}
 
-
-		MG()->Think();
+		if (ct > 1000)
+			MG()->Think();
 		MG()->Draw();
 	}
 
