@@ -6,6 +6,12 @@
 #include <gl\GL.h>
 #include <gl\GLU.h>
 #include <map>
+#include <mutex>
+
+struct TEXTURE {
+	GLuint texID;
+	uint8_t * pixels;
+};
 
 class GLENGINE : public GLENGINEDEVICE {
 private:
@@ -19,7 +25,8 @@ private:
 
 	GLuint listbase;
 
-	std::map<std::string, GLuint> textures;
+	std::map<std::string, TEXTURE> textures;
+	std::mutex texture_mutex;
 
 	GLCOLORARGB bgColor;
 
@@ -30,6 +37,8 @@ public:
 
 	virtual void SetClearColor(GLCOLORARGB bgcolor);
 	virtual bool LoadTexture(const char * filename, const char * name);
+	virtual bool UnloadTexture(const char * name);
+	virtual void PrintTextures();
 
 	virtual bool BeginScene();
 

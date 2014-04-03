@@ -33,12 +33,12 @@ void GLENGINE::SetWindowSize() {
 
 // This was written by following a tutorial on the internet:
 // http://www.cplusplus.com/articles/GwvU7k9E/
-bool LoadBMP(const char* location, GLuint *texture) {
+bool LoadBMP(const char* location, GLuint *texture, uint8_t ** pixels) {
 	std::cout << "Loading texture \"" << location << "\"\n";
 
 	uint8_t* datBuff[2] = { nullptr, nullptr };
 	uint8_t* temp = nullptr;
-	uint8_t* pixels = nullptr;
+	*pixels = nullptr;
 
 	*texture = -1;
 
@@ -72,7 +72,7 @@ bool LoadBMP(const char* location, GLuint *texture) {
 	file.seekg(bmpHeader->bfOffBits);
 	file.read((char*)temp, bmpInfo->biSizeImage);
 
-	pixels = new uint8_t[bmpInfo->biSizeImage + bmpInfo->biSizeImage / 3];
+	*pixels = new uint8_t[bmpInfo->biSizeImage + bmpInfo->biSizeImage / 3];
 
 	// We're almost done. We have our image loaded, however it's not in the right format.
 	// .bmp files store image data in the BGR format, and we have to convert it to RGB.
@@ -81,15 +81,15 @@ bool LoadBMP(const char* location, GLuint *texture) {
 	unsigned long j;
 
 	for (i = 0, j = 0; i < bmpInfo->biSizeImage; i += 3, j+=4) {
-		pixels[j] = temp[i + 2];
-		pixels[j + 1] = temp[i + 1];
-		pixels[j + 2] = temp[i];
+		*pixels[j] = temp[i + 2];
+		*pixels[j + 1] = temp[i + 1];
+		*pixels[j + 2] = temp[i];
 
 		// Remove pink
 		if (temp[i] > 220 && temp[i + 1] < 30 && temp[i + 2] > 220)
-			pixels[j + 3] = 0x00;
+			*pixels[j + 3] = 0x00;
 		else
-			pixels[j + 3] = 0xFF;
+			*pixels[j + 3] = 0xFF;
 	}
 
 	// Set width and height to the values loaded from the file
@@ -105,14 +105,13 @@ bool LoadBMP(const char* location, GLuint *texture) {
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, mode, w, h, 0, mode, GL_UNSIGNED_BYTE, pixels);
+	glTexImage2D(GL_TEXTURE_2D, 0, mode, w, h, 0, mode, GL_UNSIGNED_BYTE, *pixels);
 	glBindTexture(GL_TEXTURE_2D, NULL);
 
 	// Delete the two buffers.
 	delete[] datBuff[0];
 	delete[] datBuff[1];
 	delete[] temp;
-	//delete[] pixels;
 	file.close();
 
 	return true; // Return success code 
@@ -120,14 +119,37 @@ bool LoadBMP(const char* location, GLuint *texture) {
 
 bool GLENGINE::LoadTexture(const char * filename, const char * name) {
 	GLuint texture = 0;
+	uint8_t * pixels;
 	
-	if (!LoadBMP(filename, &texture))
+	if (!LoadBMP(filename, &texture, &pixels))
 		return false;
 
 	std::string str(name);
-	textures[str] = texture;
+
+	texture_mutex.lock();
+	textures[str].pixels = pixels;
+	textures[str].texID = texture;
+	texture_mutex.unlock();
 
 	return true;
+}
+
+bool GLENGINE::UnloadTexture(const char * name) {
+	std::string str(name);
+	std::cout << "Unloading texture \"" << name << "\"\n";
+
+	texture_mutex.lock();
+	delete[] textures[str].pixels;
+	textures[str].texID = 0;
+	textures.erase(name);
+	texture_mutex.unlock();
+
+	return true;
+}
+
+void GLENGINE::PrintTextures() {
+	std::map<std::string, TEXTURE>::iterator it = textures.begin();
+
 }
 
 bool GLENGINE::CreateRenderDevice(HWND hwnd) {
@@ -179,6 +201,8 @@ void GLENGINE::DrawRect(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color) {
 
 void GLENGINE::DrawTexturedRect(GLVERTEX2 pos, GLVECTOR2 size, const char * textureName) {
 	std::string str(textureName);
+
+	texture_mutex.lock();
 	GLuint texture = textures[textureName];
 
 	glEnable(GL_TEXTURE_2D);
@@ -209,6 +233,7 @@ void GLENGINE::DrawTexturedRect(GLVERTEX2 pos, GLVECTOR2 size, const char * text
 
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_BLEND);
+	texture_mutex.unlock();
 }
 
 void GLENGINE::DrawCircle(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color) {
