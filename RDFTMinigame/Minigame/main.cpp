@@ -63,8 +63,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 
 	Con()->Start();
 
-	// This is for testing - delay the game 
-	int ct = 0;
 
 	// Run the message loop.
 
@@ -80,11 +78,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 			DispatchMessage(&msg);
 		}
 
-		if (ct > 100)
+		if (ct > 1000)
 			MG()->Think();
-
 		MG()->Draw();
-		ct++;
 	}
 
 	Con()->Stop();

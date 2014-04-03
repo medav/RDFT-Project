@@ -61,7 +61,7 @@ void Minigame::WaitingThink() {
 
 void Minigame::RunningThink() {
 	Engine()->GetPhysDevice()->Think();
-
+	
 	if (ball->isStopped())
 		SetState(GAMESTATE::WAITING);
 
@@ -88,13 +88,13 @@ void Minigame::WaitingDraw() {
 	Engine()->GetGlDevice()->BeginScene();
 
 	if (lmState) {
-		GLVECTOR2 beg = ball->getPos();
-		GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
+	GLVECTOR2 beg = ball->getPos();
+	GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
 		vec.x *= -1;
 		vec.y *= -1;
-		GLVECTOR2 end = VectorOf(beg.x + vec.x, beg.y + vec.y);
+	GLVECTOR2 end = VectorOf(beg.x + vec.x, beg.y + vec.y);
 
-		Engine()->GetGlDevice()->DrawArrow(beg, end, 8, ColorOf(0.0f, 1.0f, 0.0f));
+	Engine()->GetGlDevice()->DrawArrow(beg, end, 8, ColorOf(0.0f, 1.0f, 0.0f));
 	}
 	
 	Engine()->GetPhysDevice()->Draw(Engine()->GetGlDevice());
@@ -103,7 +103,7 @@ void Minigame::WaitingDraw() {
 
 void Minigame::RunningDraw() {
 	Engine()->GetGlDevice()->BeginScene();
-
+	
 	Engine()->GetPhysDevice()->Draw(Engine()->GetGlDevice());
 	
 	Engine()->GetGlDevice()->EndScene();
@@ -131,6 +131,7 @@ void Minigame::NewMap() {
 	//Engine()->GetPhysDevice()->AddEntity(Obstruction2);
 
 	ball = new Ball(VectorOf(50, 60));
+	ball->ApplyVelocity(80, 20);
 
 	Engine()->GetPhysDevice()->AddEntity(ball);
 }
