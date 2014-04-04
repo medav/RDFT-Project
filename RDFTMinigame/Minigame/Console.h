@@ -8,7 +8,8 @@ enum CMDTYPE {SET, TEXTURE, NEWMAP, KILL, ENV};
 
 typedef struct {
 	CMDTYPE cty;
-	char args[200];
+	char *argv[20];
+	int argc;
 } COMMAND;
 
 class Console {

@@ -34,8 +34,6 @@ void GLENGINE::SetWindowSize() {
 // This was written by following a tutorial on the internet:
 // http://www.cplusplus.com/articles/GwvU7k9E/
 bool LoadBMP(const char* location, GLuint *texture, uint8_t ** pixels) {
-	std::cout << "Loading texture \"" << location << "\"\n";
-
 	uint8_t* datBuff[2] = { nullptr, nullptr };
 	uint8_t* temp = nullptr;
 	*pixels = nullptr;
@@ -118,11 +116,15 @@ bool LoadBMP(const char* location, GLuint *texture, uint8_t ** pixels) {
 }
 
 bool GLENGINE::LoadTexture(const char * filename, const char * name) {
+	std::cout << "Loading texture \"" << filename << "\"...";
+
 	GLuint texture = 0;
 	uint8_t * pixels;
 	
-	if (!LoadBMP(filename, &texture, &pixels))
+	if (!LoadBMP(filename, &texture, &pixels)) {
+		std::cout << "Failed\n";
 		return false;
+	}
 
 	std::string str(name);
 
@@ -131,12 +133,13 @@ bool GLENGINE::LoadTexture(const char * filename, const char * name) {
 	textures[str].texID = texture;
 	texture_mutex.unlock();
 
+	std::cout << "OK\n";
 	return true;
 }
 
 bool GLENGINE::UnloadTexture(const char * name) {
 	std::string str(name);
-	std::cout << "Unloading texture \"" << name << "\"\n";
+	std::cout << "Unloading texture \"" << name << "\"...";
 
 	texture_mutex.lock();
 	delete[] textures[str].pixels;
@@ -144,6 +147,7 @@ bool GLENGINE::UnloadTexture(const char * name) {
 	textures.erase(name);
 	texture_mutex.unlock();
 
+	std::cout << "OK\n";
 	return true;
 }
 
@@ -153,7 +157,8 @@ void GLENGINE::PrintTextures() {
 
 	std::map<std::string, TEXTURE>::iterator it = textures.begin();
 	while (it != textures.end()) {
-		std::cout << "Texture \"" << it->first.c_str() << "\"\n";
+		if (it->second.pixels)
+			std::cout << "Texture \"" << it->first.c_str() << "\"\n";
 		it++;
 	}
 	texture_mutex.unlock();
