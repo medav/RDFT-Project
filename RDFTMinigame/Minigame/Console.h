@@ -1,9 +1,10 @@
 #ifndef __CONSOLE__
 #define __CONSOLE__
+#include <Windows.h>
 
 void SetupConsole();
 
-enum CMDTYPE { SET, PRINT, NEWMAP, KILL };
+enum CMDTYPE {SET, TEXTURE, NEWMAP, KILL, ENV};
 
 typedef struct {
 	CMDTYPE cty;

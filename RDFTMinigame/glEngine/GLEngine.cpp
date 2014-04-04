@@ -72,7 +72,7 @@ bool LoadBMP(const char* location, GLuint *texture, uint8_t ** pixels) {
 	file.seekg(bmpHeader->bfOffBits);
 	file.read((char*)temp, bmpInfo->biSizeImage);
 
-	*pixels = new uint8_t[bmpInfo->biSizeImage + bmpInfo->biSizeImage / 3];
+	(*pixels) = new uint8_t[bmpInfo->biSizeImage + bmpInfo->biSizeImage / 3];
 
 	// We're almost done. We have our image loaded, however it's not in the right format.
 	// .bmp files store image data in the BGR format, and we have to convert it to RGB.
@@ -81,15 +81,15 @@ bool LoadBMP(const char* location, GLuint *texture, uint8_t ** pixels) {
 	unsigned long j;
 
 	for (i = 0, j = 0; i < bmpInfo->biSizeImage; i += 3, j+=4) {
-		*pixels[j] = temp[i + 2];
-		*pixels[j + 1] = temp[i + 1];
-		*pixels[j + 2] = temp[i];
+		(*pixels)[j] = temp[i + 2];
+		(*pixels)[j + 1] = temp[i + 1];
+		(*pixels)[j + 2] = temp[i];
 
 		// Remove pink
 		if (temp[i] > 220 && temp[i + 1] < 30 && temp[i + 2] > 220)
-			*pixels[j + 3] = 0x00;
+			(*pixels)[j + 3] = 0x00;
 		else
-			*pixels[j + 3] = 0xFF;
+			(*pixels)[j + 3] = 0xFF;
 	}
 
 	// Set width and height to the values loaded from the file
@@ -148,8 +148,15 @@ bool GLENGINE::UnloadTexture(const char * name) {
 }
 
 void GLENGINE::PrintTextures() {
-	std::map<std::string, TEXTURE>::iterator it = textures.begin();
+	texture_mutex.lock();
+	std::cout << "Currently loaded textures:\n";
 
+	std::map<std::string, TEXTURE>::iterator it = textures.begin();
+	while (it != textures.end()) {
+		std::cout << "Texture \"" << it->first.c_str() << "\"\n";
+		it++;
+	}
+	texture_mutex.unlock();
 }
 
 bool GLENGINE::CreateRenderDevice(HWND hwnd) {
@@ -203,7 +210,7 @@ void GLENGINE::DrawTexturedRect(GLVERTEX2 pos, GLVECTOR2 size, const char * text
 	std::string str(textureName);
 
 	texture_mutex.lock();
-	GLuint texture = textures[textureName];
+	GLuint texture = textures[textureName].texID;
 
 	glEnable(GL_TEXTURE_2D);
 
@@ -317,21 +324,21 @@ void GLENGINE::DrawArrow(GLVECTOR2 begin, GLVECTOR2 end, float weight, GLCOLORAR
 	glEnd();
 }
 
-bool GLENGINE::EndScene() {
+void GLENGINE::DrawTextGl(GLVECTOR2 pos, GLCOLORARGB color, const char * text) {
+	glColor3f(color.r, color.g, color.b);
+	glRasterPos2f(pos.x, pos.y);
 	
-	
-	glRasterPos2f(0.0f, 0.0f);
-
 	// Must save/restore the list base.
 	glPushAttrib(GL_LIST_BIT);
 
 	glListBase(listbase);
-	glCallLists(4, GL_UNSIGNED_BYTE, (const GLvoid*) "test");
+	glCallLists(strlen(text), GL_UNSIGNED_BYTE, (const GLvoid*) text);
 
 	glPopAttrib();
+}
 
+bool GLENGINE::EndScene() {
 	SwapBuffers(hdc);
-
 	return true;
 }
 

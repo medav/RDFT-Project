@@ -47,6 +47,7 @@ public:
 	virtual void DrawCircle(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color);
 	virtual void DrawCircleHollow(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color);
 	virtual void DrawArrow(GLVECTOR2 begin, GLVECTOR2 end, float weight, GLCOLORARGB color);
+	virtual void DrawTextGl(GLVECTOR2 pos, GLCOLORARGB color, const char * text);
 
 	virtual bool EndScene();
 

@@ -58,8 +58,10 @@ void Dispatch(const char * buf, int size, Console * con) {
 	COMMAND cmd;
 	if (strstr(buf, "set") != 0)
 		cmd.cty = CMDTYPE::SET;
-	else if (strstr(buf, "print") != 0)
-		cmd.cty = CMDTYPE::PRINT;
+	else if (strstr(buf, "env") != 0)
+		cmd.cty = CMDTYPE::ENV;
+	else if (strstr(buf, "texture") != 0)
+		cmd.cty = CMDTYPE::TEXTURE;
 	else if (strstr(buf, "new_map") != 0)
 		cmd.cty = CMDTYPE::NEWMAP;
 	else if (strstr(buf, "exit") != 0)
@@ -98,6 +100,9 @@ void Console::Exec(COMMAND cmd) {
 		MG()->gameMutex.lock();
 		MG()->NewMap();
 		MG()->gameMutex.unlock();
+	}
+	else if (cmd.cty == CMDTYPE::TEXTURE) {
+		Engine()->GetGlDevice()->PrintTextures();
 	}
 }
 
