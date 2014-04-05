@@ -54,7 +54,21 @@ void SetupConsole() {
 
 }
 
-void Dispatch(const char * buf, int size, Console * con) {
+int BuildArgs(char **args, char * buf) {
+	char arg[50];
+	int ct = 0;
+
+	while (sscanf(buf, "%s ", arg) == 1 && ct < 20) {
+		buf += (strlen(arg) + 1);
+		args[ct] = new char[50];
+		strcpy(args[ct], arg);
+		ct++;
+	}
+
+	return ct + 1;
+}
+
+void Dispatch(char * buf, int size, Console * con) {
 	COMMAND cmd;
 	if (strstr(buf, "set") != 0)
 		cmd.cty = CMDTYPE::SET;
@@ -69,7 +83,7 @@ void Dispatch(const char * buf, int size, Console * con) {
 	else
 		return;
 
-	strcpy_s(cmd.args, buf);
+	cmd.argc = BuildArgs(cmd.argv, buf);
 
 	con->Exec(cmd);
 }
@@ -81,7 +95,6 @@ DWORD WINAPI Worker(void * params) {
 	while (1) {
 		cout << "$>";
 		cin.getline(buf, 200);
-		
 		Dispatch(buf, 200, con);
 	}
 }
