@@ -77,7 +77,7 @@ void Minigame::Draw() {
 		break;
 	}
 
-	Engine()->GetGlDevice()->DrawTextGl(VectorOf(20.0, 20.0), ColorOf(1.0f, 0.0f, 0.0f), "Test!");
+	//Engine()->GetGlDevice()->DrawTextGl(VectorOf(20.0, 20.0), ColorOf(1.0f, 0.0f, 0.0f), "Test!");
 
 	Engine()->GetGlDevice()->EndScene();
 	gameMutex.unlock();
@@ -107,18 +107,18 @@ void Minigame::RunningDraw() {
 void Minigame::NewMap() {
 	Engine()->GetPhysDevice()->Clear();
 
-	//ENTITY * WorldTop = new Wall(VectorOf(Engine()->ScreenX() / 2.0, Engine()->ScreenY() - 4), Engine()->ScreenX() + 8, 16);
-	//ENTITY * WorldBottom = new Wall(VectorOf(Engine()->ScreenX() / 2.0, 4), Engine()->ScreenX() + 8, 16);
-	//ENTITY * WorldLeft = new Wall(VectorOf(4, Engine()->ScreenY() / 2.0), 16, Engine()->ScreenY() + 8);
-	//ENTITY * WorldRight = new Wall(VectorOf(Engine()->ScreenX() - 4, Engine()->ScreenY() / 2.0), 16, Engine()->ScreenY() + 8);
+	ENTITY * WorldTop = new Wall(VectorOf(Engine()->ScreenX() / 2.0, Engine()->ScreenY() - 4), Engine()->ScreenX() + 8, 16);
+	ENTITY * WorldBottom = new Wall(VectorOf(Engine()->ScreenX() / 2.0, 4), Engine()->ScreenX() + 8, 16);
+	ENTITY * WorldLeft = new Wall(VectorOf(4, Engine()->ScreenY() / 2.0), 16, Engine()->ScreenY() + 8);
+	ENTITY * WorldRight = new Wall(VectorOf(Engine()->ScreenX() - 4, Engine()->ScreenY() / 2.0), 16, Engine()->ScreenY() + 8);
 
-	//Engine()->GetPhysDevice()->AddEntity(WorldTop);
-	//Engine()->GetPhysDevice()->AddEntity(WorldBottom);
-	//Engine()->GetPhysDevice()->AddEntity(WorldLeft);
-	//Engine()->GetPhysDevice()->AddEntity(WorldRight);
+	Engine()->GetPhysDevice()->AddEntity(WorldTop);
+	Engine()->GetPhysDevice()->AddEntity(WorldBottom);
+	Engine()->GetPhysDevice()->AddEntity(WorldLeft);
+	Engine()->GetPhysDevice()->AddEntity(WorldRight);
 
-	//ENTITY * Obstruction1 = new Wall(VectorOf(500, 400), 600, 50);
-	//Engine()->GetPhysDevice()->AddEntity(Obstruction1);
+	ENTITY * Obstruction1 = new Wall(VectorOf(500, 400), 600, 50);
+	Engine()->GetPhysDevice()->AddEntity(Obstruction1);
 
 	//ENTITY * Obstruction2 = new Wall(VectorOf(700, 200), 50, 300);
 	//Engine()->GetPhysDevice()->AddEntity(Obstruction2);
