@@ -18,7 +18,6 @@ private:
 
 	int Level;
 	int NumMoves;
-
 	Ball * ball;
 	
 	void WaitingThink();
@@ -29,7 +28,6 @@ private:
 
 public:
 	Minigame();
-
 	void Think();
 	void Draw();
 	void NewMap();
