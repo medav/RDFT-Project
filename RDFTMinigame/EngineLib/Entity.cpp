@@ -181,33 +181,33 @@ void Ball::Collide(ENTITY * other){
 	if (PointInBox(TL, otherBox)){
 		if (PointInBox(TR, otherBox)){
 			Vel.y *= -1;
-			Pos.y = otherBox.y - radius;
+			Pos.y = otherBox.y - box.w;
 			//std::cout << ("Top") << std::endl;
 		}
 		else if (PointInBox(BL, otherBox)){
 			Vel.x *= -1;
-			Pos.x = otherBox.x + otherBox.w + radius;
+			Pos.x = otherBox.x + otherBox.w + box.w;
 			//std::cout << ("Left") << std::endl;
 		}
 		else{
 			if (calcVelCase(Vel) == RIGHTUP || calcVelCase(Vel) == UP){
 				Vel.y *= -1;
-				Pos.y = otherBox.y - radius;
+				Pos.y = otherBox.y - box.w;
 			}
 			// TL corner
 			else if (calcVelCase(Vel) == LEFTUP){
 				if (PointInBox(VectorOf(box.x + 1.0, box.y + box.h), otherBox)){
 					Vel.y *= -1;
-					Pos.y = otherBox.y - radius;
+					Pos.y = otherBox.y - box.w;
 				}
 				else{
 					Vel.x *= -1;
-					Pos.x = otherBox.x + otherBox.w + radius;
+					Pos.x = otherBox.x + otherBox.w + box.w;
 				}
 			}
 			else if (calcVelCase(Vel) == LEFT || calcVelCase(Vel) == LEFTDOWN){
 				Vel.x *= -1;
-				Pos.x = otherBox.x + otherBox.w + radius;
+				Pos.x = otherBox.x + otherBox.w + box.w;
 			}
 				else{
 				//std::cout << ("ydishappen") << std::endl;
@@ -218,28 +218,28 @@ void Ball::Collide(ENTITY * other){
 	else if (PointInBox(TR, otherBox)){
 		if (PointInBox(BR, otherBox)){
 			Vel.x *= -1;
-			Pos.x = otherBox.x - radius;
+			Pos.x = otherBox.x - box.w;
 				//std::cout << ("Right") << std::endl;
 			}
 			// TR corner
 			else{
 				if (calcVelCase(Vel) == RIGHT || calcVelCase(Vel) == RIGHTDOWN){
 					Vel.x *= -1;
-					Pos.x = otherBox.x - radius;
+					Pos.x = otherBox.x - box.w;
 				}
 				else if (calcVelCase(Vel) == RIGHTUP){
 					if (PointInBox(VectorOf(box.x + box.w - 1.0, box.y + box.h), otherBox)){
 						Vel.y *= -1;
-						Pos.y = otherBox.y - radius;
+						Pos.y = otherBox.y - box.w;
 				}
 					else{
 					Vel.x *= -1;
-					Pos.x = otherBox.x - radius;
+					Pos.x = otherBox.x - box.w;
 					}
 				}
 				else if (calcVelCase(Vel) == LEFTUP || calcVelCase(Vel) == UP){
 					Vel.y *= -1;
-					Pos.y = otherBox.y - radius;
+					Pos.y = otherBox.y - box.w;
 				}
 				else{
 					//std::cout << "yudothis" << std::endl;
@@ -250,28 +250,28 @@ void Ball::Collide(ENTITY * other){
 	else if (PointInBox(BR, otherBox)){
 		if (PointInBox(BL, otherBox)){
 			Vel.y *= -1;
-			Pos.y = otherBox.y + otherBox.h + radius;
+			Pos.y = otherBox.y + otherBox.h + box.w;
 			//std::cout << ("Bottom") << std::endl;
 		}
 		else{
 			// BR corner
 			if (calcVelCase(Vel) == RIGHTUP || calcVelCase(Vel) == RIGHT){
 				Vel.x *= -1;
-				Pos.x = otherBox.x - radius;
+				Pos.x = otherBox.x - box.w;
 			}
 			else if (calcVelCase(Vel) == RIGHTDOWN){
 				if (PointInBox(VectorOf(box.x + box.w, box.y + 1.0), otherBox)){
 					Vel.x *= -1;
-					Pos.x = otherBox.x - radius;
+					Pos.x = otherBox.x - box.w;
 				}
 				else{
 					Vel.y *= -1;
-					Pos.y = otherBox.y + otherBox.h + radius;
+					Pos.y = otherBox.y + otherBox.h + box.w;
 				}
 			}
 			else if (calcVelCase(Vel) == DOWN || calcVelCase(Vel) == LEFTDOWN){
 				Vel.y *= -1;
-				Pos.y = otherBox.y + otherBox.h + radius;
+				Pos.y = otherBox.y + otherBox.h + box.w;
 			}
 			else{
 				//std::cout << "nope" << std::endl;
@@ -283,21 +283,21 @@ void Ball::Collide(ENTITY * other){
 	else if (PointInBox(BL, otherBox)){
 		if (calcVelCase(Vel) == LEFTUP || calcVelCase(Vel) == LEFT){
 			Vel.x *= -1;
-			Pos.x = otherBox.x + otherBox.w + radius;
+			Pos.x = otherBox.x + otherBox.w + box.w;
 		}
 		else if (calcVelCase(Vel) == LEFTDOWN){
 			if (PointInBox(VectorOf(box.x, box.y + 1.0), otherBox)){
 				Vel.x *= -1;
-				Pos.x = otherBox.x + otherBox.w + radius;
+				Pos.x = otherBox.x + otherBox.w + box.w;
 			}
 			else{
 				Vel.y *= -1;
-				Pos.y = otherBox.y + otherBox.h + radius;
+				Pos.y = otherBox.y + otherBox.h + box.w;
 			}
 		}
 		else if (calcVelCase(Vel) == DOWN || calcVelCase(Vel) == RIGHTDOWN){
 			Vel.y *= -1;
-			Pos.y = otherBox.y + otherBox.h + radius;
+			Pos.y = otherBox.y + otherBox.h + box.w;
 		}
 		else{
 			//std::cout << "bleh" << std::endl;
