@@ -322,8 +322,8 @@ BOUNDINGBOX Ball::BoundingBox() {
 
 // Draw methods
 void Wall::Draw(PGLENGINE glEngine) {
-	glEngine->DrawRect(this->Pos, VectorOf(this->Width, this->Height), ColorOf(0.95f, 0.95f, 0.95f));
-	//glEngine->DrawTexturedRect(this->Pos, VectorOf(this->Width, this->Height), "wall");
+	//glEngine->DrawRect(this->Pos, VectorOf(this->Width, this->Height), ColorOf(0.95f, 0.95f, 0.95f));
+	glEngine->DrawTexturedRect(this->Pos, VectorOf(this->Width, this->Height), "wall");
 }
 
 void Ball::Draw(PGLENGINE glEngine) {

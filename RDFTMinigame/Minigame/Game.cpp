@@ -16,8 +16,8 @@ Minigame::Minigame() {
 	NewMap();
 	NumMoves = 0;
 	Engine()->GetGlDevice()->LoadTexture("Ball.bmp", "ball");
-	Engine()->GetGlDevice()->LoadTexture("bricks.bmp", "wall");
-	Engine()->GetGlDevice()->LoadTexture("space.bmp", "background");
+	Engine()->GetGlDevice()->LoadTexture("wall.bmp", "wall");
+	Engine()->GetGlDevice()->LoadTexture("bg2.bmp", "background");
 }
 
 
