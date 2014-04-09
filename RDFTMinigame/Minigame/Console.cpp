@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <windows.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -54,25 +56,26 @@ void SetupConsole() {
 
 }
 
-int BuildArgs(char **args, char * buf) {
+int BuildArgs(char *args[], char * buf) {
 	char arg[50];
 	int ct = 0;
 
-	while (sscanf(buf, "%s ", arg) == 1 && ct < 20) {
+	char * start = buf;
+	int len = strlen(buf);
+
+	while ((buf - start) < len && sscanf(buf, "%s ", arg) == 1 && ct < 20) {
 		buf += (strlen(arg) + 1);
 		args[ct] = new char[50];
-		strcpy(args[ct], arg);
+		strcpy_s(args[ct], 50, arg);
 		ct++;
 	}
 
-	return ct + 1;
+	return ct;
 }
 
 void Dispatch(char * buf, int size, Console * con) {
 	COMMAND cmd;
-	if (strstr(buf, "set") != 0)
-		cmd.cty = CMDTYPE::SET;
-	else if (strstr(buf, "env") != 0)
+	if (strstr(buf, "env") != 0)
 		cmd.cty = CMDTYPE::ENV;
 	else if (strstr(buf, "texture") != 0)
 		cmd.cty = CMDTYPE::TEXTURE;
@@ -109,13 +112,18 @@ void Console::Start() {
 }
 
 void Console::Exec(COMMAND cmd) {
+
 	if (cmd.cty == CMDTYPE::NEWMAP) {
 		MG()->gameMutex.lock();
 		MG()->NewMap();
 		MG()->gameMutex.unlock();
 	}
 	else if (cmd.cty == CMDTYPE::TEXTURE) {
-		Engine()->GetGlDevice()->PrintTextures();
+		if (cmd.argc <= 2)
+			Engine()->GetGlDevice()->PrintTextures();
+		else {
+		
+		}
 	}
 }
 
