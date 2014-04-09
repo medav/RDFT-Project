@@ -65,7 +65,7 @@ void Minigame::Draw() {
 	gameMutex.lock();
 	Engine()->GetGlDevice()->BeginScene();
 	Engine()->GetGlDevice()->DrawTexturedRect(VectorOf(Engine()->ScreenX() / 2, Engine()->ScreenY() / 2), VectorOf(Engine()->ScreenX(), Engine()->ScreenY()), "background");
-	Engine()->GetGlDevice()->DrawTextGl("Level "<<Level);
+	//Engine()->GetGlDevice()->DrawTextGl("Level "<<Level);
 	switch (GameState) {
 	case Minigame::WAITING:
 		WaitingDraw();
