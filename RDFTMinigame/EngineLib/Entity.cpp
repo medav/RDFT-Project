@@ -320,6 +320,10 @@ BOUNDINGBOX Ball::BoundingBox() {
 	return box;
 }
 
+void Hole::Draw(PGLENGINE glEngine){
+	glEngine->DrawTexturedRect(this->Pos, VectorOf(100, 100), "hole");
+}
+
 // Draw methods
 void Wall::Draw(PGLENGINE glEngine) {
 	//glEngine->DrawRect(this->Pos, VectorOf(this->Width, this->Height), ColorOf(0.95f, 0.95f, 0.95f));
