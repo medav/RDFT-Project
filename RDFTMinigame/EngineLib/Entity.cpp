@@ -308,7 +308,6 @@ void Ball::Collide(ENTITY * other){
 		//std::cout << "Everything failed" << std::endl;
 	}
 
-	Think();
 }
 
 // Bounding Box Methods

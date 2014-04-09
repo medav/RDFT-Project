@@ -1,6 +1,7 @@
 //#include <stdio.h>
 //#include <string.h>
 #include "Game.h"
+#include <iostream>
 
 Minigame * MG() {
 	static Minigame * mg = new Minigame();
@@ -17,7 +18,7 @@ Minigame::Minigame() {
 
 	SetupEnv();
 	NewMap();
-	
+
 	Engine()->GetGlDevice()->LoadTexture("Ball.bmp", "ball");
 	Engine()->GetGlDevice()->LoadTexture("wall.bmp", "wall");
 	Engine()->GetGlDevice()->LoadTexture("space.bmp", "background");
