@@ -80,6 +80,8 @@ public:
 	int GetInt(const char * varname);
 
 	void SetEnv(const char * varname, ENVVAR * ev);
+	void PrintEnv();
+	void PrintEnv(const char * name);
 
 	double ScreenX() {
 		RECT r;
