@@ -18,6 +18,7 @@ private:
 
 	int Level;
 	int NumMoves;
+	int Difficulty;
 	Ball * ball;
 	
 	void WaitingThink();
