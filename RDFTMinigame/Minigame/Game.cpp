@@ -14,10 +14,10 @@ Minigame::Minigame() {
 	lmState = 0;
 
 	NewMap();
-
+	NumMoves = 0;
 	Engine()->GetGlDevice()->LoadTexture("Ball.bmp", "ball");
-	Engine()->GetGlDevice()->LoadTexture("bricks.bmp", "wall");
-	Engine()->GetGlDevice()->LoadTexture("space.bmp", "background");
+	Engine()->GetGlDevice()->LoadTexture("wall.bmp", "wall");
+	Engine()->GetGlDevice()->LoadTexture("bg2.bmp", "background");
 }
 
 
@@ -49,6 +49,7 @@ void Minigame::WaitingThink() {
 		GLVECTOR2 vec = Engine()->GetLmDevice()->LMGetVector();
 		ball->ApplyVelocity(-vec.x / 4, -vec.y / 4);
 		SetState(GAMESTATE::RUNNING);
+		NumMoves++;
 		lmState = 0;
 		Engine()->GetLmDevice()->Reset();
 	}
@@ -56,18 +57,15 @@ void Minigame::WaitingThink() {
 
 void Minigame::RunningThink() {
 	Engine()->GetPhysDevice()->Think();
-
 	if (ball->isStopped())
 		SetState(GAMESTATE::WAITING);
-
 }
 
 void Minigame::Draw() {
 	gameMutex.lock();
 	Engine()->GetGlDevice()->BeginScene();
-
 	Engine()->GetGlDevice()->DrawTexturedRect(VectorOf(Engine()->ScreenX() / 2, Engine()->ScreenY() / 2), VectorOf(Engine()->ScreenX(), Engine()->ScreenY()), "background");
-
+	//Engine()->GetGlDevice()->DrawTextGl("Level "<<Level);
 	switch (GameState) {
 	case Minigame::WAITING:
 		WaitingDraw();
