@@ -135,9 +135,8 @@ void Console::Exec(COMMAND cmd) {
 
 			Engine()->SetEnv(cmd.argv[2], ev);
 		}
-		else {
-
-		}
+		else
+			Engine()->PrintEnv();
 	}
 }
 

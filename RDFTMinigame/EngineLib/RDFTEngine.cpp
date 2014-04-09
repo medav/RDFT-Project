@@ -76,7 +76,7 @@ void RDFTENGINE::SetEnv(const char * varname, ENVVAR * ev) {
 
 void RDFTENGINE::PrintEnv() {
 	env_mutex.lock();
-	std::cout << "Currently loaded textures:\n";
+	std::cout << "Environment:\n";
 
 	std::map<std::string, ENVVAR *>::iterator it = env.begin();
 

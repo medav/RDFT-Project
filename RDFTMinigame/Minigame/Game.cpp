@@ -15,6 +15,7 @@ Minigame::Minigame() {
 	lmState = 0;
 	Difficulty = 1;
 
+	SetupEnv();
 	NewMap();
 	
 	Engine()->GetGlDevice()->LoadTexture("Ball.bmp", "ball");
