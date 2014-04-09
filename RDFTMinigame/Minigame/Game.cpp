@@ -7,6 +7,7 @@ Minigame * MG() {
 	return mg;
 }
 
+void SetupEnv();
 
 Minigame::Minigame() {
 	GameState = Minigame::WAITING;
@@ -19,6 +20,23 @@ Minigame::Minigame() {
 	Engine()->GetGlDevice()->LoadTexture("Ball.bmp", "ball");
 	Engine()->GetGlDevice()->LoadTexture("wall.bmp", "wall");
 	Engine()->GetGlDevice()->LoadTexture("space.bmp", "background");
+}
+
+void SetEnv(const char * name, const char * value) {
+	ENVVAR * ev = new ENVVAR;
+	strcpy(ev->value, value);
+
+	ev->numset = false;
+	ev->boolset = false;
+
+	Engine()->SetEnv(name, ev);
+}
+
+void SetupEnv() {
+	SetEnv("friction", ".03");
+	SetEnv("ball_tex", "ball");
+	SetEnv("bg_tex", "background");
+	SetEnv("time_mul", "1");
 }
 
 
@@ -79,8 +97,8 @@ void Minigame::Draw() {
 	}
 
 	char buffer[200];
-	sprintf(buffer, "Difficulty : %d      Move : %d      Level : %d", Difficulty, NumMoves, Level);
-	Engine()->GetGlDevice()->DrawTextGl(VectorOf(Engine()->ScreenX() - 400, 8), ColorOf(0.0f, 0.0f, 0.0f), buffer);
+	sprintf(buffer, "Difficulty : %d    |    Move : %d    |    Level : %d", Difficulty, NumMoves, Level);
+	Engine()->GetGlDevice()->DrawTextGl(VectorOf(Engine()->ScreenX() - 300, 6), ColorOf(0.0f, 0.0f, 0.0f), buffer);
 
 	Engine()->GetGlDevice()->EndScene();
 	gameMutex.unlock();
