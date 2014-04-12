@@ -85,7 +85,7 @@ bool PointInBox(GLVECTOR2 pt, BOUNDINGBOX box) {
 	return false;
 }
 
-// Returns true if this entity has a point in the other entity
+/* Returns true if this entity has a point in the other entity
 bool entityInBox(BOUNDINGBOX thisBox, BOUNDINGBOX otherBox){
 	GLVECTOR2 TL = VectorOf(thisBox.x, thisBox.y + thisBox.h);
 	GLVECTOR2 TR = VectorOf(thisBox.x + thisBox.w, thisBox.y + thisBox.h);
@@ -99,6 +99,7 @@ bool entityInBox(BOUNDINGBOX thisBox, BOUNDINGBOX otherBox){
 
 	return false;
 }
+*/
 
 velDir calcVelCase(GLVECTOR2 vel){
 	double testAngle = atan2(vel.y, vel.x);
@@ -166,8 +167,6 @@ void Ball::Collide(ENTITY * other){
 	// Bottom right corner of this box
 	GLVECTOR2 BR = VectorOf(box.x + box.w, box.y);
 
-
-	// double testAngle = atan2(Vel.y, Vel.x);
 	/*
 	if (HorizontalCollision(box, otherBox)) {
 		Vel.y *= (-1.0 * cc);
@@ -179,56 +178,68 @@ void Ball::Collide(ENTITY * other){
 	Think();
 	*/
 
-	if (timeInOther == 0){
 	if (PointInBox(TL, otherBox)){
 		if (PointInBox(TR, otherBox)){
 			Vel.y *= -1;
-				//std::cout << ("Top") << std::endl;
+			Pos.y = otherBox.y - box.w;
+			//std::cout << ("Top") << std::endl;
 		}
 		else if (PointInBox(BL, otherBox)){
 			Vel.x *= -1;
-				//std::cout << ("Left") << std::endl;
+			Pos.x = otherBox.x + otherBox.w + box.w;
+			//std::cout << ("Left") << std::endl;
 		}
 		else{
-				if (calcVelCase(Vel) == RIGHTUP || calcVelCase(Vel) == UP){
+			if (calcVelCase(Vel) == RIGHTUP || calcVelCase(Vel) == UP){
+				Vel.y *= -1;
+				Pos.y = otherBox.y - box.w;
+			}
+			// TL corner
+			else if (calcVelCase(Vel) == LEFTUP){
+				if (PointInBox(VectorOf(box.x + 1.0, box.y + box.h), otherBox)){
 					Vel.y *= -1;
-				}
-				else if (calcVelCase(Vel) == LEFTUP){
-					if (PointInBox(VectorOf(box.x + 1.0, box.y + box.h), otherBox)){
-						Vel.y *= -1;
-					}
-					else{
-			Vel.x *= -1;
-					}
-				}
-				else if (calcVelCase(Vel) == LEFT || calcVelCase(Vel) == LEFTDOWN){
-					Vel.x *= -1;
+					Pos.y = otherBox.y - box.w;
 				}
 				else{
-					//std::cout << ("ydishappen") << std::endl;
+					Vel.x *= -1;
+					Pos.x = otherBox.x + otherBox.w + box.w;
 				}
-				//std::cout << ("Top Left") << std::endl;
+			}
+			else if (calcVelCase(Vel) == LEFT || calcVelCase(Vel) == LEFTDOWN){
+				Vel.x *= -1;
+				Pos.x = otherBox.x + otherBox.w + box.w;
+			}
+				else{
+				//std::cout << ("ydishappen") << std::endl;
+				}
+			//std::cout << ("Top Left") << std::endl;
 		}
 	}
 	else if (PointInBox(TR, otherBox)){
 		if (PointInBox(BR, otherBox)){
 			Vel.x *= -1;
+			Pos.x = otherBox.x - box.w;
 				//std::cout << ("Right") << std::endl;
 			}
+			// TR corner
 			else{
 				if (calcVelCase(Vel) == RIGHT || calcVelCase(Vel) == RIGHTDOWN){
 					Vel.x *= -1;
+					Pos.x = otherBox.x - box.w;
 				}
 				else if (calcVelCase(Vel) == RIGHTUP){
 					if (PointInBox(VectorOf(box.x + box.w - 1.0, box.y + box.h), otherBox)){
 						Vel.y *= -1;
-		}
-		else{
-			Vel.x *= -1;
+						Pos.y = otherBox.y - box.w;
+				}
+					else{
+					Vel.x *= -1;
+					Pos.x = otherBox.x - box.w;
 					}
 				}
 				else if (calcVelCase(Vel) == LEFTUP || calcVelCase(Vel) == UP){
-			Vel.y *= -1;
+					Vel.y *= -1;
+					Pos.y = otherBox.y - box.w;
 				}
 				else{
 					//std::cout << "yudothis" << std::endl;
@@ -237,66 +248,66 @@ void Ball::Collide(ENTITY * other){
 		}
 	}
 	else if (PointInBox(BR, otherBox)){
-		if (PointInBox(BL, otherBox))
-		{
+		if (PointInBox(BL, otherBox)){
 			Vel.y *= -1;
-				//std::cout << ("Bottom") << std::endl;
+			Pos.y = otherBox.y + otherBox.h + box.w;
+			//std::cout << ("Bottom") << std::endl;
 		}
 		else{
-				if (calcVelCase(Vel) == RIGHTUP || calcVelCase(Vel) == RIGHT){
-					Vel.x *= -1;
-				}
-				else if (calcVelCase(Vel) == RIGHTDOWN){
-					if (PointInBox(VectorOf(box.x + box.w, box.y + 1.0), otherBox)){
-			Vel.x *= -1;
-					}
-					else{
-			Vel.y *= -1;
-					}
-		}
-				else if (calcVelCase(Vel) == DOWN || calcVelCase(Vel) == LEFTDOWN){
-					Vel.y *= -1;
-	}
-	else{
-					//std::cout << "nope" << std::endl;
-				}
-				//std::cout << ("Bottom Right") << std::endl;
-			}
-		}
-		else if (PointInBox(BL, otherBox)){
-			if (calcVelCase(Vel) == LEFTUP || calcVelCase(Vel) == LEFT){
+			// BR corner
+			if (calcVelCase(Vel) == RIGHTUP || calcVelCase(Vel) == RIGHT){
 				Vel.x *= -1;
+				Pos.x = otherBox.x - box.w;
 			}
-			else if (calcVelCase(Vel) == LEFTDOWN){
-				if (PointInBox(VectorOf(box.x, box.y + 1.0), otherBox)){
-		Vel.x *= -1;
+			else if (calcVelCase(Vel) == RIGHTDOWN){
+				if (PointInBox(VectorOf(box.x + box.w, box.y + 1.0), otherBox)){
+					Vel.x *= -1;
+					Pos.x = otherBox.x - box.w;
 				}
 				else{
 					Vel.y *= -1;
+					Pos.y = otherBox.y + otherBox.h + box.w;
 				}
 			}
-			else if (calcVelCase(Vel) == DOWN || calcVelCase(Vel) == RIGHTDOWN){
-		Vel.y *= -1;
+			else if (calcVelCase(Vel) == DOWN || calcVelCase(Vel) == LEFTDOWN){
+				Vel.y *= -1;
+				Pos.y = otherBox.y + otherBox.h + box.w;
 			}
 			else{
-				//std::cout << "bleh" << std::endl;
+				//std::cout << "nope" << std::endl;
 			}
-			//std::cout << ("Bottom Left") << std::endl;
+			//std::cout << ("Bottom Right") << std::endl;
+		}
+	}
+	// BL corner
+	else if (PointInBox(BL, otherBox)){
+		if (calcVelCase(Vel) == LEFTUP || calcVelCase(Vel) == LEFT){
+			Vel.x *= -1;
+			Pos.x = otherBox.x + otherBox.w + box.w;
+		}
+		else if (calcVelCase(Vel) == LEFTDOWN){
+			if (PointInBox(VectorOf(box.x, box.y + 1.0), otherBox)){
+				Vel.x *= -1;
+				Pos.x = otherBox.x + otherBox.w + box.w;
+			}
+			else{
+				Vel.y *= -1;
+				Pos.y = otherBox.y + otherBox.h + box.w;
+			}
+		}
+		else if (calcVelCase(Vel) == DOWN || calcVelCase(Vel) == RIGHTDOWN){
+			Vel.y *= -1;
+			Pos.y = otherBox.y + otherBox.h + box.w;
 		}
 		else{
-			//std::cout << "Everything failed" << std::endl;
+			//std::cout << "bleh" << std::endl;
 		}
-		std::cout << "Collision" << std::endl;
-		timeInOther++;
+		//std::cout << ("Bottom Left") << std::endl;
+	}
+	else{
+		//std::cout << "Everything failed" << std::endl;
 	}
 
-	if (!entityInBox(box, otherBox)){
-		timeInOther = 0;
-		std::cout << "timeInOtherReset" << std::endl;
-		std::cout << timeInOther << std::endl;
-	}
-	std::cout << "Existence status: " << entityInBox(box, otherBox) << std::endl;
-	Think();
 }
 
 // Bounding Box Methods
@@ -318,6 +329,10 @@ BOUNDINGBOX Ball::BoundingBox() {
 	box.h = radius;
 
 	return box;
+}
+
+void Hole::Draw(PGLENGINE glEngine){
+	glEngine->DrawTexturedRect(this->Pos, VectorOf(100, 100), "hole");
 }
 
 // Draw methods

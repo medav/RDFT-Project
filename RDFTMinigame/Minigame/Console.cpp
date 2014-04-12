@@ -125,6 +125,19 @@ void Console::Exec(COMMAND cmd) {
 		
 		}
 	}
+	else if (cmd.cty == CMDTYPE::ENV) {
+		ENVVAR * ev;
+		if (cmd.argc == 4) {
+			ev = new ENVVAR;
+			strcpy(ev->value, cmd.argv[3]);
+			ev->boolset = false;
+			ev->numset = false;
+
+			Engine()->SetEnv(cmd.argv[2], ev);
+		}
+		else
+			Engine()->PrintEnv();
+	}
 }
 
 void Console::Stop() {

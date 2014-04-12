@@ -1,28 +1,49 @@
 //#include <stdio.h>
 //#include <string.h>
 #include "Game.h"
+#include <iostream>
 
 Minigame * MG() {
 	static Minigame * mg = new Minigame();
 	return mg;
 }
 
+void SetupEnv();
 
 Minigame::Minigame() {
 	GameState = Minigame::WAITING;
 	Level = 0;
 	lmState = 0;
+	Difficulty = 1;
 
+	SetupEnv();
 	NewMap();
-	NumMoves = 0;
+
 	Engine()->GetGlDevice()->LoadTexture("Ball.bmp", "ball");
 	Engine()->GetGlDevice()->LoadTexture("wall.bmp", "wall");
-	Engine()->GetGlDevice()->LoadTexture("bg2.bmp", "background");
+	Engine()->GetGlDevice()->LoadTexture("space.bmp", "background");
+}
+
+void SetEnv(const char * name, const char * value) {
+	ENVVAR * ev = new ENVVAR;
+	strcpy(ev->value, value);
+
+	ev->numset = false;
+	ev->boolset = false;
+
+	Engine()->SetEnv(name, ev);
+}
+
+void SetupEnv() {
+	SetEnv("friction", ".03");
+	SetEnv("ball_tex", "ball");
+	SetEnv("bg_tex", "background");
+	SetEnv("time_mul", "1");
 }
 
 
 void Minigame::Resize() {
-
+	this->NewMap();
 }
 
 void Minigame::Think() {
@@ -65,7 +86,7 @@ void Minigame::Draw() {
 	gameMutex.lock();
 	Engine()->GetGlDevice()->BeginScene();
 	Engine()->GetGlDevice()->DrawTexturedRect(VectorOf(Engine()->ScreenX() / 2, Engine()->ScreenY() / 2), VectorOf(Engine()->ScreenX(), Engine()->ScreenY()), "background");
-	//Engine()->GetGlDevice()->DrawTextGl("Level "<<Level);
+
 	switch (GameState) {
 	case Minigame::WAITING:
 		WaitingDraw();
@@ -77,7 +98,9 @@ void Minigame::Draw() {
 		break;
 	}
 
-	//Engine()->GetGlDevice()->DrawTextGl(VectorOf(20.0, 20.0), ColorOf(1.0f, 0.0f, 0.0f), "Test!");
+	char buffer[200];
+	sprintf(buffer, "Difficulty : %d    |    Move : %d    |    Level : %d", Difficulty, NumMoves, Level);
+	Engine()->GetGlDevice()->DrawTextGl(VectorOf(Engine()->ScreenX() - 300, 6), ColorOf(0.0f, 0.0f, 0.0f), buffer);
 
 	Engine()->GetGlDevice()->EndScene();
 	gameMutex.unlock();
@@ -105,10 +128,15 @@ void Minigame::RunningDraw() {
 /************************************************************/
 
 void Minigame::NewMap() {
+	if (NumMoves > 0)
+		Difficulty++;
+
+	NumMoves = 0;
+
 	Engine()->GetPhysDevice()->Clear();
 
 	ENTITY * WorldTop = new Wall(VectorOf(Engine()->ScreenX() / 2.0, Engine()->ScreenY() - 4), Engine()->ScreenX() + 8, 16);
-	ENTITY * WorldBottom = new Wall(VectorOf(Engine()->ScreenX() / 2.0, 4), Engine()->ScreenX() + 8, 16);
+	ENTITY * WorldBottom = new Wall(VectorOf(Engine()->ScreenX() / 2.0, 4), Engine()->ScreenX() + 8, 32);
 	ENTITY * WorldLeft = new Wall(VectorOf(4, Engine()->ScreenY() / 2.0), 16, Engine()->ScreenY() + 8);
 	ENTITY * WorldRight = new Wall(VectorOf(Engine()->ScreenX() - 4, Engine()->ScreenY() / 2.0), 16, Engine()->ScreenY() + 8);
 
@@ -117,13 +145,15 @@ void Minigame::NewMap() {
 	Engine()->GetPhysDevice()->AddEntity(WorldLeft);
 	Engine()->GetPhysDevice()->AddEntity(WorldRight);
 
-	ENTITY * Obstruction1 = new Wall(VectorOf(500, 400), 600, 50);
-	Engine()->GetPhysDevice()->AddEntity(Obstruction1);
+	int i;
 
-	//ENTITY * Obstruction2 = new Wall(VectorOf(700, 200), 50, 300);
-	//Engine()->GetPhysDevice()->AddEntity(Obstruction2);
+	ENTITY * Obstruction;
+	
+	for (i = 0; i < Difficulty; i++) {
+		Obstruction = new Wall(VectorOf(rand() % (int)Engine()->ScreenX(), rand() % (int)Engine()->ScreenY()), 100, 100);
+		Engine()->GetPhysDevice()->AddEntity(Obstruction);
+	}
 
-	ball = new Ball(VectorOf(50, 60));
-
+	ball = new Ball(VectorOf(50, 80));
 	Engine()->GetPhysDevice()->AddEntity(ball);
 }

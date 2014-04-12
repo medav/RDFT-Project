@@ -101,7 +101,7 @@ public:
 	Ball(GLVECTOR2 Pos) : ENTITY(Pos) {
 		Vel.x = 0;
 		Vel.y = 0;
-		radius = 70;
+		radius = 45;
 	}
 
 	virtual void Think();

@@ -1,4 +1,5 @@
 #include "RDFTEngine.h"
+#include <iostream>
 #include <string.h>
 #include <stdio.h>
 
@@ -71,6 +72,27 @@ void RDFTENGINE::SetEnv(const char * varname, ENVVAR * ev) {
 
 	env[str] = ev;
 	env_mutex.unlock();
+}
+
+void RDFTENGINE::PrintEnv() {
+	env_mutex.lock();
+	std::cout << "Environment:\n";
+
+	std::map<std::string, ENVVAR *>::iterator it = env.begin();
+
+	while (it != env.end()) {
+		if (it->second)
+		std::cout << it->first.c_str() << " = " << it->second->value << std::endl;
+		it++;
+	}
+
+	env_mutex.unlock();
+}
+
+
+void RDFTENGINE::PrintEnv(const char * name) {
+	ENVVAR * ev = GetEnv(name);
+	std::cout << name << " = " << ev->value << std::endl;
 }
 
 RDFTENGINE::~RDFTENGINE() {
