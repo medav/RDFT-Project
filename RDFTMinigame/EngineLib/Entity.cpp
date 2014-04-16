@@ -32,6 +32,7 @@ void Ball::Think() {
 	else
 		Vel.y = 0;
 
+	// Once velocity is small enough, kill it off completely
 	if ((Vel.x * Vel.x + Vel.y * Vel.y) < 0.001) {
 		Vel.x = 0;
 		Vel.y = 0;

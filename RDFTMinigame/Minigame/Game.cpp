@@ -154,6 +154,7 @@ void Minigame::NewMap() {
 	for (i = 0; i < Difficulty; i++) {
 		BoxX = rand() % (int)Engine()->ScreenX();
 		BoxY = rand() % (int)Engine()->ScreenY();
+
 		if (BoxX > Boundry && BoxY > Boundry || BoxX < Engine()->ScreenX() - Boundry && BoxY < Engine()->ScreenY() - Boundry){
 			Obstruction = new Wall(VectorOf(rand() % (int)Engine()->ScreenX(), rand() % (int)Engine()->ScreenY()), sqrt(BoxSize), sqrt(BoxSize));
 			Engine()->GetPhysDevice()->AddEntity(Obstruction);
