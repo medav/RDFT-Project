@@ -166,6 +166,14 @@ void Ball::Collide(ENTITY * other){
 	GLVECTOR2 BL = VectorOf(box.x, box.y);
 	// Bottom right corner of this box
 	GLVECTOR2 BR = VectorOf(box.x + box.w, box.y);
+	// Top left corner of other box
+	GLVECTOR2 OTL = VectorOf(otherBox.x, otherBox.y + otherBox.h);
+	// Top right corner of other box
+	GLVECTOR2 OTR = VectorOf(otherBox.x + otherBox.w, otherBox.y + otherBox.h);
+	// Bottom left corner of other box
+	GLVECTOR2 OBL = VectorOf(otherBox.x, otherBox.y);
+	// Bottom right corner of other box
+	GLVECTOR2 OBR = VectorOf(otherBox.x + otherBox.w, otherBox.y);
 
 	/*
 	if (HorizontalCollision(box, otherBox)) {
@@ -210,7 +218,7 @@ void Ball::Collide(ENTITY * other){
 				Pos.x = otherBox.x + otherBox.w + box.w;
 			}
 				else{
-				//std::cout << ("ydishappen") << std::endl;
+				std::cout << ("TL ydishappen") << std::endl;
 				}
 			//std::cout << ("Top Left") << std::endl;
 		}
@@ -242,7 +250,7 @@ void Ball::Collide(ENTITY * other){
 					Pos.y = otherBox.y - box.w;
 				}
 				else{
-					//std::cout << "yudothis" << std::endl;
+					std::cout << "TR yudothis" << std::endl;
 				}
 				//std::cout << ("Top Right") << std::endl;
 		}
@@ -274,7 +282,7 @@ void Ball::Collide(ENTITY * other){
 				Pos.y = otherBox.y + otherBox.h + box.w;
 			}
 			else{
-				//std::cout << "nope" << std::endl;
+				std::cout << "BR nope" << std::endl;
 			}
 			//std::cout << ("Bottom Right") << std::endl;
 		}
@@ -300,12 +308,32 @@ void Ball::Collide(ENTITY * other){
 			Pos.y = otherBox.y + otherBox.h + box.w;
 		}
 		else{
-			//std::cout << "bleh" << std::endl;
+			std::cout << "BL bleh" << std::endl;
 		}
 		//std::cout << ("Bottom Left") << std::endl;
 	}
+	// If ball top collides with wall between its corners
+	else if (PointInBox(OBL, box) && PointInBox(OBR, box)){
+		Vel.y *= -1;
+		Pos.y = otherBox.y - box.w;
+	}
+	// If ball right collides with wall between its corners
+	else if (PointInBox(OTR, box) && PointInBox(OBR, box)){
+		Vel.x *= -1;
+		Pos.x = otherBox.x - box.w;
+	}
+	// If ball bottom collides with wall between its corners
+	else if (PointInBox(OTL, box) && PointInBox(OTR, box)){
+		Vel.y *= -1;
+		Pos.y = otherBox.y + otherBox.h + box.w;
+	}
+	// If ball left collides with wall between its corners
+	else if (PointInBox(OTR, box) && PointInBox(OBR, box)){
+		Vel.x *= -1;
+		Pos.x = otherBox.x + otherBox.w + box.w;
+	}
 	else{
-		//std::cout << "Everything failed" << std::endl;
+		Vel.y *= -1;
 	}
 
 }
