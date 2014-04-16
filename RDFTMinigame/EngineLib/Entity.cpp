@@ -4,9 +4,6 @@
 #include "RDFTEngine.h"
 #include "EngineCommon.h"
 
-#define PI 3.1415926
-enum velDir{ RIGHT, RIGHTUP, UP, LEFTUP, LEFT, LEFTDOWN, DOWN, RIGHTDOWN };
-
 void Ball::Think() {
 	if (Vel.x == 0 && Vel.y == 0)
 		return;
@@ -24,20 +21,16 @@ void Ball::Think() {
 	double frictionAccY = (sin(velAngle) * frictionMag);
 
 	// If the computed friction component is greater than the current speed, don't do it
-	if (abs(frictionAccX) <= abs(Vel.x)){
+	if (abs(frictionAccX) <= abs(Vel.x))
 		Vel.x -= (frictionAccX * dT);
-		}
-	else{
+	else
 		Vel.x = 0;
-	}
 
 	// Same as prev but for y
-	if (abs(frictionAccY) <= abs(Vel.y)){
+	if (abs(frictionAccY) <= abs(Vel.y))
 		Vel.y -= (frictionAccY * dT);
-	}
-	else{
+	else
 		Vel.y = 0;
-	}
 
 	if ((Vel.x * Vel.x + Vel.y * Vel.y) < 0.001) {
 		Vel.x = 0;
@@ -76,274 +69,12 @@ bool Ball::isStopped() {
 	return false;
 }
 
-// Returns true if GLVECTOR2 pt is inside BOUNDINGXBOX box, false otherwise
-bool PointInBox(GLVECTOR2 pt, BOUNDINGBOX box) {
-	if (pt.x <= box.x + box.w &&
-		pt.x >= box.x &&
-		pt.y <= box.y + box.h &&
-		pt.y >= box.y)
-		return true;
-
-	return false;
-}
-
-/* Returns true if this entity has a point in the other entity
-bool entityInBox(BOUNDINGBOX thisBox, BOUNDINGBOX otherBox){
-	GLVECTOR2 TL = VectorOf(thisBox.x, thisBox.y + thisBox.h);
-	GLVECTOR2 TR = VectorOf(thisBox.x + thisBox.w, thisBox.y + thisBox.h);
-	GLVECTOR2 BL = VectorOf(thisBox.x, thisBox.y);
-	GLVECTOR2 BR = VectorOf(thisBox.x + thisBox.w, thisBox.y);
-	if (PointInBox(TL, otherBox) ||
-		PointInBox(TR, otherBox) ||
-		PointInBox(BL, otherBox) ||
-		PointInBox(BR, otherBox))
-		return true;
-
-	return false;
-}
-*/
-
-velDir calcVelCase(GLVECTOR2 vel){
-	double testAngle = atan2(vel.y, vel.x);
-	if (testAngle == 0){
-		return RIGHT;
-	}
-	else if (testAngle > 0 && testAngle < (PI / 2)){
-		return RIGHTUP;
-	}
-	else if (testAngle == (PI / 2)){
-		return UP;
-	}
-	else if (testAngle > (PI / 2) && testAngle < PI){
-		return LEFTUP;
-	}
-	else if (testAngle == PI){
-		return LEFT;
-	}
-	else if (testAngle > PI && testAngle < (3 * PI) / 2){
-		return LEFTDOWN;
-	}
-	else if (testAngle == (3 * PI) / 2){
-		return DOWN;
-	}
-	else{
-		return RIGHTDOWN;
-	}
-}
-
-/* Unused
-bool HorizontalCollision(BOUNDINGBOX box1, BOUNDINGBOX box2) {
-	// Top left corner of this box
-	GLVECTOR2 TL1 = VectorOf(box1.x, box1.y + box1.h);
-	// Top left corner of other box
-	GLVECTOR2 TL2 = VectorOf(box2.x, box2.y + box2.h);
-	// Bottom right corner of this box
-	GLVECTOR2 BR1 = VectorOf(box1.x + box1.w, box1.y);
-	// Bottom right corner of other box
-	GLVECTOR2 BR2 = VectorOf(box2.x + box2.w, box2.y);
-
-	if (TL1.y >= BR2.y && BR1.y <= BR2.y &&
-		( (TL1.x >= TL2.x && TL1.x <= BR2.x) || 
-		  (BR1.x <= BR2.x && BR1.x >= TL2.x) ) )
-		return true;
-
-	if (BR1.y <= TL2.y && TL1.y >= TL2.y &&
-		((TL1.x >= TL2.x && TL1.x <= BR2.x) ||
-		(BR1.x <= BR2.x && BR1.x >= TL2.x)))
-		return true;
-
-	return false;
-}
-*/
 
 void Ball::Collide(ENTITY * other){
-	BOUNDINGBOX box = BoundingBox();
-	BOUNDINGBOX otherBox = other->BoundingBox();
+	GLVECTOR2 tVel = Engine()->GetPhysDevice()->DoCollision(this, other);
 
-	// Top left corner of this box
-	GLVECTOR2 TL = VectorOf(box.x, box.y + box.h);
-	// Top right corner of this box
-	GLVECTOR2 TR = VectorOf(box.x + box.w, box.y + box.h);
-	// Bottom left corner of this box
-	GLVECTOR2 BL = VectorOf(box.x, box.y);
-	// Bottom right corner of this box
-	GLVECTOR2 BR = VectorOf(box.x + box.w, box.y);
-	// Top left corner of other box
-	GLVECTOR2 OTL = VectorOf(otherBox.x, otherBox.y + otherBox.h);
-	// Top right corner of other box
-	GLVECTOR2 OTR = VectorOf(otherBox.x + otherBox.w, otherBox.y + otherBox.h);
-	// Bottom left corner of other box
-	GLVECTOR2 OBL = VectorOf(otherBox.x, otherBox.y);
-	// Bottom right corner of other box
-	GLVECTOR2 OBR = VectorOf(otherBox.x + otherBox.w, otherBox.y);
-
-	int reposVal = 25;
-	/*
-	if (HorizontalCollision(box, otherBox)) {
-		Vel.y *= (-1.0 * cc);
-	} 
-	else {
-		Vel.x *= (-1.0 * cc);
-	}
-
-	Think();
-	*/
-
-	if (PointInBox(TL, otherBox)){
-		if (PointInBox(TR, otherBox)){
-			Vel.y *= -1;
-			Pos.y = otherBox.y - reposVal;
-			//std::cout << ("Top") << std::endl;
-		}
-		else if (PointInBox(BL, otherBox)){
-			Vel.x *= -1;
-			Pos.x = otherBox.x + otherBox.w + reposVal;
-			//std::cout << ("Left") << std::endl;
-		}
-		else{
-			if (calcVelCase(Vel) == RIGHTUP || calcVelCase(Vel) == UP){
-				Vel.y *= -1;
-				Pos.y = otherBox.y - reposVal;
-			}
-			// TL corner
-			else if (calcVelCase(Vel) == LEFTUP){
-				if (PointInBox(VectorOf(box.x + 20, box.y + box.h), otherBox)){
-					Vel.y *= -1;
-					Pos.y = otherBox.y - reposVal;
-				}
-				else{
-					Vel.x *= -1;
-					Pos.x = otherBox.x + otherBox.w + reposVal;
-				}
-			}
-			else if (calcVelCase(Vel) == LEFT || calcVelCase(Vel) == LEFTDOWN){
-				Vel.x *= -1;
-				Pos.x = otherBox.x + otherBox.w + reposVal;
-			}
-			else{
-			std::cout << ("TL ydishappen") << std::endl;
-			}
-			//std::cout << ("Top Left") << std::endl;
-		}
-	}
-	else if (PointInBox(TR, otherBox)){
-		if (PointInBox(BR, otherBox)){
-			Vel.x *= -1;
-			Pos.x = otherBox.x - reposVal;
-				//std::cout << ("Right") << std::endl;
-			}
-			// TR corner
-			else{
-				if (calcVelCase(Vel) == RIGHT || calcVelCase(Vel) == RIGHTDOWN){
-					Vel.x *= -1;
-					Pos.x = otherBox.x - reposVal;
-				}
-				else if (calcVelCase(Vel) == RIGHTUP){
-					if (PointInBox(VectorOf(box.x + box.w - 20, box.y + box.h), otherBox)){
-						Vel.y *= -1;
-						Pos.y = otherBox.y - reposVal;
-				}
-					else{
-					Vel.x *= -1;
-					Pos.x = otherBox.x - reposVal;
-					}
-				}
-				else if (calcVelCase(Vel) == LEFTUP || calcVelCase(Vel) == UP){
-					Vel.y *= -1;
-					Pos.y = otherBox.y - reposVal;
-				}
-				else{
-					std::cout << "TR yudothis" << std::endl;
-				}
-				//std::cout << ("Top Right") << std::endl;
-		}
-	}
-	else if (PointInBox(BR, otherBox)){
-		if (PointInBox(BL, otherBox)){
-			Vel.y *= -1;
-			Pos.y = otherBox.y + otherBox.h + reposVal;
-			//std::cout << ("Bottom") << std::endl;
-		}
-		else{
-			// BR corner
-			if (calcVelCase(Vel) == RIGHTUP || calcVelCase(Vel) == RIGHT){
-				Vel.x *= -1;
-				Pos.x = otherBox.x - reposVal;
-			}
-			else if (calcVelCase(Vel) == RIGHTDOWN){
-				if (PointInBox(VectorOf(box.x + box.w, box.y + 20), otherBox)){
-					Vel.x *= -1;
-					Pos.x = otherBox.x - reposVal;
-				}
-				else{
-					Vel.y *= -1;
-					Pos.y = otherBox.y + otherBox.h + reposVal;
-				}
-			}
-			else if (calcVelCase(Vel) == DOWN || calcVelCase(Vel) == LEFTDOWN){
-				Vel.y *= -1;
-				Pos.y = otherBox.y + otherBox.h + reposVal;
-			}
-			else{
-				std::cout << "BR nope" << std::endl;
-			}
-			//std::cout << ("Bottom Right") << std::endl;
-		}
-	}
-	// BL corner
-	else if (PointInBox(BL, otherBox)){
-		if (calcVelCase(Vel) == LEFTUP || calcVelCase(Vel) == LEFT){
-			Vel.x *= -1;
-			Pos.x = otherBox.x + otherBox.w + reposVal;
-		}
-		else if (calcVelCase(Vel) == LEFTDOWN){
-			if (PointInBox(VectorOf(box.x, box.y + 20), otherBox)){
-				Vel.x *= -1;
-				Pos.x = otherBox.x + otherBox.w + reposVal;
-			}
-			else{
-				Vel.y *= -1;
-				Pos.y = otherBox.y + otherBox.h + reposVal;
-			}
-		}
-		else if (calcVelCase(Vel) == DOWN || calcVelCase(Vel) == RIGHTDOWN){
-			Vel.y *= -1;
-			Pos.y = otherBox.y + otherBox.h + reposVal;
-		}
-		else{
-			std::cout << "BL bleh" << std::endl;
-		}
-		//std::cout << ("Bottom Left") << std::endl;
-	}
-	// If ball top collides with wall between its corners
-	else if (PointInBox(OBL, box) && PointInBox(OBR, box)){
-		Vel.y *= -1;
-		Pos.y = otherBox.y - reposVal;
-	}
-	// If ball right collides with wall between its corners
-	else if (PointInBox(OTR, box) && PointInBox(OBR, box)){
-		Vel.x *= -1;
-		Pos.x = otherBox.x - reposVal;
-	}
-	// If ball bottom collides with wall between its corners
-	else if (PointInBox(OTL, box) && PointInBox(OTR, box)){
-		Vel.y *= -1;
-		Pos.y = otherBox.y + otherBox.h + reposVal;
-	}
-	// If ball left collides with wall between its corners
-	else if (PointInBox(OTR, box) && PointInBox(OBR, box)){
-		Vel.x *= -1;
-		Pos.x = otherBox.x + otherBox.w + reposVal;
-	}
-	else{
-		if (abs(Vel.x) > abs(Vel.y)){
-			Vel.x *= -1;
-		}
-		else
-			Vel.y *= -1;
-		std::cout << "dumb stuff" << std::endl;
-	}
-
+	Vel.x = tVel.x * Engine()->GetDouble("collision_constant");
+	Vel.y = tVel.y * Engine()->GetDouble("collision_constant");
 }
 
 // Bounding Box Methods
