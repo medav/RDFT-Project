@@ -82,8 +82,10 @@ public:
 class Hole : public ENTITY {
 public:
 	Hole(GLVECTOR2 Pos) : ENTITY(Pos) {}
+	bool BallCollided = false;
 
 	virtual void Draw(PGLENGINE glEngine);
+	virtual void Collide(ENTITY * other);
 
 	virtual ENTITY::TYPE Type() {
 		return ENTITY::STATIC;

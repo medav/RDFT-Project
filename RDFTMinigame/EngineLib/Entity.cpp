@@ -72,7 +72,6 @@ bool Ball::isStopped() {
 
 void Ball::Collide(ENTITY * other){
 	GLVECTOR2 tVel = Engine()->GetPhysDevice()->DoCollision(this, other);
-
 	Vel.x = tVel.x * Engine()->GetDouble("cc");
 	Vel.y = tVel.y * Engine()->GetDouble("cc");
 }
@@ -100,6 +99,11 @@ BOUNDINGBOX Ball::BoundingBox() {
 
 void Hole::Draw(PGLENGINE glEngine){
 	glEngine->DrawTexturedRect(this->Pos, VectorOf(100, 100), Engine()->GetString("ball_tex"));
+}
+void Hole::Collide(ENTITY * other){
+	if (other->Type() == MOVING){
+		BallCollided == true;
+	}
 }
 
 // Draw methods
