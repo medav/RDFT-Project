@@ -16,10 +16,12 @@ void Ball::Think() {
 	// too slow otherwise
 	double dT = ck.DeltaT() * 100;
 
+	double mk = Engine()->GetDouble("friction");
+
 	double velAngle = atan2(Vel.y, Vel.x);
-	double frictionMag = mk * mass * 9.8;
-	double frictionAccX = (cos(velAngle) * frictionMag) / mass;
-	double frictionAccY = (sin(velAngle) * frictionMag) / mass;
+	double frictionMag = mk * 9.8;
+	double frictionAccX = (cos(velAngle) * frictionMag);
+	double frictionAccY = (sin(velAngle) * frictionMag);
 
 	// If the computed friction component is greater than the current speed, don't do it
 	if (abs(frictionAccX) <= abs(Vel.x)){
@@ -323,10 +325,10 @@ BOUNDINGBOX World::BoundingBox() {
 
 BOUNDINGBOX Ball::BoundingBox() {
 	BOUNDINGBOX box;
-	box.x = Pos.x - radius / 2;
-	box.y = Pos.y - radius / 2;
-	box.w = radius;
-	box.h = radius;
+	box.x = Pos.x - radius / 3;
+	box.y = Pos.y - radius / 3;
+	box.w = 2 * radius / 3;
+	box.h = 2 * radius / 3;
 
 	return box;
 }
