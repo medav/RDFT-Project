@@ -36,11 +36,12 @@ void SetEnv(const char * name, const char * value) {
 }
 
 void SetupEnv() {
-	SetEnv("friction", ".03");
-	SetEnv("cc", ".95");
+	SetEnv("friction", "0.03");
+	SetEnv("cc", "0.95");
 	SetEnv("ball_tex", "ball");
 	SetEnv("bg_tex", "background");
-	SetEnv("time_mul", "1");
+	SetEnv("wall_tex", "wall");
+	SetEnv("time_mul", "0.25");
 }
 
 
@@ -87,7 +88,7 @@ void Minigame::RunningThink() {
 void Minigame::Draw() {
 	gameMutex.lock();
 	Engine()->GetGlDevice()->BeginScene();
-	Engine()->GetGlDevice()->DrawTexturedRect(VectorOf(Engine()->ScreenX() / 2, Engine()->ScreenY() / 2), VectorOf(Engine()->ScreenX(), Engine()->ScreenY()), "background");
+	Engine()->GetGlDevice()->DrawTexturedRect(VectorOf(Engine()->ScreenX() / 2, Engine()->ScreenY() / 2), VectorOf(Engine()->ScreenX(), Engine()->ScreenY()), Engine()->GetString("bg_tex"));
 
 	switch (GameState) {
 	case Minigame::WAITING:

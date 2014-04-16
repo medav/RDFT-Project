@@ -65,8 +65,21 @@ double RDFTENGINE::GetDouble(const char * varname) {
 
 	return asDouble;
 }
+
 int RDFTENGINE::GetInt(const char * varname) {
 	return (int)GetDouble(varname);
+}
+
+const char * RDFTENGINE::GetString(const char * varname) {
+	env_mutex.lock();
+	ENVVAR * ev = GetEnv(varname);
+
+	if (!ev)
+		return NULL;
+
+	env_mutex.unlock();
+
+	return ev->value;
 }
 
 void RDFTENGINE::SetEnv(const char * varname, ENVVAR * ev) {
