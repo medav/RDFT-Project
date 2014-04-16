@@ -16,10 +16,6 @@ private:
 	HWND hwnd;
 	void Setup(HWND hwnd);
 
-	int BoxSize = 100;
-	int BoxX;
-	int BoxY;
-	int Boundary = 750;
 	int Level;
 	int NumMoves;
 	int Difficulty;

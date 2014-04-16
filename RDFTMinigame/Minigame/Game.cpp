@@ -42,6 +42,8 @@ void SetupEnv() {
 	SetEnv("bg_tex", "background");
 	SetEnv("wall_tex", "wall");
 	SetEnv("time_mul", "0.25");
+	SetEnv("boundary", "200");
+	SetEnv("boxsize", "100");
 }
 
 
@@ -136,6 +138,10 @@ void Minigame::NewMap() {
 
 	NumMoves = 0;
 
+	double Boundary = Engine()->GetDouble("boundary");
+	double BoxX, BoxY;
+	double BoxSize = Engine()->GetDouble("boxsize");
+
 	Engine()->GetPhysDevice()->Clear();
 
 	ENTITY * WorldTop = new Wall(VectorOf(Engine()->ScreenX() / 2.0, Engine()->ScreenY() - 4), Engine()->ScreenX() + 8, 16);
@@ -155,12 +161,14 @@ void Minigame::NewMap() {
 	for (i = 0; i < Difficulty; i++) {
 		BoxX = rand() % (int)Engine()->ScreenX();
 		BoxY = rand() % (int)Engine()->ScreenY();
-		std::cout << BoxX <<" , "<< BoxY << std::endl;
-		if (BoxX > Boundary && BoxY > Boundary || BoxX < Engine()->ScreenX() - Boundary && BoxY < Engine()->ScreenY() - Boundary){
+
+		if ((BoxX > Boundary || BoxY > Boundary) &&
+			(BoxX < Engine()->ScreenX() - Boundary || BoxY < Engine()->ScreenY() - Boundary)) {
 			Obstruction = new Wall(VectorOf(BoxX, BoxY), BoxSize, BoxSize);
 			Engine()->GetPhysDevice()->AddEntity(Obstruction);
 		}
-		else i--;
+		else 
+			i--;
 	}
 
 	ball = new Ball(VectorOf(50, 80));
