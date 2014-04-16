@@ -16,10 +16,6 @@ private:
 	HWND hwnd;
 	void Setup(HWND hwnd);
 
-	int BoxSize;
-	int BoxX;
-	int BoxY;
-	int Boundry;
 	int Level;
 	int NumMoves;
 	int Difficulty;

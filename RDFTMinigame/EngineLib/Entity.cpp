@@ -100,13 +100,13 @@ BOUNDINGBOX Ball::BoundingBox() {
 }
 
 void Hole::Draw(PGLENGINE glEngine){
-	glEngine->DrawTexturedRect(this->Pos, VectorOf(100, 100), "hole");
+	glEngine->DrawTexturedRect(this->Pos, VectorOf(100, 100), Engine()->GetString("ball_tex"));
 }
 
 // Draw methods
 void Wall::Draw(PGLENGINE glEngine) {
-	//glEngine->DrawRect(this->Pos, VectorOf(this->Width, this->Height), ColorOf(0.95f, 0.95f, 0.95f));
-	glEngine->DrawTexturedRect(this->Pos, VectorOf(this->Width, this->Height), "wall");
+	glEngine->DrawRect(this->Pos, VectorOf(this->Width, this->Height), ColorOf(0.95f, 0.95f, 0.95f));
+	//glEngine->DrawTexturedRect(this->Pos, VectorOf(this->Width, this->Height), Engine()->GetString("wall_tex"));
 }
 
 void Ball::Draw(PGLENGINE glEngine) {
@@ -123,5 +123,5 @@ void Ball::Draw(PGLENGINE glEngine) {
 
 	glEngine->DrawArrow(this->Pos, end, 4.0f, ColorOf(r, 1.0f - r, 0.0f));
 	//glEngine->DrawCircle(this->Pos, VectorOf(this->radius, 0), ColorOf(0.95f, 0.95f, 0.95f));
-	glEngine->DrawTexturedRect(this->Pos, VectorOf(this->radius, this->radius), "ball");
+	glEngine->DrawTexturedRect(this->Pos, VectorOf(this->radius, this->radius), Engine()->GetString("ball_tex"));
 }

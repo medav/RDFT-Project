@@ -78,6 +78,7 @@ public:
 	bool GetBool(const char * varname);
 	double GetDouble(const char * varname);
 	int GetInt(const char * varname);
+	const char * RDFTENGINE::GetString(const char * varname);
 
 	void SetEnv(const char * varname, ENVVAR * ev);
 	void PrintEnv();

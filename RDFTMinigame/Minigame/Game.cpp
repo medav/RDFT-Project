@@ -36,11 +36,14 @@ void SetEnv(const char * name, const char * value) {
 }
 
 void SetupEnv() {
-	SetEnv("friction", ".03");
-	SetEnv("cc", ".95");
+	SetEnv("friction", "0.03");
+	SetEnv("cc", "0.95");
 	SetEnv("ball_tex", "ball");
 	SetEnv("bg_tex", "background");
-	SetEnv("time_mul", "1");
+	SetEnv("wall_tex", "wall");
+	SetEnv("time_mul", "0.25");
+	SetEnv("boundary", "200");
+	SetEnv("boxsize", "100");
 }
 
 
@@ -87,7 +90,7 @@ void Minigame::RunningThink() {
 void Minigame::Draw() {
 	gameMutex.lock();
 	Engine()->GetGlDevice()->BeginScene();
-	Engine()->GetGlDevice()->DrawTexturedRect(VectorOf(Engine()->ScreenX() / 2, Engine()->ScreenY() / 2), VectorOf(Engine()->ScreenX(), Engine()->ScreenY()), "background");
+	Engine()->GetGlDevice()->DrawTexturedRect(VectorOf(Engine()->ScreenX() / 2, Engine()->ScreenY() / 2), VectorOf(Engine()->ScreenX(), Engine()->ScreenY()), Engine()->GetString("bg_tex"));
 
 	switch (GameState) {
 	case Minigame::WAITING:
@@ -135,6 +138,10 @@ void Minigame::NewMap() {
 
 	NumMoves = 0;
 
+	double Boundary = Engine()->GetDouble("boundary");
+	double BoxX, BoxY;
+	double BoxSize = Engine()->GetDouble("boxsize");
+
 	Engine()->GetPhysDevice()->Clear();
 
 	ENTITY * WorldTop = new Wall(VectorOf(Engine()->ScreenX() / 2.0, Engine()->ScreenY() - 4), Engine()->ScreenX() + 8, 16);
@@ -155,11 +162,13 @@ void Minigame::NewMap() {
 		BoxX = rand() % (int)Engine()->ScreenX();
 		BoxY = rand() % (int)Engine()->ScreenY();
 
-		if (BoxX > Boundry && BoxY > Boundry || BoxX < Engine()->ScreenX() - Boundry && BoxY < Engine()->ScreenY() - Boundry){
-			Obstruction = new Wall(VectorOf(rand() % (int)Engine()->ScreenX(), rand() % (int)Engine()->ScreenY()), sqrt(BoxSize), sqrt(BoxSize));
+		if ((BoxX > Boundary || BoxY > Boundary) &&
+			(BoxX < Engine()->ScreenX() - Boundary || BoxY < Engine()->ScreenY() - Boundary)) {
+			Obstruction = new Wall(VectorOf(BoxX, BoxY), BoxSize, BoxSize);
 			Engine()->GetPhysDevice()->AddEntity(Obstruction);
 		}
-		else i--;
+		else 
+			i--;
 	}
 
 	ball = new Ball(VectorOf(50, 80));
