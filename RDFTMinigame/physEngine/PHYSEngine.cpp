@@ -44,11 +44,17 @@ void PHYSENGINE::Think() {
 
 	// Search for collisions
 	for (unsigned int i = 0; i < ents->size(); i++){
+		// We only look at the moving objects
 		if ((*ents)[i]->Type() == ENTITY::MOVING){
+			// Loop through all the other objects
 			for (unsigned int j = 0; j < (*ents).size(); j++){
+				// We don't want to collide with self
 				if ((*ents)[i] != (*ents)[j]) {
-					if (Collide((*ents)[i]->BoundingBox(), (*ents)[j]->BoundingBox()))
+					// Test for collision
+					if (Collide((*ents)[i]->BoundingBox(), (*ents)[j]->BoundingBox())) {
 						(*ents)[i]->Collide((*ents)[j]);
+						(*ents)[j]->Collide((*ents)[i]);
+					}	
 				}
 			}
 		}
