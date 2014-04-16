@@ -175,6 +175,7 @@ void Ball::Collide(ENTITY * other){
 	// Bottom right corner of other box
 	GLVECTOR2 OBR = VectorOf(otherBox.x + otherBox.w, otherBox.y);
 
+	int reposVal = 25;
 	/*
 	if (HorizontalCollision(box, otherBox)) {
 		Vel.y *= (-1.0 * cc);
@@ -189,65 +190,65 @@ void Ball::Collide(ENTITY * other){
 	if (PointInBox(TL, otherBox)){
 		if (PointInBox(TR, otherBox)){
 			Vel.y *= -1;
-			Pos.y = otherBox.y - box.w;
+			Pos.y = otherBox.y - reposVal;
 			//std::cout << ("Top") << std::endl;
 		}
 		else if (PointInBox(BL, otherBox)){
 			Vel.x *= -1;
-			Pos.x = otherBox.x + otherBox.w + box.w;
+			Pos.x = otherBox.x + otherBox.w + reposVal;
 			//std::cout << ("Left") << std::endl;
 		}
 		else{
 			if (calcVelCase(Vel) == RIGHTUP || calcVelCase(Vel) == UP){
 				Vel.y *= -1;
-				Pos.y = otherBox.y - box.w;
+				Pos.y = otherBox.y - reposVal;
 			}
 			// TL corner
 			else if (calcVelCase(Vel) == LEFTUP){
 				if (PointInBox(VectorOf(box.x + 1.0, box.y + box.h), otherBox)){
 					Vel.y *= -1;
-					Pos.y = otherBox.y - box.w;
+					Pos.y = otherBox.y - reposVal;
 				}
 				else{
 					Vel.x *= -1;
-					Pos.x = otherBox.x + otherBox.w + box.w;
+					Pos.x = otherBox.x + otherBox.w + reposVal;
 				}
 			}
 			else if (calcVelCase(Vel) == LEFT || calcVelCase(Vel) == LEFTDOWN){
 				Vel.x *= -1;
-				Pos.x = otherBox.x + otherBox.w + box.w;
+				Pos.x = otherBox.x + otherBox.w + reposVal;
 			}
-				else{
-				std::cout << ("TL ydishappen") << std::endl;
-				}
+			else{
+			std::cout << ("TL ydishappen") << std::endl;
+			}
 			//std::cout << ("Top Left") << std::endl;
 		}
 	}
 	else if (PointInBox(TR, otherBox)){
 		if (PointInBox(BR, otherBox)){
 			Vel.x *= -1;
-			Pos.x = otherBox.x - box.w;
+			Pos.x = otherBox.x - reposVal;
 				//std::cout << ("Right") << std::endl;
 			}
 			// TR corner
 			else{
 				if (calcVelCase(Vel) == RIGHT || calcVelCase(Vel) == RIGHTDOWN){
 					Vel.x *= -1;
-					Pos.x = otherBox.x - box.w;
+					Pos.x = otherBox.x - reposVal;
 				}
 				else if (calcVelCase(Vel) == RIGHTUP){
 					if (PointInBox(VectorOf(box.x + box.w - 1.0, box.y + box.h), otherBox)){
 						Vel.y *= -1;
-						Pos.y = otherBox.y - box.w;
+						Pos.y = otherBox.y - reposVal;
 				}
 					else{
 					Vel.x *= -1;
-					Pos.x = otherBox.x - box.w;
+					Pos.x = otherBox.x - reposVal;
 					}
 				}
 				else if (calcVelCase(Vel) == LEFTUP || calcVelCase(Vel) == UP){
 					Vel.y *= -1;
-					Pos.y = otherBox.y - box.w;
+					Pos.y = otherBox.y - reposVal;
 				}
 				else{
 					std::cout << "TR yudothis" << std::endl;
@@ -258,28 +259,28 @@ void Ball::Collide(ENTITY * other){
 	else if (PointInBox(BR, otherBox)){
 		if (PointInBox(BL, otherBox)){
 			Vel.y *= -1;
-			Pos.y = otherBox.y + otherBox.h + box.w;
+			Pos.y = otherBox.y + otherBox.h + reposVal;
 			//std::cout << ("Bottom") << std::endl;
 		}
 		else{
 			// BR corner
 			if (calcVelCase(Vel) == RIGHTUP || calcVelCase(Vel) == RIGHT){
 				Vel.x *= -1;
-				Pos.x = otherBox.x - box.w;
+				Pos.x = otherBox.x - reposVal;
 			}
 			else if (calcVelCase(Vel) == RIGHTDOWN){
 				if (PointInBox(VectorOf(box.x + box.w, box.y + 1.0), otherBox)){
 					Vel.x *= -1;
-					Pos.x = otherBox.x - box.w;
+					Pos.x = otherBox.x - reposVal;
 				}
 				else{
 					Vel.y *= -1;
-					Pos.y = otherBox.y + otherBox.h + box.w;
+					Pos.y = otherBox.y + otherBox.h + reposVal;
 				}
 			}
 			else if (calcVelCase(Vel) == DOWN || calcVelCase(Vel) == LEFTDOWN){
 				Vel.y *= -1;
-				Pos.y = otherBox.y + otherBox.h + box.w;
+				Pos.y = otherBox.y + otherBox.h + reposVal;
 			}
 			else{
 				std::cout << "BR nope" << std::endl;
@@ -291,21 +292,21 @@ void Ball::Collide(ENTITY * other){
 	else if (PointInBox(BL, otherBox)){
 		if (calcVelCase(Vel) == LEFTUP || calcVelCase(Vel) == LEFT){
 			Vel.x *= -1;
-			Pos.x = otherBox.x + otherBox.w + box.w;
+			Pos.x = otherBox.x + otherBox.w + reposVal;
 		}
 		else if (calcVelCase(Vel) == LEFTDOWN){
 			if (PointInBox(VectorOf(box.x, box.y + 1.0), otherBox)){
 				Vel.x *= -1;
-				Pos.x = otherBox.x + otherBox.w + box.w;
+				Pos.x = otherBox.x + otherBox.w + reposVal;
 			}
 			else{
 				Vel.y *= -1;
-				Pos.y = otherBox.y + otherBox.h + box.w;
+				Pos.y = otherBox.y + otherBox.h + reposVal;
 			}
 		}
 		else if (calcVelCase(Vel) == DOWN || calcVelCase(Vel) == RIGHTDOWN){
 			Vel.y *= -1;
-			Pos.y = otherBox.y + otherBox.h + box.w;
+			Pos.y = otherBox.y + otherBox.h + reposVal;
 		}
 		else{
 			std::cout << "BL bleh" << std::endl;
@@ -315,25 +316,30 @@ void Ball::Collide(ENTITY * other){
 	// If ball top collides with wall between its corners
 	else if (PointInBox(OBL, box) && PointInBox(OBR, box)){
 		Vel.y *= -1;
-		Pos.y = otherBox.y - box.w;
+		Pos.y = otherBox.y - reposVal;
 	}
 	// If ball right collides with wall between its corners
 	else if (PointInBox(OTR, box) && PointInBox(OBR, box)){
 		Vel.x *= -1;
-		Pos.x = otherBox.x - box.w;
+		Pos.x = otherBox.x - reposVal;
 	}
 	// If ball bottom collides with wall between its corners
 	else if (PointInBox(OTL, box) && PointInBox(OTR, box)){
 		Vel.y *= -1;
-		Pos.y = otherBox.y + otherBox.h + box.w;
+		Pos.y = otherBox.y + otherBox.h + reposVal;
 	}
 	// If ball left collides with wall between its corners
 	else if (PointInBox(OTR, box) && PointInBox(OBR, box)){
 		Vel.x *= -1;
-		Pos.x = otherBox.x + otherBox.w + box.w;
+		Pos.x = otherBox.x + otherBox.w + reposVal;
 	}
 	else{
-		Vel.y *= -1;
+		if (Vel.x > Vel.y){
+			Vel.y *= -1;
+		}
+		else
+			Vel.x *= -1;
+		std::cout << "dumb stuff" << std::endl;
 	}
 
 }
