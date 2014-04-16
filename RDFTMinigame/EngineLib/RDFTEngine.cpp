@@ -16,7 +16,13 @@ RDFTENGINE::RDFTENGINE() {
 
 ENVVAR * RDFTENGINE::GetEnv(const char * varname) {
 	std::string str(varname);
-	return env[str];
+
+	std::map<std::string, ENVVAR *>::iterator it = env.find(str);
+
+	if (it != env.end())
+		return it->second;
+
+	return NULL;
 }
 
 bool RDFTENGINE::GetBool(const char * varname) {

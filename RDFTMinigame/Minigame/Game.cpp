@@ -37,6 +37,7 @@ void SetEnv(const char * name, const char * value) {
 
 void SetupEnv() {
 	SetEnv("friction", ".03");
+	SetEnv("cc", ".95");
 	SetEnv("ball_tex", "ball");
 	SetEnv("bg_tex", "background");
 	SetEnv("time_mul", "1");
@@ -151,9 +152,9 @@ void Minigame::NewMap() {
 	ENTITY * Obstruction;
 	
 	for (i = 0; i < Difficulty; i++) {
-		BoxX = rand() % (int)Engine()->ScreenX;
-		BoxY = rand() % (int)Engine()->ScreenY;
-		if (BoxX > Boundry && BoxY > Boundry || BoxX < Engine()->ScreenX - Boundry && BoxY < Engine()->ScreenY - Boundry){
+		BoxX = rand() % (int)Engine()->ScreenX();
+		BoxY = rand() % (int)Engine()->ScreenY();
+		if (BoxX > Boundry && BoxY > Boundry || BoxX < Engine()->ScreenX() - Boundry && BoxY < Engine()->ScreenY() - Boundry){
 			Obstruction = new Wall(VectorOf(rand() % (int)Engine()->ScreenX(), rand() % (int)Engine()->ScreenY()), sqrt(BoxSize), sqrt(BoxSize));
 			Engine()->GetPhysDevice()->AddEntity(Obstruction);
 		}

@@ -73,8 +73,8 @@ bool Ball::isStopped() {
 void Ball::Collide(ENTITY * other){
 	GLVECTOR2 tVel = Engine()->GetPhysDevice()->DoCollision(this, other);
 
-	Vel.x = tVel.x * Engine()->GetDouble("collision_constant");
-	Vel.y = tVel.y * Engine()->GetDouble("collision_constant");
+	Vel.x = tVel.x * Engine()->GetDouble("cc");
+	Vel.y = tVel.y * Engine()->GetDouble("cc");
 }
 
 // Bounding Box Methods
