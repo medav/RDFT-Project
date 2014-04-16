@@ -1,5 +1,6 @@
 //#include <stdio.h>
 //#include <string.h>
+#include <math.h>
 #include "Game.h"
 #include <iostream>
 
@@ -150,8 +151,13 @@ void Minigame::NewMap() {
 	ENTITY * Obstruction;
 	
 	for (i = 0; i < Difficulty; i++) {
-		Obstruction = new Wall(VectorOf(rand() % (int)Engine()->ScreenX(), rand() % (int)Engine()->ScreenY()), 100, 100);
-		Engine()->GetPhysDevice()->AddEntity(Obstruction);
+		BoxX = rand() % (int)Engine()->ScreenX;
+		BoxY = rand() % (int)Engine()->ScreenY;
+		if (BoxX > Boundry && BoxY > Boundry || BoxX < Engine()->ScreenX - Boundry && BoxY < Engine()->ScreenY - Boundry){
+			Obstruction = new Wall(VectorOf(rand() % (int)Engine()->ScreenX(), rand() % (int)Engine()->ScreenY()), sqrt(BoxSize), sqrt(BoxSize));
+			Engine()->GetPhysDevice()->AddEntity(Obstruction);
+		}
+		else i--;
 	}
 
 	ball = new Ball(VectorOf(50, 80));
