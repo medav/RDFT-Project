@@ -45,7 +45,7 @@ void LMENGINE::Reset(){
 	init = 0;
 }
 GLVECTOR2 LMENGINE::LMGetVector() {
-		return last;
+	return last;
 }
 
 
@@ -85,5 +85,6 @@ bool APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserve
 		// A process unloads the DLL.
 		break;
 	}
+
 	return true;
 }

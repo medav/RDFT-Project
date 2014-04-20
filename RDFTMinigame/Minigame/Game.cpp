@@ -91,7 +91,6 @@ void Minigame::Draw() {
 	gameMutex.lock();
 	Engine()->GetGlDevice()->BeginScene();
 	Engine()->GetGlDevice()->DrawTexturedRect(VectorOf(Engine()->ScreenX() / 2, Engine()->ScreenY() / 2), VectorOf(Engine()->ScreenX(), Engine()->ScreenY()), Engine()->GetString("bg_tex"));
-
 	switch (GameState) {
 	case Minigame::WAITING:
 		WaitingDraw();
@@ -170,7 +169,7 @@ void Minigame::NewMap() {
 		else 
 			i--;
 	}
-
+	hole = new Hole(VectorOf(Engine()->ScreenX() - 100, Engine()->ScreenY() - 100));
 	ball = new Ball(VectorOf(50, 80));
 	Engine()->GetPhysDevice()->AddEntity(ball);
 }

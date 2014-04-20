@@ -366,6 +366,7 @@ bool GLENGINE::ReleaseRenderDevice() {
 
 GLENGINE::~GLENGINE() {
 	this->ReleaseRenderDevice();
+
 }
 
 bool CreateGlDevice(LPGLENGINE device, HWND hwnd) {
