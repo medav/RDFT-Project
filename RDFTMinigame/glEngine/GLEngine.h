@@ -25,7 +25,7 @@ private:
 
 	GLuint listbase;
 
-	std::map<std::string, TEXTURE> textures;
+	std::map<std::string, TEXTURE *> textures;
 	std::mutex texture_mutex;
 
 	GLCOLORARGB bgColor;

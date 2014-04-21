@@ -118,21 +118,33 @@ bool LoadBMP(const char* location, GLuint *texture, uint8_t ** pixels) {
 }
 
 bool GLENGINE::LoadTexture(const char * filename, const char * name) {
-	std::cout << "Loading texture \"" << filename << "\"...";
-
 	GLuint texture = 0;
 	uint8_t * pixels;
 	
 	if (!LoadBMP(filename, &texture, &pixels)) {
+		std::cout << "Loading texture \"" << filename << "\"...";
 		std::cout << "Failed\n";
 		return false;
 	}
 
 	std::string str(name);
+	TEXTURE * tex;
+
+	tex = textures[str];
+	if (tex) {
+		if (tex->pixels)
+			UnloadTexture(name);	
+	}
+
+	std::cout << "Loading texture \"" << filename << "\"...";
 
 	texture_mutex.lock();
-	textures[str].pixels = pixels;
-	textures[str].texID = texture;
+
+	tex = new TEXTURE;
+	tex->pixels = pixels;
+	tex->texID = texture;
+	textures[str] = tex;
+
 	texture_mutex.unlock();
 
 	std::cout << "OK\n";
@@ -144,9 +156,15 @@ bool GLENGINE::UnloadTexture(const char * name) {
 	std::cout << "Unloading texture \"" << name << "\"...";
 
 	texture_mutex.lock();
-	delete[] textures[str].pixels;
-	textures[str].texID = 0;
-	textures.erase(name);
+	TEXTURE * tex = textures[str];
+
+	if (tex->pixels)
+		delete[] textures[str]->pixels;
+
+	textures[str] = NULL;
+	delete tex;
+
+	textures.erase(str);
 	texture_mutex.unlock();
 
 	std::cout << "OK\n";
@@ -157,9 +175,9 @@ void GLENGINE::PrintTextures() {
 	texture_mutex.lock();
 	std::cout << "Currently loaded textures:\n";
 
-	std::map<std::string, TEXTURE>::iterator it = textures.begin();
+	std::map<std::string, TEXTURE *>::iterator it = textures.begin();
 	while (it != textures.end()) {
-		if (it->second.pixels)
+		if (it->second->pixels)
 			std::cout << "Texture \"" << it->first.c_str() << "\"\n";
 		it++;
 	}
@@ -217,7 +235,7 @@ void GLENGINE::DrawTexturedRect(GLVERTEX2 pos, GLVECTOR2 size, const char * text
 	std::string str(textureName);
 
 	texture_mutex.lock();
-	GLuint texture = textures[textureName].texID;
+	GLuint texture = textures[textureName]->texID;
 
 	glEnable(GL_TEXTURE_2D);
 
