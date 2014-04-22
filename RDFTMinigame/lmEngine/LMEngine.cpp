@@ -26,7 +26,7 @@ unsigned char LMENGINE::LMRefresh() {
 						first = false;
 					}
 					last = { avgPos.x - start.x, avgPos.y - start.y };
-					if (ctrl.frame(1).hands()[0].fingers()[0].tipPosition().z - ctrl.frame(0).hands()[0].fingers()[0].tipPosition().z < -4 && init == 1){
+					if (ctrl.frame(1).hands()[0].fingers()[0].tipPosition().z - ctrl.frame(0).hands()[0].fingers()[0].tipPosition().z < -7 && init == 1){
 						init = 2;
 						first = true;
 					}
