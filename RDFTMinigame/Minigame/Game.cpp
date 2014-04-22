@@ -22,6 +22,7 @@ Minigame::Minigame() {
 
 	Engine()->GetGlDevice()->LoadTexture("Ball.bmp", "ball");
 	Engine()->GetGlDevice()->LoadTexture("wall.bmp", "wall");
+	Engine()->GetGlDevice()->LoadTexture("test.bmp", "test");
 	Engine()->GetGlDevice()->LoadTexture("space.bmp", "background");
 }
 
@@ -169,7 +170,7 @@ void Minigame::NewMap() {
 		else 
 			i--;
 	}
-	hole = new Hole(VectorOf(Engine()->ScreenX() - 100, Engine()->ScreenY() - 100));
+	//hole = new Hole(VectorOf(Engine()->ScreenX() - 100, Engine()->ScreenY() - 100));
 	ball = new Ball(VectorOf(50, 80));
 	Engine()->GetPhysDevice()->AddEntity(ball);
 }
