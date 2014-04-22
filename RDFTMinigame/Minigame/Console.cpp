@@ -119,11 +119,14 @@ void Console::Exec(COMMAND cmd) {
 		MG()->gameMutex.unlock();
 	}
 	else if (cmd.cty == CMDTYPE::TEXTURE) {
-		if (cmd.argc <= 2)
-			Engine()->GetGlDevice()->PrintTextures();
-		else {
-		
+		if (cmd.argc == 4 && strcmp(cmd.argv[1], "load") == 0) {
+			Engine()->GetGlDevice()->LoadTexture(cmd.argv[2], cmd.argv[3]);
+		}	
+		else if (cmd.argc == 3 && strcmp(cmd.argv[1], "unload") == 0) {
+			Engine()->GetGlDevice()->UnloadTexture(cmd.argv[2]);
 		}
+		else
+			Engine()->GetGlDevice()->PrintTextures();
 	}
 	else if (cmd.cty == CMDTYPE::ENV) {
 		ENVVAR * ev;

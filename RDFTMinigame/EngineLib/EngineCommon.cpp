@@ -2,12 +2,9 @@
 #include "EngineCommon.h"
 #include "RDFTEngine.h"
 
-GLVECTOR2 VectorOf(double x, double y) {
-	GLVECTOR2 pos;
-	pos.x = x;
-	pos.y = y;
 
-	return pos;
+GLVECTOR2 VectorOf(double x, double y) {
+	return Engine()->GetPhysDevice()->VectorOf(x, y);
 }
 
 GLCOLORARGB AColorOf(float a, float r, float g, float b) {
@@ -22,7 +19,6 @@ GLCOLORARGB AColorOf(float a, float r, float g, float b) {
 GLCOLORARGB ColorOf(float r, float g, float b) {
 	return AColorOf(1.0, r, g, b);
 }
-
 
 ClockKeeper::ClockKeeper() {
 	run = false;
@@ -43,7 +39,7 @@ double ClockKeeper::DeltaT() {
 	duration<long double> time_span = duration_cast<duration<double>>(temp - prev);
 	prev = temp;
 	
-	return time_span.count() / 4;
+	return time_span.count() * Engine()->GetDouble("time_mul");
 }
 
 void ClockKeeper::Reset() {
@@ -52,7 +48,7 @@ void ClockKeeper::Reset() {
 
 
 double Magnitude(GLVECTOR2 vec) {
-	return sqrt(vec.x * vec.x + vec.y * vec.y);
+	return Engine()->GetPhysDevice()->Magnitude(vec);
 }
 
 RDFTENGINE * Engine() {

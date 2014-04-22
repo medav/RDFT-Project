@@ -31,8 +31,17 @@ public:
 		this->Pos.y = y;
 	}
 
+	virtual void SetPos(GLVECTOR2 newPos) {
+		Pos.x = newPos.x;
+		Pos.y = newPos.y;
+	}
+
 	virtual GLVECTOR2 getPos() {
 		return Pos;
+	}
+
+	virtual GLVECTOR2 getVel() {
+		return VectorOf(0.0, 0.0);
 	}
 
 	virtual void Think() {}
@@ -73,8 +82,10 @@ public:
 class Hole : public ENTITY {
 public:
 	Hole(GLVECTOR2 Pos) : ENTITY(Pos) {}
+	bool BallCollided = false;
 
 	virtual void Draw(PGLENGINE glEngine);
+	virtual void Collide(ENTITY * other);
 
 	virtual ENTITY::TYPE Type() {
 		return ENTITY::STATIC;
@@ -83,16 +94,8 @@ public:
 
 class Ball : public ENTITY {
 private:
-
-	const double mass = 5.0;
-
-	// Collision constant: How much to decrease speed by after collision
-	const double cc = 0.994;
-
 	int timeInOther = 0;
-
 	GLVECTOR2 Vel;
-
 	double radius;
 
 public:
@@ -112,6 +115,10 @@ public:
 
 	void ApplyVelocity(float x, float y);
 
+	virtual GLVECTOR2 getVel() {
+		return Vel;
+	}
+
 	virtual ENTITY::TYPE Type() {
 		return ENTITY::MOVING;
 	}
@@ -124,8 +131,11 @@ public:
 	virtual void Init() = 0;
 	virtual void Think() = 0;
 	virtual void Draw(PGLENGINE glEngine) = 0;
+	virtual GLVECTOR2 DoCollision(ENTITY * Moving, ENTITY * Static) = 0;
 
 	virtual void AddEntity(ENTITY * ent) = 0;
+	virtual GLVECTOR2 VectorOf(double x, double y) = 0;
+	virtual double Magnitude(GLVECTOR2 vec) = 0;
 	virtual void Clear() = 0;
 
 	virtual ~PHYSENGINEDEVICE() {}

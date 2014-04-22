@@ -20,6 +20,19 @@ public:
 	virtual void Think();
 	virtual void Draw(PGLENGINE glEngine);
 
+	virtual GLVECTOR2 DoCollision(ENTITY * Moving, ENTITY * Static);
+
+	virtual GLVECTOR2 VectorOf(double x, double y) {
+		GLVECTOR2 pos;
+		pos.x = x;
+		pos.y = y;
+
+		return pos;
+	}
+
+	virtual double Magnitude(GLVECTOR2 vec) {
+		return sqrt(vec.x * vec.x + vec.y * vec.y);
+	}
 
 	~PHYSENGINE();
 };

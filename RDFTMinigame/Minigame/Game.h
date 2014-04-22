@@ -20,7 +20,8 @@ private:
 	int NumMoves;
 	int Difficulty;
 	Ball * ball;
-	
+	Hole * hole;
+
 	void WaitingThink();
 	void RunningThink();
 
