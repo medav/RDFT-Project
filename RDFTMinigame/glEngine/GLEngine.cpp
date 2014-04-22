@@ -121,6 +121,8 @@ bool GLENGINE::LoadTexture(const char * filename, const char * name) {
 	GLuint texture = 0;
 	uint8_t * pixels;
 	
+	gl_mutex.lock();
+
 	if (!LoadBMP(filename, &texture, &pixels)) {
 		std::cout << "Loading texture \"" << filename << "\"...";
 		std::cout << "Failed\n";
@@ -146,6 +148,7 @@ bool GLENGINE::LoadTexture(const char * filename, const char * name) {
 	textures[str] = tex;
 
 	texture_mutex.unlock();
+	gl_mutex.unlock();
 
 	std::cout << "OK\n";
 	return true;
@@ -212,6 +215,7 @@ bool GLENGINE::CreateRenderDevice(HWND hwnd) {
 }
 
 bool GLENGINE::BeginScene() {
+	gl_mutex.lock();
 	glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -365,6 +369,7 @@ void GLENGINE::DrawTextGl(GLVECTOR2 pos, GLCOLORARGB color, const char * text) {
 
 bool GLENGINE::EndScene() {
 	SwapBuffers(hdc);
+	gl_mutex.unlock();
 	return true;
 }
 
