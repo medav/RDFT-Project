@@ -26,10 +26,11 @@ private:
 	GLuint listbase;
 
 	std::map<std::string, TEXTURE *> textures;
-	std::mutex texture_mutex;
-	std::mutex gl_mutex;
 
 	GLCOLORARGB bgColor;
+
+	GLuint PrintErrorLine(int line);
+	bool LoadBMP(const char* location, GLuint *texture, uint8_t ** pixels);
 
 public:
 	GLENGINE(HWND hwnd);
@@ -40,6 +41,8 @@ public:
 	virtual bool LoadTexture(const char * filename, const char * name);
 	virtual bool UnloadTexture(const char * name);
 	virtual void PrintTextures();
+
+	virtual void PrintError();
 
 	virtual bool BeginScene();
 

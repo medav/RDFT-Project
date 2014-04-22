@@ -8,7 +8,6 @@ void Ball::Think() {
 	if (Vel.x == 0 && Vel.y == 0)
 		return;
 
-
 	// Update Pos based on velocity Vel
 	// Multiply by 100 because it would be
 	// too slow otherwise
@@ -91,6 +90,16 @@ BOUNDINGBOX World::BoundingBox() {
 
 BOUNDINGBOX Ball::BoundingBox() {
 	BOUNDINGBOX box;
+	box.x = Pos.x - radius / 4;
+	box.y = Pos.y - radius / 4;
+	box.w = 2 * radius / 4;
+	box.h = 2 * radius / 4;
+
+	return box;
+}
+
+BOUNDINGBOX Hole::BoundingBox() {
+	BOUNDINGBOX box;
 	box.x = Pos.x - radius / 3;
 	box.y = Pos.y - radius / 3;
 	box.w = 2 * radius / 3;
@@ -100,11 +109,11 @@ BOUNDINGBOX Ball::BoundingBox() {
 }
 
 void Hole::Draw(PGLENGINE glEngine){
-	glEngine->DrawTexturedRect(this->Pos, VectorOf(100, 100), Engine()->GetString("ball_tex"));
+	glEngine->DrawTexturedRect(this->Pos, VectorOf(this->radius, this->radius), Engine()->GetString("hole_tex"));
 }
 void Hole::Collide(ENTITY * other){
 	if (other->Type() == MOVING){
-		BallCollided == true;
+		BallCollided = true;
 	}
 }
 

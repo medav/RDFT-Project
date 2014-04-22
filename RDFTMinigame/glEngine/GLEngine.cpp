@@ -3,6 +3,15 @@
 #include <fstream>
 #include <iostream>
 
+GLuint GLENGINE::PrintErrorLine(int line) {
+	
+	GLuint err = glGetError();
+	if (err)
+		std::cout << "GlEngine.cpp : " << line << " OpenGL error code : " << err << std::endl;
+
+	return err;
+}
+
 GLENGINE::GLENGINE(HWND hwnd) : textures() {
 	this->CreateRenderDevice(hwnd);
 	this->SetWindowSize();
@@ -33,7 +42,7 @@ void GLENGINE::SetWindowSize() {
 
 // This was written by following a tutorial on the internet:
 // http://www.cplusplus.com/articles/GwvU7k9E/
-bool LoadBMP(const char* location, GLuint *texture, uint8_t ** pixels) {
+bool GLENGINE::LoadBMP(const char* location, GLuint *texture, uint8_t ** pixels) {
 	uint8_t* datBuff[2] = { nullptr, nullptr };
 	uint8_t* temp = nullptr;
 	*pixels = nullptr;
@@ -96,8 +105,20 @@ bool LoadBMP(const char* location, GLuint *texture, uint8_t ** pixels) {
 
 	/*******************GENERATING TEXTURES*******************/
 
-	glGenTextures(1, texture);             // Generate a texture
+	glGenTextures(1, texture);
+
+	if (*texture == -1) {
+		std::cout << "\nglGenTextures() failed: " << glGetError() << std::endl;
+		delete[] datBuff[0];
+		delete[] datBuff[1];
+		delete[] temp;
+		delete[] *pixels;
+		return false;
+	}
+	PrintErrorLine(__LINE__);
+	
 	glBindTexture(GL_TEXTURE_2D, *texture);
+	PrintErrorLine(__LINE__);
 
 	GLint mode = GL_RGBA;
 
@@ -105,8 +126,13 @@ bool LoadBMP(const char* location, GLuint *texture, uint8_t ** pixels) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	PrintErrorLine(__LINE__);
+
 	glTexImage2D(GL_TEXTURE_2D, 0, mode, w, h, 0, mode, GL_UNSIGNED_BYTE, *pixels);
+	PrintErrorLine(__LINE__);
+
 	glBindTexture(GL_TEXTURE_2D, NULL);
+	PrintErrorLine(__LINE__);
 
 	// Delete the two buffers.
 	delete[] datBuff[0];
@@ -117,17 +143,14 @@ bool LoadBMP(const char* location, GLuint *texture, uint8_t ** pixels) {
 	return true; // Return success code 
 }
 
+void GLENGINE::PrintError() {
+	if (!PrintErrorLine(__LINE__))
+		std::cout << "No errors\n";
+}
+
 bool GLENGINE::LoadTexture(const char * filename, const char * name) {
 	GLuint texture = 0;
 	uint8_t * pixels;
-	
-	gl_mutex.lock();
-
-	if (!LoadBMP(filename, &texture, &pixels)) {
-		std::cout << "Loading texture \"" << filename << "\"...";
-		std::cout << "Failed\n";
-		return false;
-	}
 
 	std::string str(name);
 	TEXTURE * tex;
@@ -139,16 +162,16 @@ bool GLENGINE::LoadTexture(const char * filename, const char * name) {
 	}
 
 	std::cout << "Loading texture \"" << filename << "\"...";
-
-	texture_mutex.lock();
+	if (!LoadBMP(filename, &texture, &pixels)) {
+		std::cout << "Failed\n";
+		return false;
+	}
+	PrintErrorLine(__LINE__);
 
 	tex = new TEXTURE;
 	tex->pixels = pixels;
 	tex->texID = texture;
 	textures[str] = tex;
-
-	texture_mutex.unlock();
-	gl_mutex.unlock();
 
 	std::cout << "OK\n";
 	return true;
@@ -158,24 +181,19 @@ bool GLENGINE::UnloadTexture(const char * name) {
 	std::string str(name);
 	std::cout << "Unloading texture \"" << name << "\"...";
 
-	texture_mutex.lock();
 	TEXTURE * tex = textures[str];
 
-	if (tex->pixels)
-		delete[] textures[str]->pixels;
-
-	textures[str] = NULL;
-	delete tex;
+	glDeleteTextures(1, &tex->texID);
+	PrintErrorLine(__LINE__);
 
 	textures.erase(str);
-	texture_mutex.unlock();
+	delete tex;
 
 	std::cout << "OK\n";
 	return true;
 }
 
 void GLENGINE::PrintTextures() {
-	texture_mutex.lock();
 	std::cout << "Currently loaded textures:\n";
 
 	std::map<std::string, TEXTURE *>::iterator it = textures.begin();
@@ -184,7 +202,6 @@ void GLENGINE::PrintTextures() {
 			std::cout << "Texture \"" << it->first.c_str() << "\"\n";
 		it++;
 	}
-	texture_mutex.unlock();
 }
 
 bool GLENGINE::CreateRenderDevice(HWND hwnd) {
@@ -210,14 +227,17 @@ bool GLENGINE::CreateRenderDevice(HWND hwnd) {
 	// create and enable the render context (RC)
 	hrc = wglCreateContext(hdc);
 	wglMakeCurrent(hdc, hrc);
+	PrintErrorLine(__LINE__);
 
 	return true;
 }
 
 bool GLENGINE::BeginScene() {
-	gl_mutex.lock();
 	glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
+	PrintErrorLine(__LINE__);
+
 	glClear(GL_COLOR_BUFFER_BIT);
+	PrintErrorLine(__LINE__);
 
 	return true;
 }
@@ -233,21 +253,37 @@ void GLENGINE::DrawRect(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color) {
 	glVertex2f((GLfloat)(pos.x - size.x / 2.0), (GLfloat)(pos.y + size.y / 2.0));
 	
 	glEnd();
+	
 }
 
 void GLENGINE::DrawTexturedRect(GLVERTEX2 pos, GLVECTOR2 size, const char * textureName) {
 	std::string str(textureName);
 
-	texture_mutex.lock();
+	if (textures.count(str) == 0 || !textures[textureName]) {
+		GLCOLORARGB color;
+		color.a = 1.0;
+		color.r = 1.0;
+		color.g = 1.0;
+		color.b = 1.0;
+
+		DrawRect(pos, size, color);
+		return;
+	}
+
 	GLuint texture = textures[textureName]->texID;
 
 	glEnable(GL_TEXTURE_2D);
+	PrintErrorLine(__LINE__);
 
 	glBindTexture(GL_TEXTURE_2D, texture);
+	PrintErrorLine(__LINE__);
 
 	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	PrintErrorLine(__LINE__);
 
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	PrintErrorLine(__LINE__);
+	
 	glBegin(GL_QUADS);
 
 	glColor3f(1.0f, 1.0f, 1.0f);
@@ -265,12 +301,17 @@ void GLENGINE::DrawTexturedRect(GLVERTEX2 pos, GLVECTOR2 size, const char * text
 	glVertex2f((GLfloat)(pos.x - size.x / 2.0), (GLfloat)(pos.y + size.y / 2.0));
 
 	glEnd();
+	PrintErrorLine(__LINE__);
+	
 
 	glBindTexture(GL_TEXTURE_2D, NULL);
-
+	PrintErrorLine(__LINE__);
+	
 	glDisable(GL_TEXTURE_2D);
+	PrintErrorLine(__LINE__);
+
 	glDisable(GL_BLEND);
-	texture_mutex.unlock();
+	PrintErrorLine(__LINE__);
 }
 
 void GLENGINE::DrawCircle(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color) {
@@ -297,6 +338,8 @@ void GLENGINE::DrawCircle(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color) {
 		y = s * t + c * y;
 	}
 	glEnd();
+	PrintErrorLine(__LINE__);
+	
 }
 
 void GLENGINE::DrawCircleHollow(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color) {
@@ -330,8 +373,13 @@ void GLENGINE::DrawArrow(GLVECTOR2 begin, GLVECTOR2 end, float weight, GLCOLORAR
 	e2.y = end.y - L * cos(theta2);
 
 	glLineWidth(weight);
-	glBegin(GL_LINES);
+	PrintErrorLine(__LINE__);
+
 	glEnable(GL_LINE_SMOOTH);
+	PrintErrorLine(__LINE__);
+
+	glBegin(GL_LINES);
+	
 
 	glColor3f(color.r, color.g, color.b);
 	glVertex2f((GLfloat)begin.x, (GLfloat)begin.y);
@@ -350,26 +398,40 @@ void GLENGINE::DrawArrow(GLVECTOR2 begin, GLVECTOR2 end, float weight, GLCOLORAR
 	glVertex2f((GLfloat)e2.x, (GLfloat)e2.y);
 	glVertex2f((GLfloat)end.x, (GLfloat)end.y);
 
-	glDisable(GL_LINE_SMOOTH);
+	
 	glEnd();
+	PrintErrorLine(__LINE__);
+
+	glDisable(GL_LINE_SMOOTH);
+	PrintErrorLine(__LINE__);
+	
 }
 
 void GLENGINE::DrawTextGl(GLVECTOR2 pos, GLCOLORARGB color, const char * text) {
 	glColor3f(color.r, color.g, color.b);
+	PrintErrorLine(__LINE__);
+
 	glRasterPos2f(pos.x, pos.y);
+	PrintErrorLine(__LINE__);
 	
 	// Must save/restore the list base.
 	glPushAttrib(GL_LIST_BIT);
+	PrintErrorLine(__LINE__);
 
 	glListBase(listbase);
+	PrintErrorLine(__LINE__);
+
 	glCallLists(strlen(text), GL_UNSIGNED_BYTE, (const GLvoid*) text);
+	PrintErrorLine(__LINE__);
 
 	glPopAttrib();
+	PrintErrorLine(__LINE__);
 }
 
 bool GLENGINE::EndScene() {
 	SwapBuffers(hdc);
-	gl_mutex.unlock();
+
+	PrintErrorLine(__LINE__);
 	return true;
 }
 
