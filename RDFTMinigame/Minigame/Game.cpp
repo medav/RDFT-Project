@@ -170,7 +170,10 @@ void Minigame::NewMap() {
 		else 
 			i--;
 	}
-	//hole = new Hole(VectorOf(Engine()->ScreenX() - 100, Engine()->ScreenY() - 100));
+
+	hole = new Hole(VectorOf(Engine()->ScreenX() - 100, Engine()->ScreenY() - 100));
+	Engine()->GetPhysDevice()->AddEntity(hole);
+
 	ball = new Ball(VectorOf(50, 80));
 	Engine()->GetPhysDevice()->AddEntity(ball);
 }

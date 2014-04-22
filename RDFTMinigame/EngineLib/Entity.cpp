@@ -8,8 +8,6 @@ void Ball::Think() {
 	if (Vel.x == 0 && Vel.y == 0)
 		return;
 
-	double mk = Engine()->GetDouble("friction");
-
 	// Update Pos based on velocity Vel
 	// Multiply by 100 because it would be
 	// too slow otherwise
@@ -105,7 +103,7 @@ void Hole::Draw(PGLENGINE glEngine){
 }
 void Hole::Collide(ENTITY * other){
 	if (other->Type() == MOVING){
-		BallCollided == true;
+		BallCollided = true;
 	}
 }
 
