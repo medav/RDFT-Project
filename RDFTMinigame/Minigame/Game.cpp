@@ -20,7 +20,8 @@ Minigame::Minigame() {
 	SetupEnv();
 	NewMap();
 
-	Engine()->GetGlDevice()->LoadTexture("Ball.bmp", "ball");
+	Engine()->GetGlDevice()->LoadTexture("ball.bmp", "ball");
+	Engine()->GetGlDevice()->LoadTexture("hole.bmp", "hole");
 	Engine()->GetGlDevice()->LoadTexture("wall.bmp", "wall");
 	Engine()->GetGlDevice()->LoadTexture("test.bmp", "test");
 	Engine()->GetGlDevice()->LoadTexture("space.bmp", "background");
@@ -42,6 +43,7 @@ void SetupEnv() {
 	SetEnv("ball_tex", "ball");
 	SetEnv("bg_tex", "background");
 	SetEnv("wall_tex", "wall");
+	SetEnv("hole_tex", "hole");
 	SetEnv("time_mul", "0.25");
 	SetEnv("boundary", "200");
 	SetEnv("boxsize", "100");
@@ -86,6 +88,12 @@ void Minigame::RunningThink() {
 	Engine()->GetPhysDevice()->Think();
 	if (ball->isStopped())
 		SetState(GAMESTATE::WAITING);
+
+	if (hole->HasBallCollided()) {
+		// Youre winner!
+		this->NewMap();
+	}
+		
 }
 
 void Minigame::Draw() {
@@ -144,10 +152,10 @@ void Minigame::NewMap() {
 
 	Engine()->GetPhysDevice()->Clear();
 
-	ENTITY * WorldTop = new Wall(VectorOf(Engine()->ScreenX() / 2.0, Engine()->ScreenY() - 4), Engine()->ScreenX() + 8, 16);
-	ENTITY * WorldBottom = new Wall(VectorOf(Engine()->ScreenX() / 2.0, 4), Engine()->ScreenX() + 8, 32);
-	ENTITY * WorldLeft = new Wall(VectorOf(4, Engine()->ScreenY() / 2.0), 16, Engine()->ScreenY() + 8);
-	ENTITY * WorldRight = new Wall(VectorOf(Engine()->ScreenX() - 4, Engine()->ScreenY() / 2.0), 16, Engine()->ScreenY() + 8);
+	ENTITY * WorldTop = new Wall(VectorOf(Engine()->ScreenX() / 2.0, Engine()->ScreenY() + 16), Engine()->ScreenX() + 8, 64);
+	ENTITY * WorldBottom = new Wall(VectorOf(Engine()->ScreenX() / 2.0, - 8), Engine()->ScreenX() + 8, 64);
+	ENTITY * WorldLeft = new Wall(VectorOf(-16, Engine()->ScreenY() / 2.0), 64, Engine()->ScreenY() + 8);
+	ENTITY * WorldRight = new Wall(VectorOf(Engine()->ScreenX() + 16, Engine()->ScreenY() / 2.0), 64, Engine()->ScreenY() + 8);
 
 	Engine()->GetPhysDevice()->AddEntity(WorldTop);
 	Engine()->GetPhysDevice()->AddEntity(WorldBottom);

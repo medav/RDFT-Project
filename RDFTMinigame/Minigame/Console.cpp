@@ -113,12 +113,16 @@ void Console::Queue(COMMAND * cmd) {
 DWORD WINAPI Worker(void * params) {
 	Console * con = (Console *)params;
 	char buf[200];
+	cout << "$>";
 
 	while (1) {
 		Con()->WaitFor();
-		cout << "$>";
+		//cout << "$>";
 		cin.getline(buf, 200);
-		Dispatch(buf, 200, con);
+		if (strlen(buf) == 0)
+			cout << "$>";
+		else
+			Dispatch(buf, 200, con);
 	}
 }
 
