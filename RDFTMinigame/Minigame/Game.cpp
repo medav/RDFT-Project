@@ -179,7 +179,7 @@ void Minigame::RunningDraw() {
 void Minigame::WinningDraw() {
 	Engine()->GetPhysDevice()->Draw(Engine()->GetGlDevice());
 
-	if (NumMoves <= Engine()->GetInt("difficulty"))
+	if (NumMoves <= (int) log2(Engine()->GetInt("difficulty") + 2) )
 		Engine()->GetGlDevice()->DrawTexturedRect(VectorOf(Engine()->ScreenX() / 2, Engine()->ScreenY() / 2), 
 												  VectorOf(Engine()->ScreenX() * 0.7, Engine()->ScreenY() * 0.7), "you_rock");
 	else
