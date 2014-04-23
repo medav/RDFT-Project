@@ -43,6 +43,8 @@ void Ball::Think() {
 	double scrX = Engine()->ScreenX();
 	double scrY = Engine()->ScreenY();
 
+	// Update posistion based on velocity calculated and redraw
+	// ball on the other respective side of screen if it "goes through"
 	Pos.x += Vel.x * dT;
 	if (Pos.x < 0)
 		Pos.x += scrX;
