@@ -95,6 +95,8 @@ void Dispatch(char * buf, int size, Console * con) {
 		cmd->cty = CMDTYPE::KILL;
 	else if (strstr(buf, "err") != 0)
 		cmd->cty = CMDTYPE::GETERR;
+	else if (strstr(buf, "help") != 0)
+		cmd->cty = CMDTYPE::HELP;
 	else
 		return;
 
@@ -190,6 +192,13 @@ void Console::Exec(COMMAND * cmd) {
 	}
 	else if (cmd->cty == CMDTYPE::GETERR) {
 		Engine()->GetGlDevice()->PrintError();
+	}
+	else if (cmd->cty == CMDTYPE::HELP) {
+		std::cout << "--Available Commands--\n";
+		std::cout << "env [set NAME VALUE]\n\tPrint the environment or set a variable\n\n";
+		std::cout << "texture [(unload NAME) | (load FILE NAME)]\n\tPrint loaded textures, load or unload a texture from a file\n\n";
+		std::cout << "new_map\n\tBuild a new map\n\n";
+		std::cout << "err\n\tPrint the last OpenGL error, if any\n\n";
 	}
 }
 

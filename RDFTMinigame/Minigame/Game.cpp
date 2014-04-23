@@ -23,7 +23,8 @@ Minigame::Minigame() {
 	Engine()->GetGlDevice()->LoadTexture("ball.bmp", "ball");
 	Engine()->GetGlDevice()->LoadTexture("hole.bmp", "hole");
 	Engine()->GetGlDevice()->LoadTexture("wall.bmp", "wall");
-	Engine()->GetGlDevice()->LoadTexture("test.bmp", "test");
+	Engine()->GetGlDevice()->LoadTexture("you_suck.bmp", "you_suck");
+	Engine()->GetGlDevice()->LoadTexture("you_rock.bmp", "you_rock");
 	Engine()->GetGlDevice()->LoadTexture("space.bmp", "background");
 }
 
@@ -90,9 +91,10 @@ void Minigame::RunningThink() {
 		SetState(GAMESTATE::WAITING);
 
 	if (hole->HasBallCollided()) {
-		// Youre winner!
-		this->NewMap();
+		NewMap();
+		//SetState(GAMESTATE::WINNING);
 	}
+		
 		
 }
 
@@ -141,8 +143,11 @@ void Minigame::RunningDraw() {
 /************************************************************/
 
 void Minigame::NewMap() {
-	if (NumMoves > 0)
+	if (NumMoves > 0) {
 		Difficulty++;
+		Level++;
+	}
+		
 
 	NumMoves = 0;
 

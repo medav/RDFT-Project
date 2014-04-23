@@ -93,7 +93,7 @@ bool GLENGINE::LoadBMP(const char* location, GLuint *texture, uint8_t ** pixels)
 		(*pixels)[j + 2] = temp[i];
 
 		// Remove pink
-		if (temp[i] > 220 && temp[i + 1] < 30 && temp[i + 2] > 220)
+		if (temp[i] > 215 && temp[i + 1] < 35 && temp[i + 2] > 215)
 			(*pixels)[j + 3] = 0x00;
 		else
 			(*pixels)[j + 3] = 0xFF;
