@@ -15,19 +15,29 @@ Minigame::Minigame() {
 	GameState = Minigame::WAITING;
 	Level = 0;
 	lmState = 0;
-	Difficulty = 1;
 
 	SetupEnv();
 	NewMap();
 
+	// Load default textures
 	Engine()->GetGlDevice()->LoadTexture("ball.bmp", "ball");
 	Engine()->GetGlDevice()->LoadTexture("hole.bmp", "hole");
 	Engine()->GetGlDevice()->LoadTexture("wall.bmp", "wall");
 	Engine()->GetGlDevice()->LoadTexture("you_suck.bmp", "you_suck");
 	Engine()->GetGlDevice()->LoadTexture("you_rock.bmp", "you_rock");
-	Engine()->GetGlDevice()->LoadTexture("space.bmp", "background");
+	Engine()->GetGlDevice()->LoadTexture("background.bmp", "background");
 }
 
+void Minigame::NewGame() {
+	GameState = Minigame::WAITING;
+	Level = 0;
+	lmState = 0;
+
+	SetupEnv();
+	NewMap();
+}
+
+// Helper function to set an environment variable to a value
 void SetEnv(const char * name, const char * value) {
 	ENVVAR * ev = new ENVVAR;
 	strcpy(ev->value, value);
@@ -38,6 +48,19 @@ void SetEnv(const char * name, const char * value) {
 	Engine()->SetEnv(name, ev);
 }
 
+// Helper function to set an environment variable to a value
+void SetEnv(const char * name, double value) {
+	ENVVAR * ev = new ENVVAR;
+	sprintf(ev->value, "%lf", value);
+	ev->asDouble = value;
+
+	ev->numset = true;
+	ev->boolset = false;
+
+	Engine()->SetEnv(name, ev);
+}
+
+// Set up the default env values
 void SetupEnv() {
 	SetEnv("friction", "0.03");
 	SetEnv("cc", "0.95");
@@ -48,15 +71,17 @@ void SetupEnv() {
 	SetEnv("time_mul", "0.25");
 	SetEnv("boundary", "200");
 	SetEnv("boxsize", "100");
+	SetEnv("difficulty", "1");
 }
 
 
 void Minigame::Resize() {
+	// We make a new map on window resize because
+	// It would be all weird otherwise
 	this->NewMap();
 }
 
 void Minigame::Think() {
-	gameMutex.lock();
 
 	switch (GameState) {
 	case Minigame::WAITING:
@@ -65,11 +90,13 @@ void Minigame::Think() {
 	case Minigame::RUNNING:
 		RunningThink();
 		break;
+	case Minigame::WINNING:
+		WinningThink();
+		break;
 	default:
 		break;
 	}
 
-	gameMutex.unlock();
 }
 
 void Minigame::WaitingThink() {
@@ -91,15 +118,21 @@ void Minigame::RunningThink() {
 		SetState(GAMESTATE::WAITING);
 
 	if (hole->HasBallCollided()) {
-		NewMap();
-		//SetState(GAMESTATE::WINNING);
+		Engine()->GetLmDevice()->Reset();
+		SetState(GAMESTATE::WINNING);
 	}
-		
-		
+}
+
+void Minigame::WinningThink() {
+	lmState = Engine()->GetLmDevice()->LMRefresh();
+
+	if (lmState == 1) {
+		NewMap();
+		SetState(GAMESTATE::WAITING);
+	}
 }
 
 void Minigame::Draw() {
-	gameMutex.lock();
 	Engine()->GetGlDevice()->BeginScene();
 	Engine()->GetGlDevice()->DrawTexturedRect(VectorOf(Engine()->ScreenX() / 2, Engine()->ScreenY() / 2), VectorOf(Engine()->ScreenX(), Engine()->ScreenY()), Engine()->GetString("bg_tex"));
 	switch (GameState) {
@@ -109,16 +142,18 @@ void Minigame::Draw() {
 	case Minigame::RUNNING:
 		RunningDraw();
 		break;
+	case Minigame::WINNING:
+		WinningDraw();
+		break;
 	default:
 		break;
 	}
 
 	char buffer[200];
-	sprintf(buffer, "Difficulty : %d    |    Move : %d    |    Level : %d", Difficulty, NumMoves, Level);
+	sprintf(buffer, "Difficulty : %d    |    Move : %d    |    Level : %d", Engine()->GetInt("difficulty") , NumMoves, Level);
 	Engine()->GetGlDevice()->DrawTextGl(VectorOf(Engine()->ScreenX() - 300, 6), ColorOf(0.0f, 0.0f, 0.0f), buffer);
 
 	Engine()->GetGlDevice()->EndScene();
-	gameMutex.unlock();
 }
 
 void Minigame::WaitingDraw() {
@@ -140,14 +175,29 @@ void Minigame::RunningDraw() {
 	Engine()->GetPhysDevice()->Draw(Engine()->GetGlDevice());
 }
 
+void Minigame::WinningDraw() {
+	Engine()->GetPhysDevice()->Draw(Engine()->GetGlDevice());
+
+	if (NumMoves <= Engine()->GetInt("difficulty"))
+		Engine()->GetGlDevice()->DrawTexturedRect(VectorOf(Engine()->ScreenX() / 2, Engine()->ScreenY() / 2), 
+												  VectorOf(Engine()->ScreenX() * 0.7, Engine()->ScreenY() * 0.7), "you_rock");
+	else
+		Engine()->GetGlDevice()->DrawTexturedRect(VectorOf(Engine()->ScreenX() / 2, Engine()->ScreenY() / 2), 
+												  VectorOf(Engine()->ScreenX() * 0.7, Engine()->ScreenY() * 0.7), "you_suck");
+}
+
 /************************************************************/
 
 void Minigame::NewMap() {
 	if (NumMoves > 0) {
-		Difficulty++;
+		SetEnv("difficulty", Engine()->GetInt("difficulty") + rand() % 3 + 1);
+		SetEnv("boxsize", 100 - Engine()->GetInt("difficulty"));
 		Level++;
 	}
-		
+	
+	int Difficulty = Engine()->GetInt("difficulty");
+
+
 
 	NumMoves = 0;
 
@@ -157,6 +207,7 @@ void Minigame::NewMap() {
 
 	Engine()->GetPhysDevice()->Clear();
 
+	// The world!
 	ENTITY * WorldTop = new Wall(VectorOf(Engine()->ScreenX() / 2.0, Engine()->ScreenY() + 16), Engine()->ScreenX() + 8, 64);
 	ENTITY * WorldBottom = new Wall(VectorOf(Engine()->ScreenX() / 2.0, - 8), Engine()->ScreenX() + 8, 64);
 	ENTITY * WorldLeft = new Wall(VectorOf(-16, Engine()->ScreenY() / 2.0), 64, Engine()->ScreenY() + 8);

@@ -2,7 +2,6 @@
 #define __GAME__
 #include "..\EngineLib\RDFTEngine.h"
 #include <math.h>
-#include <mutex>
 
 
 class Minigame {
@@ -18,26 +17,35 @@ private:
 
 	int Level;
 	int NumMoves;
-	int Difficulty;
+
 	Ball * ball;
 	Hole * hole;
 
 	void WaitingThink();
 	void RunningThink();
+	void WinningThink();
 
 	void WaitingDraw();
 	void RunningDraw();
+	void WinningDraw();
 
 public:
 	Minigame();
 	void Think();
 	void Draw();
 	void NewMap();
+	void NewGame();
 
-	std::mutex gameMutex;
+	void IncMoves() {
+		NumMoves++;
+	}
 
 	void SetState(GAMESTATE state) {
 		GameState = state;
+	}
+
+	Ball * GetBall() {
+		return ball;
 	}
 
 	void Resize();

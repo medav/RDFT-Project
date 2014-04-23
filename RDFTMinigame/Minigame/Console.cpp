@@ -91,12 +91,16 @@ void Dispatch(char * buf, int size, Console * con) {
 		cmd->cty = CMDTYPE::TEXTURE;
 	else if (strstr(buf, "new_map") != 0)
 		cmd->cty = CMDTYPE::NEWMAP;
+	else if (strstr(buf, "new_game") != 0)
+		cmd->cty = CMDTYPE::NEWGAME;
 	else if (strstr(buf, "exit") != 0)
 		cmd->cty = CMDTYPE::KILL;
 	else if (strstr(buf, "err") != 0)
 		cmd->cty = CMDTYPE::GETERR;
 	else if (strstr(buf, "help") != 0)
 		cmd->cty = CMDTYPE::HELP;
+	else if (strstr(buf, "vel") != 0)
+		cmd->cty = CMDTYPE::VEL;
 	else
 		return;
 
@@ -163,9 +167,8 @@ void Console::WaitFor() {
 void Console::Exec(COMMAND * cmd) {
 
 	if (cmd->cty == CMDTYPE::NEWMAP) {
-		MG()->gameMutex.lock();
 		MG()->NewMap();
-		MG()->gameMutex.unlock();
+		MG()->SetState(Minigame::WAITING);
 	}
 	else if (cmd->cty == CMDTYPE::TEXTURE) {
 		if (cmd->argc == 4 && strcmp(cmd->argv[1], "load") == 0) {
@@ -198,7 +201,24 @@ void Console::Exec(COMMAND * cmd) {
 		std::cout << "env [set NAME VALUE]\n\tPrint the environment or set a variable\n\n";
 		std::cout << "texture [(unload NAME) | (load FILE NAME)]\n\tPrint loaded textures, load or unload a texture from a file\n\n";
 		std::cout << "new_map\n\tBuild a new map\n\n";
+		std::cout << "vel vx vy\n\tApply a velocity to the ball\n\n";
 		std::cout << "err\n\tPrint the last OpenGL error, if any\n\n";
+	}
+	else if (cmd->cty == CMDTYPE::VEL) {
+		double vx, vy;
+		if (cmd->argc > 2) {
+			sscanf(cmd->argv[1], "%lf", &vx);
+			sscanf(cmd->argv[2], "%lf", &vy);
+			MG()->GetBall()->ApplyVelocity(vx, vy);
+			MG()->SetState(Minigame::RUNNING);
+			MG()->IncMoves();
+		}
+		else if(cmd->argc < 3)
+			std::cout << "Too few arguments\n";
+			
+	}
+	else if (cmd->cty == CMDTYPE::NEWGAME) {
+		MG()->NewGame();
 	}
 }
 

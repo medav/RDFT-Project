@@ -7,7 +7,7 @@
 
 void SetupConsole();
 
-enum CMDTYPE {SET, TEXTURE, NEWMAP, KILL, ENV, GETERR, HELP};
+enum CMDTYPE {SET, TEXTURE, NEWMAP, KILL, ENV, GETERR, HELP, VEL, NEWGAME};
 
 typedef struct {
 	CMDTYPE cty;
