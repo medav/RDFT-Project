@@ -129,6 +129,7 @@ void Minigame::WinningThink() {
 	if (lmState == 1) {
 		NewMap();
 		SetState(GAMESTATE::WAITING);
+		Engine()->GetLmDevice()->Reset();
 	}
 }
 
