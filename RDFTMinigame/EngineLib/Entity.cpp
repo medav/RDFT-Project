@@ -59,8 +59,19 @@ void Ball::Think() {
 }
 
 void Ball::ApplyVelocity(float x, float y){
-	Vel.x = x;
-	Vel.y = y;
+	if (x > 100)
+		Vel.x = 100;
+	else if (x < -100)
+		Vel.x = -100;
+	else
+		Vel.x = x;
+
+	if (y > 100)
+		Vel.y = 100;
+	else if (y < -100)
+		Vel.y = -100;
+	else
+		Vel.y = y;
 }
 
 bool Ball::isStopped() {
