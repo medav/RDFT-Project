@@ -14,6 +14,8 @@ public:
 	virtual bool UnloadTexture(const char * name) = 0;
 	virtual void PrintTextures() = 0;
 
+	virtual void PrintError() = 0;
+
 	virtual bool BeginScene() = 0;
 
 	virtual void DrawRect(GLVERTEX2 pos, GLVECTOR2 size, GLCOLORARGB color) = 0;
