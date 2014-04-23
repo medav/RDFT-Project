@@ -73,36 +73,62 @@ int BuildArgs(char *args[], char * buf) {
 	return ct;
 }
 
+void FreeCMD(COMMAND * cmd) {
+	int i;
+	for (i = 0; i < cmd->argc; i++) {
+		delete cmd->argv[i];
+	}
+
+	delete cmd;
+}
+
 void Dispatch(char * buf, int size, Console * con) {
-	COMMAND cmd;
+	COMMAND * cmd = new COMMAND;
+
 	if (strstr(buf, "env") != 0)
-		cmd.cty = CMDTYPE::ENV;
+		cmd->cty = CMDTYPE::ENV;
 	else if (strstr(buf, "texture") != 0)
-		cmd.cty = CMDTYPE::TEXTURE;
+		cmd->cty = CMDTYPE::TEXTURE;
 	else if (strstr(buf, "new_map") != 0)
-		cmd.cty = CMDTYPE::NEWMAP;
+		cmd->cty = CMDTYPE::NEWMAP;
 	else if (strstr(buf, "exit") != 0)
-		cmd.cty = CMDTYPE::KILL;
+		cmd->cty = CMDTYPE::KILL;
+	else if (strstr(buf, "err") != 0)
+		cmd->cty = CMDTYPE::GETERR;
+	else if (strstr(buf, "help") != 0)
+		cmd->cty = CMDTYPE::HELP;
 	else
 		return;
 
-	cmd.argc = BuildArgs(cmd.argv, buf);
+	cmd->argc = BuildArgs(cmd->argv, buf);
 
-	con->Exec(cmd);
+	con->Queue(cmd);
+}
+
+void Console::Queue(COMMAND * cmd) {
+	qMutex.lock();
+	cmdq.push(cmd);
+	qMutex.unlock();
+	
 }
 
 DWORD WINAPI Worker(void * params) {
 	Console * con = (Console *)params;
 	char buf[200];
+	cout << "$>";
 
 	while (1) {
-		cout << "$>";
+		Con()->WaitFor();
+		//cout << "$>";
 		cin.getline(buf, 200);
-		Dispatch(buf, 200, con);
+		if (strlen(buf) == 0)
+			cout << "$>";
+		else
+			Dispatch(buf, 200, con);
 	}
 }
 
-Console::Console() {
+Console::Console() : cmdq() {
 	SetupConsole();
 }
 
@@ -111,35 +137,68 @@ void Console::Start() {
 	thr = CreateThread(0, 0, Worker, this, 0, 0);
 }
 
-void Console::Exec(COMMAND cmd) {
+void Console::ExecSync() {
+	
+	qMutex.lock();
+	bool hasCmd = !cmdq.empty();
 
-	if (cmd.cty == CMDTYPE::NEWMAP) {
+	while (!cmdq.empty()) {
+		Exec(cmdq.front());
+		FreeCMD(cmdq.front());
+		cmdq.pop();
+	}
+
+	qMutex.unlock();
+
+	if (hasCmd)
+		cout << "$>";
+
+}
+
+void Console::WaitFor() {
+	running.lock();
+	running.unlock();
+}
+
+void Console::Exec(COMMAND * cmd) {
+
+	if (cmd->cty == CMDTYPE::NEWMAP) {
 		MG()->gameMutex.lock();
 		MG()->NewMap();
 		MG()->gameMutex.unlock();
 	}
-	else if (cmd.cty == CMDTYPE::TEXTURE) {
-		if (cmd.argc == 4 && strcmp(cmd.argv[1], "load") == 0) {
-			Engine()->GetGlDevice()->LoadTexture(cmd.argv[2], cmd.argv[3]);
+	else if (cmd->cty == CMDTYPE::TEXTURE) {
+		if (cmd->argc == 4 && strcmp(cmd->argv[1], "load") == 0) {
+			Engine()->GetGlDevice()->LoadTexture(cmd->argv[2], cmd->argv[3]);
 		}	
-		else if (cmd.argc == 3 && strcmp(cmd.argv[1], "unload") == 0) {
-			Engine()->GetGlDevice()->UnloadTexture(cmd.argv[2]);
+		else if (cmd->argc == 3 && strcmp(cmd->argv[1], "unload") == 0) {
+			Engine()->GetGlDevice()->UnloadTexture(cmd->argv[2]);
 		}
 		else
 			Engine()->GetGlDevice()->PrintTextures();
 	}
-	else if (cmd.cty == CMDTYPE::ENV) {
+	else if (cmd->cty == CMDTYPE::ENV) {
 		ENVVAR * ev;
-		if (cmd.argc == 4) {
+		if (cmd->argc == 4) {
 			ev = new ENVVAR;
-			strcpy(ev->value, cmd.argv[3]);
+			strcpy(ev->value, cmd->argv[3]);
 			ev->boolset = false;
 			ev->numset = false;
 
-			Engine()->SetEnv(cmd.argv[2], ev);
+			Engine()->SetEnv(cmd->argv[2], ev);
 		}
 		else
 			Engine()->PrintEnv();
+	}
+	else if (cmd->cty == CMDTYPE::GETERR) {
+		Engine()->GetGlDevice()->PrintError();
+	}
+	else if (cmd->cty == CMDTYPE::HELP) {
+		std::cout << "--Available Commands--\n";
+		std::cout << "env [set NAME VALUE]\n\tPrint the environment or set a variable\n\n";
+		std::cout << "texture [(unload NAME) | (load FILE NAME)]\n\tPrint loaded textures, load or unload a texture from a file\n\n";
+		std::cout << "new_map\n\tBuild a new map\n\n";
+		std::cout << "err\n\tPrint the last OpenGL error, if any\n\n";
 	}
 }
 

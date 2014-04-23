@@ -7,7 +7,7 @@
 
 class Minigame {
 public:
-	enum GAMESTATE { WAITING, RUNNING };
+	enum GAMESTATE { WAITING, RUNNING, WINNING };
 
 private:
 	Minigame::GAMESTATE GameState;
@@ -20,7 +20,8 @@ private:
 	int NumMoves;
 	int Difficulty;
 	Ball * ball;
-	
+	Hole * hole;
+
 	void WaitingThink();
 	void RunningThink();
 

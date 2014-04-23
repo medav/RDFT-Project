@@ -80,12 +80,23 @@ public:
 };
 
 class Hole : public ENTITY {
+private:
+	double radius;
+	bool BallCollided;
+
 public:
-	Hole(GLVECTOR2 Pos) : ENTITY(Pos) {}
-	bool BallCollided = false;
+	Hole(GLVECTOR2 Pos) : ENTITY(Pos) {
+		radius = 45;
+		BallCollided = false;
+	}
 
 	virtual void Draw(PGLENGINE glEngine);
 	virtual void Collide(ENTITY * other);
+	virtual BOUNDINGBOX BoundingBox();
+
+	bool HasBallCollided() {
+		return BallCollided;
+	}
 
 	virtual ENTITY::TYPE Type() {
 		return ENTITY::STATIC;

@@ -20,8 +20,11 @@ Minigame::Minigame() {
 	SetupEnv();
 	NewMap();
 
-	Engine()->GetGlDevice()->LoadTexture("Ball.bmp", "ball");
+	Engine()->GetGlDevice()->LoadTexture("ball.bmp", "ball");
+	Engine()->GetGlDevice()->LoadTexture("hole.bmp", "hole");
 	Engine()->GetGlDevice()->LoadTexture("wall.bmp", "wall");
+	Engine()->GetGlDevice()->LoadTexture("you_suck.bmp", "you_suck");
+	Engine()->GetGlDevice()->LoadTexture("you_rock.bmp", "you_rock");
 	Engine()->GetGlDevice()->LoadTexture("space.bmp", "background");
 }
 
@@ -41,6 +44,7 @@ void SetupEnv() {
 	SetEnv("ball_tex", "ball");
 	SetEnv("bg_tex", "background");
 	SetEnv("wall_tex", "wall");
+	SetEnv("hole_tex", "hole");
 	SetEnv("time_mul", "0.25");
 	SetEnv("boundary", "200");
 	SetEnv("boxsize", "100");
@@ -85,13 +89,19 @@ void Minigame::RunningThink() {
 	Engine()->GetPhysDevice()->Think();
 	if (ball->isStopped())
 		SetState(GAMESTATE::WAITING);
+
+	if (hole->HasBallCollided()) {
+		NewMap();
+		//SetState(GAMESTATE::WINNING);
+	}
+		
+		
 }
 
 void Minigame::Draw() {
 	gameMutex.lock();
 	Engine()->GetGlDevice()->BeginScene();
 	Engine()->GetGlDevice()->DrawTexturedRect(VectorOf(Engine()->ScreenX() / 2, Engine()->ScreenY() / 2), VectorOf(Engine()->ScreenX(), Engine()->ScreenY()), Engine()->GetString("bg_tex"));
-
 	switch (GameState) {
 	case Minigame::WAITING:
 		WaitingDraw();
@@ -133,8 +143,11 @@ void Minigame::RunningDraw() {
 /************************************************************/
 
 void Minigame::NewMap() {
-	if (NumMoves > 0)
+	if (NumMoves > 0) {
 		Difficulty++;
+		Level++;
+	}
+		
 
 	NumMoves = 0;
 
@@ -144,10 +157,10 @@ void Minigame::NewMap() {
 
 	Engine()->GetPhysDevice()->Clear();
 
-	ENTITY * WorldTop = new Wall(VectorOf(Engine()->ScreenX() / 2.0, Engine()->ScreenY() - 4), Engine()->ScreenX() + 8, 16);
-	ENTITY * WorldBottom = new Wall(VectorOf(Engine()->ScreenX() / 2.0, 4), Engine()->ScreenX() + 8, 32);
-	ENTITY * WorldLeft = new Wall(VectorOf(4, Engine()->ScreenY() / 2.0), 16, Engine()->ScreenY() + 8);
-	ENTITY * WorldRight = new Wall(VectorOf(Engine()->ScreenX() - 4, Engine()->ScreenY() / 2.0), 16, Engine()->ScreenY() + 8);
+	ENTITY * WorldTop = new Wall(VectorOf(Engine()->ScreenX() / 2.0, Engine()->ScreenY() + 16), Engine()->ScreenX() + 8, 64);
+	ENTITY * WorldBottom = new Wall(VectorOf(Engine()->ScreenX() / 2.0, - 8), Engine()->ScreenX() + 8, 64);
+	ENTITY * WorldLeft = new Wall(VectorOf(-16, Engine()->ScreenY() / 2.0), 64, Engine()->ScreenY() + 8);
+	ENTITY * WorldRight = new Wall(VectorOf(Engine()->ScreenX() + 16, Engine()->ScreenY() / 2.0), 64, Engine()->ScreenY() + 8);
 
 	Engine()->GetPhysDevice()->AddEntity(WorldTop);
 	Engine()->GetPhysDevice()->AddEntity(WorldBottom);
@@ -170,6 +183,9 @@ void Minigame::NewMap() {
 		else 
 			i--;
 	}
+
+	hole = new Hole(VectorOf(Engine()->ScreenX() - 100, Engine()->ScreenY() - 100));
+	Engine()->GetPhysDevice()->AddEntity(hole);
 
 	ball = new Ball(VectorOf(50, 80));
 	Engine()->GetPhysDevice()->AddEntity(ball);

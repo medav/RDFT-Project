@@ -80,6 +80,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR pCmdLine, int nCmdShow)
 
 		MG()->Think();
 		MG()->Draw();
+		Con()->ExecSync();
 	}
 
 	Con()->Stop();
