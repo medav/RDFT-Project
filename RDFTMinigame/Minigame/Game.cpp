@@ -126,7 +126,7 @@ void Minigame::RunningThink() {
 void Minigame::WinningThink() {
 	lmState = Engine()->GetLmDevice()->LMRefresh();
 
-	if (lmState == 1) {
+	if (lmState == 2) {
 		NewMap();
 		SetState(GAMESTATE::WAITING);
 		Engine()->GetLmDevice()->Reset();
