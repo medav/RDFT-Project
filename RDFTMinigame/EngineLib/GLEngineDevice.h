@@ -10,7 +10,7 @@ public:
 	virtual void SetWindowSize() = 0;
 
 	virtual void SetClearColor(GLCOLORARGB bgcolor) = 0;
-	virtual bool LoadTexture(const char * filename, const char * name) = 0;
+	virtual bool LoadTexture(const char * filename, const char * name, bool mask) = 0;
 	virtual bool UnloadTexture(const char * name) = 0;
 	virtual void PrintTextures() = 0;
 

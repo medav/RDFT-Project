@@ -20,12 +20,12 @@ Minigame::Minigame() {
 	NewMap();
 
 	// Load default textures
-	Engine()->GetGlDevice()->LoadTexture("ball.bmp", "ball");
-	Engine()->GetGlDevice()->LoadTexture("hole.bmp", "hole");
-	Engine()->GetGlDevice()->LoadTexture("wall.bmp", "wall");
-	Engine()->GetGlDevice()->LoadTexture("you_suck.bmp", "you_suck");
-	Engine()->GetGlDevice()->LoadTexture("you_rock.bmp", "you_rock");
-	Engine()->GetGlDevice()->LoadTexture("background.bmp", "background");
+	Engine()->GetGlDevice()->LoadTexture("ball.bmp", "ball", false);
+	Engine()->GetGlDevice()->LoadTexture("hole.bmp", "hole", false);
+	Engine()->GetGlDevice()->LoadTexture("block.bmp", "block", false);
+	Engine()->GetGlDevice()->LoadTexture("you_suck.bmp", "you_suck", false);
+	Engine()->GetGlDevice()->LoadTexture("you_rock.bmp", "you_rock", false);
+	Engine()->GetGlDevice()->LoadTexture("background.bmp", "background", false);
 }
 
 void Minigame::NewGame() {
@@ -66,7 +66,7 @@ void SetupEnv() {
 	SetEnv("cc", "0.95");
 	SetEnv("ball_tex", "ball");
 	SetEnv("bg_tex", "background");
-	SetEnv("wall_tex", "wall");
+	SetEnv("wall_tex", "block");
 	SetEnv("hole_tex", "hole");
 	SetEnv("time_mul", "0.25");
 	SetEnv("boundary", "200");

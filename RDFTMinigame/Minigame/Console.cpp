@@ -172,8 +172,11 @@ void Console::Exec(COMMAND * cmd) {
 	}
 	else if (cmd->cty == CMDTYPE::TEXTURE) {
 		if (cmd->argc == 4 && strcmp(cmd->argv[1], "load") == 0) {
-			Engine()->GetGlDevice()->LoadTexture(cmd->argv[2], cmd->argv[3]);
+			Engine()->GetGlDevice()->LoadTexture(cmd->argv[2], cmd->argv[3], false);
 		}	
+		else if (cmd->argc == 4 && strcmp(cmd->argv[1], "load_masked") == 0) {
+			Engine()->GetGlDevice()->LoadTexture(cmd->argv[2], cmd->argv[3], true);
+		}
 		else if (cmd->argc == 3 && strcmp(cmd->argv[1], "unload") == 0) {
 			Engine()->GetGlDevice()->UnloadTexture(cmd->argv[2]);
 		}

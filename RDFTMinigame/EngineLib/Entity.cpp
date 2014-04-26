@@ -132,8 +132,8 @@ void Hole::Collide(ENTITY * other){
 
 // Draw methods
 void Wall::Draw(PGLENGINE glEngine) {
-	glEngine->DrawRect(this->Pos, VectorOf(this->Width, this->Height), ColorOf(0.95f, 0.95f, 0.95f));
-	//glEngine->DrawTexturedRect(this->Pos, VectorOf(this->Width, this->Height), Engine()->GetString("wall_tex"));
+	//glEngine->DrawRect(this->Pos, VectorOf(this->Width, this->Height), ColorOf(0.95f, 0.95f, 0.95f));
+	glEngine->DrawTexturedRect(this->Pos, VectorOf(this->Width, this->Height), Engine()->GetString("wall_tex"));
 }
 
 void Ball::Draw(PGLENGINE glEngine) {

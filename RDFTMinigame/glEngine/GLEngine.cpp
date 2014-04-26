@@ -40,46 +40,64 @@ void GLENGINE::SetWindowSize() {
 	glOrtho(0.0f, width, 0.0f, height, 0.0f, 1.0f);
 }
 
-// This was written by following a tutorial on the internet:
-// http://www.cplusplus.com/articles/GwvU7k9E/
-bool GLENGINE::LoadBMP(const char* location, GLuint *texture, uint8_t ** pixels) {
-	uint8_t* datBuff[2] = { nullptr, nullptr };
-	uint8_t* temp = nullptr;
-	*pixels = nullptr;
+bmp_t GLENGINE::LoadBMP(const char * filename) {
+	bmp_t bmp;
 
-	*texture = -1;
+	bmp.bmpHeader = 0;
+	bmp.bmpInfo = 0;
+	bmp.datBuff[0] = 0;
+	bmp.datBuff[1] = 0;
+	bmp.pixels = 0;
 
-	BITMAPFILEHEADER* bmpHeader = nullptr;
-	BITMAPINFOHEADER* bmpInfo = nullptr;
+	std::ifstream file(filename, std::ios::binary);
 
-	// The file... We open it with it's constructor
-	std::ifstream file(location, std::ios::binary);
 	if (!file)
-		return false;
+		return bmp;
 
-	// Allocate byte memory that will hold the two headers
-	datBuff[0] = new uint8_t[sizeof(BITMAPFILEHEADER)];
-	datBuff[1] = new uint8_t[sizeof(BITMAPINFOHEADER)];
+	bmp.datBuff[0] = new uint8_t[sizeof(BITMAPFILEHEADER)];
+	bmp.datBuff[1] = new uint8_t[sizeof(BITMAPINFOHEADER)];
 
-	file.read((char*)datBuff[0], sizeof(BITMAPFILEHEADER));
-	file.read((char*)datBuff[1], sizeof(BITMAPINFOHEADER));
+	file.read((char*)bmp.datBuff[0], sizeof(BITMAPFILEHEADER));
+	file.read((char*)bmp.datBuff[1], sizeof(BITMAPINFOHEADER));
 
-	// Construct the values from the buffers
-	bmpHeader = (BITMAPFILEHEADER*)datBuff[0];
-	bmpInfo = (BITMAPINFOHEADER*)datBuff[1];
+	bmp.bmpHeader = (BITMAPFILEHEADER*)bmp.datBuff[0];
+	bmp.bmpInfo = (BITMAPINFOHEADER*)bmp.datBuff[1];
 
-	// Check if the file is an actual BMP file
-	if (bmpHeader->bfType != 0x4D42)
-		return false;
-
-	// First allocate pixel memory
-	temp = new uint8_t[bmpInfo->biSizeImage];
+	bmp.pixels = new uint8_t[bmp.bmpInfo->biSizeImage];
 
 	// Go to where image data starts, then read in image data
-	file.seekg(bmpHeader->bfOffBits);
-	file.read((char*)temp, bmpInfo->biSizeImage);
+	file.seekg(bmp.bmpHeader->bfOffBits);
+	file.read((char*)bmp.pixels, bmp.bmpInfo->biSizeImage);
+	file.close();
 
-	(*pixels) = new uint8_t[bmpInfo->biSizeImage + bmpInfo->biSizeImage / 3];
+	return bmp;
+}
+
+
+// This was written by following a tutorial on the internet:
+// http://www.cplusplus.com/articles/GwvU7k9E/
+bool GLENGINE::CreateTex(const char* location, GLuint *texture, uint8_t ** pixels, const char * mask) {
+	bmp_t bmpfile = LoadBMP(location);
+	bmp_t maskfile;
+
+	*pixels = new uint8_t[bmpfile.bmpInfo->biSizeImage + bmpfile.bmpInfo->biSizeImage / 3];
+
+	if (mask) {
+		maskfile = LoadBMP(mask);
+		if (!maskfile.bmpHeader) {
+			mask = 0;
+		}
+		else {
+			if (maskfile.bmpInfo->biSizeImage != bmpfile.bmpInfo->biSizeImage) {
+				delete[] maskfile.datBuff[0];
+				delete[] maskfile.datBuff[1];
+				delete[] maskfile.pixels;
+
+				mask = 0;
+			}
+		}
+	}
+
 
 	// We're almost done. We have our image loaded, however it's not in the right format.
 	// .bmp files store image data in the BGR format, and we have to convert it to RGB.
@@ -87,21 +105,30 @@ bool GLENGINE::LoadBMP(const char* location, GLuint *texture, uint8_t ** pixels)
 	unsigned long i;
 	unsigned long j;
 
-	for (i = 0, j = 0; i < bmpInfo->biSizeImage; i += 3, j+=4) {
-		(*pixels)[j] = temp[i + 2];
-		(*pixels)[j + 1] = temp[i + 1];
-		(*pixels)[j + 2] = temp[i];
+	for (i = 0, j = 0; i < bmpfile.bmpInfo->biSizeImage; i += 3, j += 4) {
+		(*pixels)[j] = bmpfile.pixels[i + 2];
+		(*pixels)[j + 1] = bmpfile.pixels[i + 1];
+		(*pixels)[j + 2] = bmpfile.pixels[i];
 
-		// Remove pink
-		if (temp[i] > 215 && temp[i + 1] < 35 && temp[i + 2] > 215)
-			(*pixels)[j + 3] = 0x00;
-		else
-			(*pixels)[j + 3] = 0xFF;
+		// Remove mask or pink
+
+		if (mask) {
+			if (maskfile.pixels[i] == 0x00 && maskfile.pixels[i + 1] == 0x00 && maskfile.pixels[i + 2] == 0x00)
+				(*pixels)[j + 3] = 0x00;
+			else
+				(*pixels)[j + 3] = 0xFF;
+		}
+		else {
+			if (bmpfile.pixels[i] > 215 && bmpfile.pixels[i + 1] < 35 && bmpfile.pixels[i + 2] > 215)
+				(*pixels)[j + 3] = 0x00;
+			else
+				(*pixels)[j + 3] = 0xFF;
+		}
 	}
 
 	// Set width and height to the values loaded from the file
-	GLuint w = bmpInfo->biWidth;
-	GLuint h = bmpInfo->biHeight;
+	GLuint w = bmpfile.bmpInfo->biWidth;
+	GLuint h = bmpfile.bmpInfo->biHeight;
 
 	/*******************GENERATING TEXTURES*******************/
 
@@ -109,10 +136,17 @@ bool GLENGINE::LoadBMP(const char* location, GLuint *texture, uint8_t ** pixels)
 
 	if (*texture == -1) {
 		std::cout << "\nglGenTextures() failed: " << glGetError() << std::endl;
-		delete[] datBuff[0];
-		delete[] datBuff[1];
-		delete[] temp;
+		delete[] bmpfile.datBuff[0];
+		delete[] bmpfile.datBuff[1];
+		delete[] bmpfile.pixels;
 		delete[] *pixels;
+
+		if (mask) {
+			delete[] maskfile.datBuff[0];
+			delete[] maskfile.datBuff[1];
+			delete[] maskfile.pixels;
+		}
+
 		return false;
 	}
 	PrintErrorLine(__LINE__);
@@ -135,10 +169,15 @@ bool GLENGINE::LoadBMP(const char* location, GLuint *texture, uint8_t ** pixels)
 	PrintErrorLine(__LINE__);
 
 	// Delete the two buffers.
-	delete[] datBuff[0];
-	delete[] datBuff[1];
-	delete[] temp;
-	file.close();
+	delete[] bmpfile.datBuff[0];
+	delete[] bmpfile.datBuff[1];
+	delete[] bmpfile.pixels;
+
+	if (mask) {
+		delete[] maskfile.datBuff[0];
+		delete[] maskfile.datBuff[1];
+		delete[] maskfile.pixels;
+	}
 
 	return true; // Return success code 
 }
@@ -148,7 +187,7 @@ void GLENGINE::PrintError() {
 		std::cout << "No errors\n";
 }
 
-bool GLENGINE::LoadTexture(const char * filename, const char * name) {
+bool GLENGINE::LoadTexture(const char * filename, const char * name, bool mask) {
 	GLuint texture = 0;
 	uint8_t * pixels;
 
@@ -162,7 +201,15 @@ bool GLENGINE::LoadTexture(const char * filename, const char * name) {
 	}
 
 	std::cout << "Loading texture \"" << filename << "\"...";
-	if (!LoadBMP(filename, &texture, &pixels)) {
+
+	bool result = false;
+
+	if (mask)
+		result = CreateTex(filename, &texture, &pixels, "mask.bmp");
+	else
+		result = CreateTex(filename, &texture, &pixels, 0);
+
+	if (!result) {
 		std::cout << "Failed\n";
 		return false;
 	}

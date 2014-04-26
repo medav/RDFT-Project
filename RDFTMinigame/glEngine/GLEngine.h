@@ -8,6 +8,13 @@
 #include <map>
 #include <mutex>
 
+typedef struct {
+	uint8_t* datBuff[2];
+	BITMAPFILEHEADER* bmpHeader;
+	BITMAPINFOHEADER* bmpInfo;
+	uint8_t* pixels;
+} bmp_t;
+
 struct TEXTURE {
 	GLuint texID;
 	uint8_t * pixels;
@@ -30,7 +37,9 @@ private:
 	GLCOLORARGB bgColor;
 
 	GLuint PrintErrorLine(int line);
-	bool LoadBMP(const char* location, GLuint *texture, uint8_t ** pixels);
+
+	bmp_t LoadBMP(const char * file);
+	bool CreateTex(const char* location, GLuint *texture, uint8_t ** pixels, const char * mask);
 
 public:
 	GLENGINE(HWND hwnd);
@@ -38,7 +47,7 @@ public:
 	virtual void SetWindowSize();
 
 	virtual void SetClearColor(GLCOLORARGB bgcolor);
-	virtual bool LoadTexture(const char * filename, const char * name);
+	virtual bool LoadTexture(const char * filename, const char * name, bool mask);
 	virtual bool UnloadTexture(const char * name);
 	virtual void PrintTextures();
 
